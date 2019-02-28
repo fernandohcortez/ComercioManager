@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMDataManager", "CMDataMana
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "CMData", "CMData\CMData.sqlproj", "{F8DE9AE7-BE1C-44C0-B59B-12859D2E8952}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMDesktopUI", "CMDesktopUI\CMDesktopUI.csproj", "{ED241B7D-5BA6-4992-BAB9-0516D5F539C2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{F8DE9AE7-BE1C-44C0-B59B-12859D2E8952}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8DE9AE7-BE1C-44C0-B59B-12859D2E8952}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F8DE9AE7-BE1C-44C0-B59B-12859D2E8952}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{ED241B7D-5BA6-4992-BAB9-0516D5F539C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED241B7D-5BA6-4992-BAB9-0516D5F539C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED241B7D-5BA6-4992-BAB9-0516D5F539C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED241B7D-5BA6-4992-BAB9-0516D5F539C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
