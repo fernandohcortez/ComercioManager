@@ -1,9 +1,11 @@
 ﻿using Caliburn.Micro;
+using CMDesktopUI.Helpers;
 using CMDesktopUI.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace CMDesktopUI
 {
@@ -14,6 +16,8 @@ namespace CMDesktopUI
         public Bootstrapper()
         {
             Initialize();
+
+            ConventionManager.AddElementConvention<PasswordBox>(PasswordBoxHelper.BoundPasswordProperty, "Password", "PasswordChanged");
         }
 
         protected override void Configure()
@@ -28,11 +32,17 @@ namespace CMDesktopUI
                         _container.RegisterPerRequest(viewModelType, viewModelType.ToString(), viewModelType));
             }
 
+            void RegisterAllSingletons()
+            {
+                _container
+                    .Singleton<IWindowManager, WindowManager>()
+                    .Singleton<IEventAggregator, EventAggregator>()
+                    .Singleton<IApiHelper, ApiHelper>();
+            }
+
             _container.Instance(_container);
 
-            _container
-                .Singleton<IWindowManager, WindowManager>()
-                .Singleton<IEventAggregator, EventAggregator>();
+            RegisterAllSingletons();
 
             RegisterInContainerAllViewModels();
         }
