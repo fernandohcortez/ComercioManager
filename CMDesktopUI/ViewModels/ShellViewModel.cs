@@ -8,5 +8,6 @@ namespace CMDesktopUI.ViewModels
 {
     public class ShellViewModel
     {
+
     }
 }
