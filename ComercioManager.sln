@@ -9,6 +9,8 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "CMData", "CMData\CMData.sql
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMDesktopUI", "CMDesktopUI\CMDesktopUI.csproj", "{ED241B7D-5BA6-4992-BAB9-0516D5F539C2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMDataModel", "CMDataModel\CMDataModel.csproj", "{097A632A-3A19-4F72-8318-BFE0314F8B9C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{ED241B7D-5BA6-4992-BAB9-0516D5F539C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED241B7D-5BA6-4992-BAB9-0516D5F539C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED241B7D-5BA6-4992-BAB9-0516D5F539C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{097A632A-3A19-4F72-8318-BFE0314F8B9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{097A632A-3A19-4F72-8318-BFE0314F8B9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{097A632A-3A19-4F72-8318-BFE0314F8B9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{097A632A-3A19-4F72-8318-BFE0314F8B9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

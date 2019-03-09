@@ -44,6 +44,8 @@ namespace CMDesktopUI.ViewModels
             try
             {
                 var resultado = await _apiHelper.Autenticar(Usuario, Senha);
+
+               
             }
             catch (Exception e)
             {

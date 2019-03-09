@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Globalization;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ namespace CMDesktopUI.Helpers
     public class ApiHelper : IApiHelper
     {
         private HttpClient _apiClient;
+        private UsuarioAutenticado _usuarioAutenticado;
 
         public ApiHelper()
         {
@@ -43,7 +45,32 @@ namespace CMDesktopUI.Helpers
             {
                 if (response.IsSuccessStatusCode)
                 {
-                    return await response.Content.ReadAsAsync<UsuarioAutenticado>();
+                    _usuarioAutenticado = await response.Content.ReadAsAsync<UsuarioAutenticado>();
+
+                    return _usuarioAutenticado;
+                }
+
+                throw new Exception(response.ReasonPhrase);
+            }
+        }
+
+        public async Task IncluirProduto(string nome, string descricao, decimal precoVenda)
+        {
+            var data = new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("Authorization", "Bearer " + _usuarioAutenticado.Access_Token),
+                new KeyValuePair<string, string>("Nome", nome),
+                new KeyValuePair<string, string>("Descricao", descricao),
+                new KeyValuePair<string, string>("PrevoVenda", precoVenda.ToString(CultureInfo.CurrentCulture)),
+                new KeyValuePair<string, string>("DataInclusao", DateTime.Now.ToString(CultureInfo.CurrentCulture)),
+                new KeyValuePair<string, string>("DataAlteracao", DateTime.Now.ToString(CultureInfo.CurrentCulture))
+            });
+
+            using (var response = await _apiClient.PostAsync("api/Produto", data))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                   await response.Content.ReadAsAsync<object>();
                 }
 
                 throw new Exception(response.ReasonPhrase);
