@@ -20,11 +20,12 @@ namespace CMDesktopUI.ViewModels
             ActivateItem(_loginVm);
         }
 
-        public void ProdutoScreen(ProdutoViewModel produtoVm)
+        public void ProdutoScreen(IApiHelper apiHelper)
         {
-            _produtoVm = produtoVm;
+            //_produtoVm = produtoVm;
 
-            ActivateItem(new ProdutoViewModel(new ApiHelper()));
+            ActivateItem(new ProdutoViewModel(apiHelper));
         }
+
     }
 }

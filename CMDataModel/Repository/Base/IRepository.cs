@@ -8,6 +8,7 @@ namespace CMDataModel.Repository.Base
     public interface IRepository<T> where T : class
     {
         T Get(int id);
+        T Get(string id);
 
         IEnumerable<T> GetAll();
         Task<IEnumerable<T>> GetAllAsync();

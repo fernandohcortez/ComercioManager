@@ -79,6 +79,7 @@
     <Compile Include="Helpers\ApiHelper.cs" />
     <Compile Include="Helpers\IApiHelper.cs" />
     <Compile Include="Helpers\PasswordBoxHelper.cs" />
+    <Compile Include="Models\IUsuarioAutenticado.cs" />
     <Compile Include="Models\UsuarioAutenticado.cs" />
     <Compile Include="ViewModels\ProdutoViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />

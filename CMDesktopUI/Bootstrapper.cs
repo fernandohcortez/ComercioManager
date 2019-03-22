@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using CMDesktopUI.Models;
 
 namespace CMDesktopUI
 {
@@ -37,7 +38,8 @@ namespace CMDesktopUI
                 _container
                     .Singleton<IWindowManager, WindowManager>()
                     .Singleton<IEventAggregator, EventAggregator>()
-                    .Singleton<IApiHelper, ApiHelper>();
+                    .Singleton<IApiHelper, ApiHelper>()
+                    .Singleton<IUsuarioAutenticado, UsuarioAutenticado>();
             }
 
             _container.Instance(_container);

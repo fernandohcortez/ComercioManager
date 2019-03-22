@@ -1,6 +1,6 @@
 ﻿using Caliburn.Micro;
-using System;
 using CMDesktopUI.Helpers;
+using System;
 using System.Threading.Tasks;
 
 namespace CMDesktopUI.ViewModels
@@ -37,19 +37,33 @@ namespace CMDesktopUI.ViewModels
             }
         }
 
+        public bool IsErrorVisible => MensagemErro?.Length > 0;
+
+        private string _mensagemErro;
+        public string MensagemErro
+        {
+            get => _mensagemErro;
+            set
+            {
+                _mensagemErro = value;
+                NotifyOfPropertyChange(() => IsErrorVisible);
+                NotifyOfPropertyChange(() => MensagemErro);
+            }
+        }
+        
         public bool CanLogIn => Usuario?.Length > 0 && Senha?.Length > 0;
 
         public async Task LogIn()
         {
             try
             {
-                var resultado = await _apiHelper.Autenticar(Usuario, Senha);
+                MensagemErro = string.Empty;
 
-               
+                var resultado = await _apiHelper.Autenticar(Usuario, Senha);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                MensagemErro = e.Message;
             }
         }
     }

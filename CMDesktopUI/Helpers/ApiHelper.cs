@@ -43,11 +43,28 @@ namespace CMDesktopUI.Helpers
 
             using (var response = await _apiClient.PostAsync("/Token", data))
             {
+                if (!response.IsSuccessStatusCode)
+                    throw new Exception(response.ReasonPhrase);
+
+                _usuarioAutenticado = await response.Content.ReadAsAsync<UsuarioAutenticado>();
+
+                var dadosUsuarioAutenticado = await ObterUsuario(_usuarioAutenticado.UserName);
+
+                _usuarioAutenticado.Email = dadosUsuarioAutenticado.Email;
+                _usuarioAutenticado.PrimeiroNome = dadosUsuarioAutenticado.PrimeiroNome;
+                _usuarioAutenticado.UltimoNome = dadosUsuarioAutenticado.UltimoNome;
+
+                return _usuarioAutenticado;
+            }
+        }
+
+        public async Task<UsuarioAutenticado> ObterUsuario(string id)
+        {
+            using (var response = await _apiClient.GetAsync($"api/Usuario/{id}/"))
+            {
                 if (response.IsSuccessStatusCode)
                 {
-                    _usuarioAutenticado = await response.Content.ReadAsAsync<UsuarioAutenticado>();
-
-                    return _usuarioAutenticado;
+                    return await response.Content.ReadAsAsync<UsuarioAutenticado>();
                 }
 
                 throw new Exception(response.ReasonPhrase);
@@ -70,7 +87,7 @@ namespace CMDesktopUI.Helpers
             {
                 if (response.IsSuccessStatusCode)
                 {
-                   await response.Content.ReadAsAsync<object>();
+                    await response.Content.ReadAsAsync<object>();
                 }
 
                 throw new Exception(response.ReasonPhrase);
