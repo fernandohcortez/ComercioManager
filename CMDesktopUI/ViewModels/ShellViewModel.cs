@@ -1,31 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using CMDesktopUI.Helpers;
 
 namespace CMDesktopUI.ViewModels
 {
     public class ShellViewModel : Conductor<object>
     {
-        private readonly LoginViewModel _loginVm;
+        private readonly Login2ViewModel _loginVm;
         private ProdutoViewModel _produtoVm;
+        private readonly IApiHelper _apiHelper;
 
-        public ShellViewModel(LoginViewModel loginVm)
+        public ShellViewModel(Login2ViewModel loginVM, IApiHelper apiHelper)
         {
-            _loginVm = loginVm;
+            _apiHelper = apiHelper;
 
-            ActivateItem(_loginVm);
+            _loginVm = loginVM;
+
+            ActivateItem(loginVM);
         }
 
-        public void ProdutoScreen(IApiHelper apiHelper)
+        public void ProdutoScreen()
         {
             //_produtoVm = produtoVm;
 
-            ActivateItem(new ProdutoViewModel(apiHelper));
+            ActivateItem(new ProdutoViewModel(_apiHelper));
         }
+
+        //private Func<ProdutoViewModel> _vmFactory;
+
+        //public ShellViewModel(Func<ProdutoViewModel> vmFactory)
+        //{
+        //    _vmFactory = vmFactory;
+        //}
+
+        //public void ProdutoScreen()
+        //{
+        //    var newVM = _vmFactory();
+        //    ActivateItem(newVM);
+        //}
 
     }
 }

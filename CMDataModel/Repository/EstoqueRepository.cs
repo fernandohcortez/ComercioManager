@@ -4,9 +4,9 @@ using CMDataModel.Repository.Interfaces;
 
 namespace CMDataModel.Repository
 {
-    public class UsuarioRepository : Repository<Usuario, CMDataEntities>, IUsuarioRepository
+    public class EstoqueRepository : Repository<Estoque, CMDataEntities>, IEstoqueRepository
     {
-        public UsuarioRepository(DbContext context) : base(context)
+        public EstoqueRepository(DbContext context) : base(context)
         {
         }
     }

@@ -23,6 +23,8 @@ namespace CMDataModel.Repository.Base
         void UpdateRange(IEnumerable<T> entities);
 
         void Remove(T entity);
+        void Remove(int id);
+        void Remove(string id);
         void RemoveRange(IEnumerable<T> entities);
     }
 }

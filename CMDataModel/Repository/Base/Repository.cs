@@ -73,6 +73,16 @@ namespace CMDataModel.Repository.Base
             _context.Set<TEntity>().Remove(entity);
         }
 
+        public void Remove(int id)
+        {
+            _context.Set<TEntity>().Remove(Get(id));
+        }
+
+        public void Remove(string id)
+        {
+            _context.Set<TEntity>().Remove(Get(id));
+        }
+
         public void RemoveRange(IEnumerable<TEntity> entities)
         {
             _context.Set<TEntity>().RemoveRange(entities);

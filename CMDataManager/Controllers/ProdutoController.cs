@@ -15,34 +15,35 @@ namespace CMDataManager.Controllers
             _unitOfWork = UnitOfWork.CriarInstancia();
         }
 
-        // GET api/values
         public IEnumerable<Produto> Get()
         {
             return _unitOfWork.Produtos.GetAll();
         }
 
-        // GET api/values/5
         public Produto Get(int id)
         {
             return _unitOfWork.Produtos.Get(id);
         }
 
-        // POST api/values
         public void Post([FromBody]Produto produto)
         {
             _unitOfWork.Produtos.Add(produto);
+
+            _unitOfWork.Commit();
         }
 
-        // PUT api/values/5
         public void Put(int id, [FromBody]Produto produto)
         {
             _unitOfWork.Produtos.Update(produto);
+
+            _unitOfWork.Commit();
         }
 
-        // DELETE api/values/5
         public void Delete(int id)
         {
-            _unitOfWork.Produtos.Remove(new Produto { Id = id });
+            _unitOfWork.Produtos.Remove(id);
+
+            _unitOfWork.Commit();
         }
     }
 }

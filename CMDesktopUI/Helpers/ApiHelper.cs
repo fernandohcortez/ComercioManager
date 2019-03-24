@@ -48,6 +48,8 @@ namespace CMDesktopUI.Helpers
 
                 _usuarioAutenticado = await response.Content.ReadAsAsync<UsuarioAutenticado>();
 
+                _apiClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + _usuarioAutenticado.Access_Token);
+
                 var dadosUsuarioAutenticado = await ObterUsuario(_usuarioAutenticado.UserName);
 
                 _usuarioAutenticado.Email = dadosUsuarioAutenticado.Email;
@@ -73,16 +75,15 @@ namespace CMDesktopUI.Helpers
 
         public async Task IncluirProduto(string nome, string descricao, decimal precoVenda)
         {
-            var data = new FormUrlEncodedContent(new[]
+           var data = new FormUrlEncodedContent(new[]
             {
-                new KeyValuePair<string, string>("Authorization", "Bearer " + _usuarioAutenticado.Access_Token),
                 new KeyValuePair<string, string>("Nome", nome),
                 new KeyValuePair<string, string>("Descricao", descricao),
                 new KeyValuePair<string, string>("PrevoVenda", precoVenda.ToString(CultureInfo.CurrentCulture)),
                 new KeyValuePair<string, string>("DataInclusao", DateTime.Now.ToString(CultureInfo.CurrentCulture)),
                 new KeyValuePair<string, string>("DataAlteracao", DateTime.Now.ToString(CultureInfo.CurrentCulture))
             });
-
+            
             using (var response = await _apiClient.PostAsync("api/Produto", data))
             {
                 if (response.IsSuccessStatusCode)

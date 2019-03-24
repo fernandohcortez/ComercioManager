@@ -8,13 +8,24 @@ using CMDesktopUI.Models;
 
 namespace CMDesktopUI.ViewModels
 {
-    public class ProdutoViewModel : Screen
+    public class ProdutoViewModel : Conductor<object>
     {
         private readonly IApiHelper _apiHelper;
 
         public ProdutoViewModel(IApiHelper apiHelper)
         {
             _apiHelper = apiHelper;
+        }
+
+        private int _id;
+        public int Id
+        {
+            get => _id;
+            set
+            {
+                _id = value;
+                NotifyOfPropertyChange(() => Id);
+            }
         }
 
         private string _nome;
@@ -65,6 +76,11 @@ namespace CMDesktopUI.ViewModels
             {
                 Console.WriteLine(e.Message);
             }
+        }
+
+        public void Fechar()
+        {
+            TryClose();
         }
     }
 }
