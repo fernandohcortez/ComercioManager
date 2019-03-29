@@ -4,9 +4,8 @@ using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using CM.DataAccess.Repository.Base;
 
-namespace CMDataModel.Repository.Base
+namespace CM.DataAccess.Repository.Base
 {
     public class Repository<TEntity, TContext> : IRepository<TEntity> where TEntity : class where TContext : class
     {

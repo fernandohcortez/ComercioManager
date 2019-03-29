@@ -91,13 +91,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CMEntityDataModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="ContextHelper.cs" />
+    <Compile Include="DbSetHelper.cs" />
     <Compile Include="DocumentoEntrada.cs">
       <DependentUpon>CMEntityDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DocumentoEntradaItem.cs">
       <DependentUpon>CMEntityDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Enum.cs" />
     <Compile Include="Estoque.cs">
       <DependentUpon>CMEntityDataModel.tt</DependentUpon>
     </Compile>
@@ -139,9 +140,7 @@
     <Compile Include="Usuario.cs">
       <DependentUpon>CMEntityDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Util\Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Util\Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -1,6 +1,5 @@
 ﻿using CM.DataAccess.Repository.Base;
 using CM.DataAccess.Repository.Interfaces;
-using CMDataModel.Repository;
 
 namespace CM.DataAccess.Repository.UnitOfWork
 {

@@ -1,21 +1,18 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using CM.DataAccess.Repository.Base;
-using CM.DataAccess.Repository.Interfaces;
+using System.Text;
+using CM.DataAccess;
 
-namespace CM.DataAccess.Repository
+namespace CM.Domain
 {
-    public class EstoqueRepository : Repository<Estoque, CMDataEntities>, IEstoqueRepository
+    public class EstoqueDomain
     {
-        public EstoqueRepository(DbContext context) : base(context)
-        {
-            
-        }
-
         public Estoque ObterEstoqueAtual(Produto produto)
         {
-            //Verificar se produto.Estoque funciona.
-            //var estoqueProduto = Find(m => m.ProdutoId == produto.Id).ToList();
+            //var context = ContextHelper.CriarInstancia();
+            //var estoqueProduto = context.DbSet.Find<Estoque>(m => m.ProdutoId == produto.Id).ToList();
+            //context.Commit();
 
             var quantidade = produto.Estoques.Sum(m => m.Quantidade);
             var valorUnitario = produto.Estoques.Sum(m => m.ValorUnitario);

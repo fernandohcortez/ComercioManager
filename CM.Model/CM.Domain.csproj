@@ -41,8 +41,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="EstoqueDomain.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CM.Core\CM.Core.csproj">
+      <Project>{aacce3e7-0d5a-48de-884e-1946fc180afe}</Project>
+      <Name>CM.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CMDataModel\CM.DataAccess.csproj">
+      <Project>{097a632a-3a19-4f72-8318-bfe0314f8b9c}</Project>
+      <Name>CM.DataAccess</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

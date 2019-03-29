@@ -1,6 +1,6 @@
 ﻿using System.Data.Entity;
+using CM.DataAccess.Repository.Base;
 using CM.DataAccess.Repository.Interfaces;
-using CMDataModel.Repository.Base;
 
 namespace CM.DataAccess.Repository
 {
