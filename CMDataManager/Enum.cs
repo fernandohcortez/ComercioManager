@@ -1,4 +1,4 @@
-﻿namespace CMDataManager
+﻿namespace CM.WebApi
 {
     public enum TipoMovimentoEstoque
     {

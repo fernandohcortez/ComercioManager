@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CMDataModel.Repository.Base
+namespace CM.DataAccess.Repository.Base
 {
     public class UnitOfWorkBase
     {

@@ -1,8 +1,10 @@
-﻿using CMDataManager.BLL.Base;
-using CMDataModel;
-using CMDataModel.Repository.UnitOfWork;
+﻿using CM.DataAccess;
+using CM.DataAccess.Repository.UnitOfWork;
+using CM.WebApi;
+using CM.WebApi.BLL;
+using CM.WebApi.BLL.Base;
 
-namespace CMDataManager.BLL
+namespace CM.WebApi.BLL
 {
     public class DocumentoEntradaBll : BllBase
     {

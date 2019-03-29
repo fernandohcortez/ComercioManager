@@ -1,13 +1,10 @@
-﻿using CMDataManager.Controllers.Base;
-using CMDataModel;
-using CMDataModel.Repository.Interfaces;
-using CMDataModel.Repository.UnitOfWork;
-using System.Collections.Generic;
-using System.Net.Mime;
-using System.Web.Http;
+﻿using System.Web.Http;
+using CM.DataAccess;
+using CM.DataAccess.Repository.Interfaces;
+using CM.WebApi.Controllers.Base;
 using Microsoft.AspNet.Identity;
 
-namespace CMDataManager.Controllers
+namespace CM.WebApi.Controllers
 {
     [RoutePrefix("api/Usuario")]
     public class UsuarioController : ControllerBase<Usuario, IUsuarioRepository, string>

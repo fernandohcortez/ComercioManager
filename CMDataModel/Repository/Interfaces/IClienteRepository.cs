@@ -1,6 +1,6 @@
-﻿using CMDataModel.Repository.Base;
+﻿using CM.DataAccess.Repository.Base;
 
-namespace CMDataModel.Repository.Interfaces
+namespace CM.DataAccess.Repository.Interfaces
 {
     public interface IClienteRepository : IRepository<Cliente>
     {

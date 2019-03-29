@@ -1,10 +1,11 @@
-﻿using CMDataManager.BLL.Base;
-using CMDataModel;
-using CMDataModel.Repository.UnitOfWork;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
+using CM.DataAccess;
+using CM.DataAccess.Repository.UnitOfWork;
+using CM.WebApi;
+using CM.WebApi.BLL.Base;
 
-namespace CMDataManager.BLL
+namespace CM.WebApi.BLL
 {
     public class EstoqueBll : BllBase
     {

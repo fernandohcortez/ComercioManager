@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CMDataModel
+namespace CM.DataAccess
 {
     using System;
     using System.Collections.Generic;

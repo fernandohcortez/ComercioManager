@@ -1,11 +1,12 @@
 ﻿using CMDataModel.Repository.Base;
-using CMDataModel.Repository.UnitOfWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using CM.DataAccess.Repository.Base;
+using CM.DataAccess.Repository.UnitOfWork;
 
-namespace CMDataManager.Controllers.Base
+namespace CM.WebApi.Controllers.Base
 {
     [Authorize]
     public class ControllerBase<TEntity, TRepository, TIdType> : ApiController

@@ -4,9 +4,9 @@ using System.Linq;
 using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartup(typeof(CMDataManager.Startup))]
+[assembly: OwinStartup(typeof(CM.WebApi.Startup))]
 
-namespace CMDataManager
+namespace CM.WebApi
 {
     public partial class Startup
     {

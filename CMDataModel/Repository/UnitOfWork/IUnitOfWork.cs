@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using CMDataModel.Repository.Interfaces;
+using CM.DataAccess.Repository.Interfaces;
 
-namespace CMDataModel.Repository.UnitOfWork
+namespace CM.DataAccess.Repository.UnitOfWork
 {
     public interface IUnitOfWork : IDisposable
     {

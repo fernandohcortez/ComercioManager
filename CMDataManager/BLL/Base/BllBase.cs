@@ -1,6 +1,6 @@
-﻿using CMDataModel.Repository.UnitOfWork;
+﻿using CM.DataAccess.Repository.UnitOfWork;
 
-namespace CMDataManager.BLL.Base
+namespace CM.WebApi.BLL.Base
 {
     public class BllBase
     {

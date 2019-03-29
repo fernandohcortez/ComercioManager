@@ -1,7 +1,8 @@
-﻿using CMDataModel.Repository.Base;
-using CMDataModel.Repository.Interfaces;
+﻿using CM.DataAccess.Repository.Base;
+using CM.DataAccess.Repository.Interfaces;
+using CMDataModel.Repository;
 
-namespace CMDataModel.Repository.UnitOfWork
+namespace CM.DataAccess.Repository.UnitOfWork
 {
     public class UnitOfWork : UnitOfWorkBase, IUnitOfWork
     {

@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using System.Xml;
 
-namespace CMDataModel.Util
+namespace CM.DataAccess.Util
 {
     public static class Extensions
     {

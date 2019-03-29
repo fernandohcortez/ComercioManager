@@ -8,10 +8,10 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
-using CMDataManager.Providers;
-using CMDataManager.Models;
+using CM.WebApi.Providers;
+using CM.WebApi.Models;
 
-namespace CMDataManager
+namespace CM.WebApi
 {
     public partial class Startup
     {

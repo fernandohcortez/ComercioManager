@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace CMDataModel.Repository.Base
+namespace CM.DataAccess.Repository.Base
 {
     public interface IRepository<T> where T : class
     {

@@ -1,8 +1,8 @@
 ﻿using System.Data.Entity;
+using CM.DataAccess.Repository.Interfaces;
 using CMDataModel.Repository.Base;
-using CMDataModel.Repository.Interfaces;
 
-namespace CMDataModel.Repository
+namespace CM.DataAccess.Repository
 {
     public class PedidoVendaItemRepository : Repository<PedidoVendaItem, CMDataEntities>, IPedidoVendaItemRepository
     {

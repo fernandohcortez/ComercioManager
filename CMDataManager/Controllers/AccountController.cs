@@ -13,11 +13,11 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
-using CMDataManager.Models;
-using CMDataManager.Providers;
-using CMDataManager.Results;
+using CM.WebApi.Models;
+using CM.WebApi.Providers;
+using CM.WebApi.Results;
 
-namespace CMDataManager.Controllers
+namespace CM.WebApi.Controllers
 {
     [Authorize]
     [RoutePrefix("api/Account")]

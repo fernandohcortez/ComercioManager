@@ -1,4 +1,4 @@
-namespace CMDataManager.Areas.HelpPage.ModelDescriptions
+namespace CM.WebApi.Areas.HelpPage.ModelDescriptions
 {
     public class DictionaryModelDescription : KeyValuePairModelDescription
     {

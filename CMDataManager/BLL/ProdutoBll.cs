@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using CMDataManager.BLL.Base;
-using CMDataModel;
-using CMDataModel.Repository.UnitOfWork;
+﻿using CM.DataAccess;
+using CM.DataAccess.Repository.UnitOfWork;
+using CM.WebApi.BLL.Base;
 
-namespace CMDataManager.BLL
+namespace CM.WebApi.BLL
 {
     public class ProdutoBll : BllBase
     {

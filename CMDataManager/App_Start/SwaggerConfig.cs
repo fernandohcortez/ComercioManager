@@ -1,14 +1,13 @@
-using CMDataManager;
-using CMDataManager.App_Start;
 using Swashbuckle.Application;
 using System.Web.Http;
 using WebActivatorEx;
+using CM.WebApi;
 
 #if DEBUG
 [assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
 #endif
 
-namespace CMDataManager
+namespace CM.WebApi
 {
     public class SwaggerConfig
     {

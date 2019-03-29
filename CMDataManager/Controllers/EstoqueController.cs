@@ -1,11 +1,8 @@
-﻿using CMDataModel;
-using CMDataModel.Repository.UnitOfWork;
-using System.Collections.Generic;
-using System.Web.Http;
-using CMDataManager.Controllers.Base;
-using CMDataModel.Repository.Interfaces;
+﻿using CM.DataAccess;
+using CM.DataAccess.Repository.Interfaces;
+using CM.WebApi.Controllers.Base;
 
-namespace CMDataManager.Controllers
+namespace CM.WebApi.Controllers
 {
     public class EstoqueController : ControllerBase<Estoque, IEstoqueRepository, int>
     {

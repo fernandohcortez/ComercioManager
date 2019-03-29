@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace CMDataManager.Models
+namespace CM.WebApi.Models
 {
     public class ProdutoModel
     {

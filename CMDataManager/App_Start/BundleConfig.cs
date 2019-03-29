@@ -1,7 +1,6 @@
-﻿using System.Web;
-using System.Web.Optimization;
+﻿using System.Web.Optimization;
 
-namespace CMDataManager
+namespace CM.WebApi
 {
     public class BundleConfig
     {

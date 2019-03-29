@@ -6,8 +6,9 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using CM.WebApi;
 
-namespace CMDataManager
+namespace CM.WebApi
 {
     public class WebApiApplication : System.Web.HttpApplication
     {

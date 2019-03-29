@@ -1,8 +1,8 @@
-﻿using Swashbuckle.Swagger;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Web.Http.Description;
+using Swashbuckle.Swagger;
 
-namespace CMDataManager.App_Start
+namespace CM.WebApi
 {
     public class AuthTokenOperation : IDocumentFilter
     {

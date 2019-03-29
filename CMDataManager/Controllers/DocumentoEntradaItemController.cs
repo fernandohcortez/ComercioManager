@@ -1,11 +1,8 @@
-﻿using CMDataManager.Controllers.Base;
-using CMDataModel;
-using CMDataModel.Repository.Interfaces;
-using CMDataModel.Repository.UnitOfWork;
-using System.Collections.Generic;
-using System.Web.Http;
+﻿using CM.DataAccess;
+using CM.DataAccess.Repository.Interfaces;
+using CM.WebApi.Controllers.Base;
 
-namespace CMDataManager.Controllers
+namespace CM.WebApi.Controllers
 {
     public class DocumentoEntradaItemController : ControllerBase<DocumentoEntradaItem, IDocumentoEntradaItemRepository, int>
     {
