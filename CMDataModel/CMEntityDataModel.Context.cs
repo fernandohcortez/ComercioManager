@@ -30,5 +30,9 @@ namespace CMDataModel
         public virtual DbSet<PedidoVendaItem> PedidoVendaItem { get; set; }
         public virtual DbSet<Produto> Produto { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
+        public virtual DbSet<DocumentoEntrada> DocumentoEntrada { get; set; }
+        public virtual DbSet<Fornecedor> Fornecedor { get; set; }
+        public virtual DbSet<Cliente> Cliente { get; set; }
+        public virtual DbSet<DocumentoEntradaItem> DocumentoEntradaItem { get; set; }
     }
 }

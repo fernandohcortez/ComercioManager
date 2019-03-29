@@ -86,19 +86,24 @@
     <Compile Include="Helpers\IApiHelper.cs" />
     <Compile Include="Helpers\PasswordBoxHelper.cs" />
     <Compile Include="Models\IUsuarioAutenticado.cs" />
+    <Compile Include="Models\Produto.cs" />
     <Compile Include="Models\UsuarioAutenticado.cs" />
-    <Compile Include="ViewModels\Login2ViewModel.cs" />
-    <Compile Include="ViewModels\ProdutoViewModel.cs" />
+    <Compile Include="ViewModels\FornecedorViewModel.cs" />
+    <Compile Include="ViewModels\PedidoVendaViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="ViewModels\DocumentoEntradaViewModel.cs" />
+    <Compile Include="ViewModels\ClienteViewModel.cs" />
+    <Compile Include="ViewModels\ProdutoListaViewModel.cs" />
+    <Compile Include="ViewModels\ProdutoViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
-    <Compile Include="Views\Login2View.xaml.cs">
-      <DependentUpon>Login2View.xaml</DependentUpon>
+    <Compile Include="Views\LoginView.xaml.cs">
+      <DependentUpon>LoginView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProdutoListaView.xaml.cs">
+      <DependentUpon>ProdutoListaView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ProdutoView.xaml.cs">
       <DependentUpon>ProdutoView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\LoginView.xaml.cs">
-      <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
@@ -107,17 +112,17 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\Login2View.xaml">
+    <Page Include="Views\LoginView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ProdutoListaView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ProdutoView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\LoginView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ShellView.xaml">
       <SubType>Designer</SubType>
@@ -153,6 +158,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\home.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\fotoUsuario.jpeg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

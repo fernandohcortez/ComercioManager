@@ -2,42 +2,18 @@
 using CMDataModel.Repository.UnitOfWork;
 using System.Collections.Generic;
 using System.Web.Http;
+using CMDataManager.BLL;
+using CMDataManager.Controllers.Base;
+using CMDataModel.Repository.Interfaces;
 
 namespace CMDataManager.Controllers
 {
-    [Authorize]
-    public class PedidoVendaController : ApiController
+    public class PedidoVendaController : ControllerBase<PedidoVenda, IPedidoVendaRepository, int>
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        public PedidoVendaController()
+        public override void Post(PedidoVenda pedidoVenda)
         {
-            _unitOfWork = UnitOfWork.CriarInstancia();
-        }
-
-        public IEnumerable<PedidoVenda> Get()
-        {
-            return _unitOfWork.PedidosVenda.GetAll();
-        }
-
-        public PedidoVenda Get(int id)
-        {
-            return _unitOfWork.PedidosVenda.Get(id);
-        }
-
-        public void Post([FromBody]PedidoVenda pedidoVenda)
-        {
-            _unitOfWork.PedidosVenda.Add(pedidoVenda);
-        }
-
-        public void Put(int id, [FromBody]PedidoVenda pedidoVenda)
-        {
-            _unitOfWork.PedidosVenda.Update(pedidoVenda);
-        }
-
-        public void Delete(int id)
-        {
-            _unitOfWork.PedidosVenda.Remove(id);
+            var pedidoVendaBll = new PedidoVendaBll(UoW);
+            pedidoVendaBll.Incluir(pedidoVenda);
         }
     }
 }

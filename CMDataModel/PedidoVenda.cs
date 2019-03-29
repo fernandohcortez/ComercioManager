@@ -22,15 +22,17 @@ namespace CMDataModel
     
         public int Id { get; set; }
         public System.DateTime Data { get; set; }
-        public decimal SubTotal { get; set; }
-        public decimal Imposto { get; set; }
-        public decimal Total { get; set; }
+        public decimal ValorSubTotal { get; set; }
+        public decimal ValorImposto { get; set; }
+        public decimal ValorTotal { get; set; }
         public System.DateTime DataInclusao { get; set; }
         public System.DateTime DataAlteracao { get; set; }
         public string UsuarioIdCaixa { get; set; }
+        public int ClienteId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PedidoVendaItem> Itens { get; set; }
         public virtual Usuario Usuario { get; set; }
+        public virtual Cliente Cliente { get; set; }
     }
 }

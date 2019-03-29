@@ -17,7 +17,7 @@ namespace CMDataModel
         public int Id { get; set; }
         public int Quantidade { get; set; }
         public decimal ValorUnitario { get; set; }
-        public decimal Imposto { get; set; }
+        public decimal ValorImposto { get; set; }
         public decimal ValorTotal { get; set; }
         public int PedidoVendaId { get; set; }
         public int ProdutoId { get; set; }

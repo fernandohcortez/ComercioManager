@@ -4,137 +4,273 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="CMDataModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="Estoque">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Quantidade" Type="int" Nullable="false" />
-          <Property Name="ValorUnitario" Type="decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="ValorTotal" Type="decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="Data" Type="datetime" Nullable="false" />
-          <Property Name="ProdutoId" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="PedidoVenda">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Data" Type="datetime" Nullable="false" />
-          <Property Name="SubTotal" Type="decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="Imposto" Type="decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="Total" Type="decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="DataInclusao" Type="datetime" Nullable="false" />
-          <Property Name="DataAlteracao" Type="datetime" Nullable="false" />
-          <Property Name="UsuarioIdCaixa" Type="nvarchar" MaxLength="128" Nullable="false" />
-        </EntityType>
-        <EntityType Name="PedidoVendaItem">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Quantidade" Type="int" Nullable="false" />
-          <Property Name="ValorUnitario" Type="decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="Imposto" Type="decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="ValorTotal" Type="decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="PedidoVendaId" Type="int" Nullable="false" />
-          <Property Name="ProdutoId" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Produto">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Nome" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="Descricao" Type="nvarchar(max)" />
-          <Property Name="PrecoVenda" Type="decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="DataInclusao" Type="datetime" Nullable="false" />
-          <Property Name="DataAlteracao" Type="datetime" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Usuario">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="PrimeiroNome" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="UltimoNome" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Email" Type="nvarchar" MaxLength="256" Nullable="false" />
-          <Property Name="DataInclusao" Type="datetime" Nullable="false" />
-          <Property Name="DataAlteracao" Type="datetime" Nullable="false" />
-        </EntityType>
-        <Association Name="FK_EstoqueProduto">
-          <End Role="Produto" Type="Self.Produto" Multiplicity="1" />
-          <End Role="Estoque" Type="Self.Estoque" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Produto">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Estoque">
-              <PropertyRef Name="ProdutoId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PedidoVendaItemPedidoVenda">
-          <End Role="PedidoVenda" Type="Self.PedidoVenda" Multiplicity="1" />
-          <End Role="PedidoVendaItem" Type="Self.PedidoVendaItem" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PedidoVenda">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="PedidoVendaItem">
-              <PropertyRef Name="PedidoVendaId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PedidoVendaItemProduto">
-          <End Role="Produto" Type="Self.Produto" Multiplicity="1" />
-          <End Role="PedidoVendaItem" Type="Self.PedidoVendaItem" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Produto">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="PedidoVendaItem">
-              <PropertyRef Name="ProdutoId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PedidoVendaUsuario">
-          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
-          <End Role="PedidoVenda" Type="Self.PedidoVenda" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Usuario">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="PedidoVenda">
-              <PropertyRef Name="UsuarioIdCaixa" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityContainer Name="CMDataModelStoreContainer">
-          <EntitySet Name="Estoque" EntityType="Self.Estoque" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="PedidoVenda" EntityType="Self.PedidoVenda" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="PedidoVendaItem" EntityType="Self.PedidoVendaItem" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Produto" EntityType="Self.Produto" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_EstoqueProduto" Association="Self.FK_EstoqueProduto">
-            <End Role="Produto" EntitySet="Produto" />
-            <End Role="Estoque" EntitySet="Estoque" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PedidoVendaItemPedidoVenda" Association="Self.FK_PedidoVendaItemPedidoVenda">
-            <End Role="PedidoVenda" EntitySet="PedidoVenda" />
-            <End Role="PedidoVendaItem" EntitySet="PedidoVendaItem" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PedidoVendaItemProduto" Association="Self.FK_PedidoVendaItemProduto">
-            <End Role="Produto" EntitySet="Produto" />
-            <End Role="PedidoVendaItem" EntitySet="PedidoVendaItem" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PedidoVendaUsuario" Association="Self.FK_PedidoVendaUsuario">
-            <End Role="Usuario" EntitySet="Usuario" />
-            <End Role="PedidoVenda" EntitySet="PedidoVenda" />
-          </AssociationSet>
-        </EntityContainer>
-      </Schema></edmx:StorageModels>
+    <Schema Namespace="CMDataModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="CMDataModelStoreContainer">
+    <EntitySet Name="Estoque" EntityType="CMDataModel.Store.Estoque" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="PedidoVenda" EntityType="CMDataModel.Store.PedidoVenda" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="PedidoVendaItem" EntityType="CMDataModel.Store.PedidoVendaItem" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Produto" EntityType="CMDataModel.Store.Produto" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Usuario" EntityType="CMDataModel.Store.Usuario" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="DocumentoEntrada" EntityType="CMDataModel.Store.DocumentoEntrada" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Fornecedor" EntityType="CMDataModel.Store.Fornecedor" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Cliente" EntityType="CMDataModel.Store.Cliente" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="DocumentoEntradaItem" EntityType="CMDataModel.Store.DocumentoEntradaItem" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="PedidoVendaItemPedidoVenda" Association="CMDataModel.Store.PedidoVendaItemPedidoVenda">
+      <End Role="PedidoVendaItem" EntitySet="PedidoVendaItem" />
+      <End Role="PedidoVenda" EntitySet="PedidoVenda" />
+    </AssociationSet>
+    <AssociationSet Name="PedidoVendaItemProduto" Association="CMDataModel.Store.PedidoVendaItemProduto">
+      <End Role="PedidoVendaItem" EntitySet="PedidoVendaItem" />
+      <End Role="Produto" EntitySet="Produto" />
+    </AssociationSet>
+    <AssociationSet Name="PedidoVendaUsuario" Association="CMDataModel.Store.PedidoVendaUsuario">
+      <End Role="PedidoVenda" EntitySet="PedidoVenda" />
+      <End Role="Usuario" EntitySet="Usuario" />
+    </AssociationSet>
+    <AssociationSet Name="EstoqueProduto" Association="CMDataModel.Store.EstoqueProduto">
+      <End Role="Estoque" EntitySet="Estoque" />
+      <End Role="Produto" EntitySet="Produto" />
+    </AssociationSet>
+    <AssociationSet Name="DocumentoEntradaFornecedor" Association="CMDataModel.Store.DocumentoEntradaFornecedor">
+      <End Role="DocumentoEntrada" EntitySet="DocumentoEntrada" />
+      <End Role="Fornecedor" EntitySet="Fornecedor" />
+    </AssociationSet>
+    <AssociationSet Name="DocumentoEntradaItemDocumentoEntrada" Association="CMDataModel.Store.DocumentoEntradaItemDocumentoEntrada">
+      <End Role="DocumentoEntradaItem" EntitySet="DocumentoEntradaItem" />
+      <End Role="DocumentoEntrada" EntitySet="DocumentoEntrada" />
+    </AssociationSet>
+    <AssociationSet Name="DocumentoEntradaItemProduto" Association="CMDataModel.Store.DocumentoEntradaItemProduto">
+      <End Role="DocumentoEntradaItem" EntitySet="DocumentoEntradaItem" />
+      <End Role="Produto" EntitySet="Produto" />
+    </AssociationSet>
+    <AssociationSet Name="PedidoVendaCliente" Association="CMDataModel.Store.PedidoVendaCliente">
+      <End Role="PedidoVenda" EntitySet="PedidoVenda" />
+      <End Role="Cliente" EntitySet="Cliente" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Estoque">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Quantidade" Type="int" Nullable="false" />
+    <Property Name="ValorUnitario" Type="decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="ValorTotal" Type="decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="Data" Type="datetime" Nullable="false" />
+    <Property Name="ProdutoId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PedidoVenda">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Data" Type="datetime" Nullable="false" />
+    <Property Name="ValorSubTotal" Type="decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="ValorImposto" Type="decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="ValorTotal" Type="decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="DataInclusao" Type="datetime" Nullable="false" />
+    <Property Name="DataAlteracao" Type="datetime" Nullable="false" />
+    <Property Name="UsuarioIdCaixa" Type="nvarchar" Nullable="false" MaxLength="128" />
+    <Property Name="ClienteId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PedidoVendaItem">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Quantidade" Type="int" Nullable="false" />
+    <Property Name="ValorUnitario" Type="decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="ValorImposto" Type="decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="ValorTotal" Type="decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="PedidoVendaId" Type="int" Nullable="false" />
+    <Property Name="ProdutoId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Produto">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nome" Type="nvarchar" Nullable="false" MaxLength="100" />
+    <Property Name="Descricao" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="PrecoVenda" Type="decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="DataInclusao" Type="datetime" Nullable="false" />
+    <Property Name="DataAlteracao" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Usuario">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="nvarchar" Nullable="false" MaxLength="128" />
+    <Property Name="PrimeiroNome" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="UltimoNome" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="Email" Type="nvarchar" Nullable="false" MaxLength="256" />
+    <Property Name="DataInclusao" Type="datetime" Nullable="false" />
+    <Property Name="DataAlteracao" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DocumentoEntrada">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SerieNF" Type="nvarchar" Nullable="true" MaxLength="3" />
+    <Property Name="NumeroNF" Type="nvarchar" Nullable="true" MaxLength="15" />
+    <Property Name="Data" Type="datetime" Nullable="false" />
+    <Property Name="FornecedorId" Type="int" Nullable="false" />
+    <Property Name="ValorSubTotal" Type="decimal" Nullable="false" />
+    <Property Name="ValorImposto" Type="decimal" Nullable="false" />
+    <Property Name="ValorTotal" Type="decimal" Nullable="false" />
+    <Property Name="DataInclusao" Type="datetime" Nullable="false" />
+    <Property Name="DataAlteracao" Type="datetime" Nullable="false" />
+    <Property Name="Status" Type="nvarchar" Nullable="false" MaxLength="1" />
+  </EntityType>
+  <EntityType Name="Fornecedor">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RazaoSocial" Type="nvarchar" Nullable="false" MaxLength="100" />
+    <Property Name="NomeFantasia" Type="nvarchar" Nullable="true" MaxLength="70" />
+    <Property Name="Cnpj" Type="nvarchar" Nullable="false" MaxLength="18" />
+    <Property Name="InscricaoEstadual" Type="nvarchar" Nullable="true" MaxLength="15" />
+    <Property Name="Fone1" Type="nvarchar" Nullable="true" MaxLength="14" />
+    <Property Name="Fone2" Type="nvarchar" Nullable="true" MaxLength="14" />
+    <Property Name="Endereco" Type="nvarchar" Nullable="true" MaxLength="100" />
+    <Property Name="Complemento" Type="nvarchar" Nullable="true" MaxLength="100" />
+    <Property Name="Bairro" Type="nvarchar" Nullable="true" MaxLength="70" />
+    <Property Name="Cidade" Type="nvarchar" Nullable="true" MaxLength="70" />
+    <Property Name="Estado" Type="nvarchar" Nullable="true" MaxLength="2" />
+    <Property Name="Email" Type="nvarchar" Nullable="true" MaxLength="256" />
+    <Property Name="DataInclusao" Type="datetime" Nullable="false" />
+    <Property Name="DataAlteracao" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Cliente">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nome" Type="nvarchar" Nullable="false" MaxLength="70" />
+    <Property Name="Cpf" Type="nvarchar" Nullable="true" MaxLength="14" />
+    <Property Name="Fone1" Type="nvarchar" Nullable="true" MaxLength="14" />
+    <Property Name="Fone2" Type="nvarchar" Nullable="true" MaxLength="14" />
+    <Property Name="DataNascimento" Type="datetime" Nullable="true" />
+    <Property Name="Endereco" Type="nvarchar" Nullable="true" MaxLength="200" />
+    <Property Name="Complemento" Type="nvarchar" Nullable="true" MaxLength="100" />
+    <Property Name="Bairro" Type="nvarchar" Nullable="true" MaxLength="70" />
+    <Property Name="Cidade" Type="nvarchar" Nullable="true" MaxLength="70" />
+    <Property Name="Estado" Type="nvarchar" Nullable="true" MaxLength="2" />
+    <Property Name="DataInclusao" Type="datetime" Nullable="false" />
+    <Property Name="DataAlteracao" Type="datetime" Nullable="false" />
+    <Property Name="Email" Type="nvarchar" Nullable="true" MaxLength="256" />
+  </EntityType>
+  <EntityType Name="DocumentoEntradaItem">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DocumentoEntradaId" Type="int" Nullable="false" />
+    <Property Name="Quantidade" Type="int" Nullable="false" />
+    <Property Name="ValorUnitario" Type="decimal" Nullable="false" />
+    <Property Name="ValorImposto" Type="decimal" Nullable="false" />
+    <Property Name="ValorTotal" Type="decimal" Nullable="false" />
+    <Property Name="ProdutoId" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="PedidoVendaItemPedidoVenda">
+    <End Role="PedidoVendaItem" Type="CMDataModel.Store.PedidoVendaItem" Multiplicity="*" />
+    <End Role="PedidoVenda" Type="CMDataModel.Store.PedidoVenda" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="PedidoVenda">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PedidoVendaItem">
+        <PropertyRef Name="PedidoVendaId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="PedidoVendaItemProduto">
+    <End Role="PedidoVendaItem" Type="CMDataModel.Store.PedidoVendaItem" Multiplicity="*" />
+    <End Role="Produto" Type="CMDataModel.Store.Produto" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Produto">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PedidoVendaItem">
+        <PropertyRef Name="ProdutoId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="PedidoVendaUsuario">
+    <End Role="PedidoVenda" Type="CMDataModel.Store.PedidoVenda" Multiplicity="*" />
+    <End Role="Usuario" Type="CMDataModel.Store.Usuario" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Usuario">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PedidoVenda">
+        <PropertyRef Name="UsuarioIdCaixa" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="EstoqueProduto">
+    <End Role="Estoque" Type="CMDataModel.Store.Estoque" Multiplicity="*" />
+    <End Role="Produto" Type="CMDataModel.Store.Produto" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Produto">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Estoque">
+        <PropertyRef Name="ProdutoId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="DocumentoEntradaFornecedor">
+    <End Role="DocumentoEntrada" Type="CMDataModel.Store.DocumentoEntrada" Multiplicity="*" />
+    <End Role="Fornecedor" Type="CMDataModel.Store.Fornecedor" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Fornecedor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DocumentoEntrada">
+        <PropertyRef Name="FornecedorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="DocumentoEntradaItemDocumentoEntrada">
+    <End Role="DocumentoEntradaItem" Type="CMDataModel.Store.DocumentoEntradaItem" Multiplicity="*" />
+    <End Role="DocumentoEntrada" Type="CMDataModel.Store.DocumentoEntrada" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="DocumentoEntrada">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DocumentoEntradaItem">
+        <PropertyRef Name="DocumentoEntradaId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="DocumentoEntradaItemProduto">
+    <End Role="DocumentoEntradaItem" Type="CMDataModel.Store.DocumentoEntradaItem" Multiplicity="*" />
+    <End Role="Produto" Type="CMDataModel.Store.Produto" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Produto">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DocumentoEntradaItem">
+        <PropertyRef Name="ProdutoId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="PedidoVendaCliente">
+    <End Role="PedidoVenda" Type="CMDataModel.Store.PedidoVenda" Multiplicity="*" />
+    <End Role="Cliente" Type="CMDataModel.Store.Cliente" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Cliente">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PedidoVenda">
+        <PropertyRef Name="ClienteId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CMDataModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -156,14 +292,16 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Data" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="SubTotal" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="Imposto" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="Total" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="ValorSubTotal" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="ValorImposto" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="ValorTotal" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="DataInclusao" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DataAlteracao" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Itens" Relationship="CMDataModel.PedidoVendaItemPedidoVenda" FromRole="PedidoVenda" ToRole="PedidoVendaItem" />
           <NavigationProperty Name="Usuario" Relationship="CMDataModel.PedidoVendaUsuario" FromRole="PedidoVenda" ToRole="Usuario" />
           <Property Name="UsuarioIdCaixa" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Cliente" Relationship="CMDataModel.PedidoVendaCliente" FromRole="PedidoVenda" ToRole="Cliente" />
+          <Property Name="ClienteId" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="PedidoVendaItem">
           <Key>
@@ -172,7 +310,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Quantidade" Type="Int32" Nullable="false" />
           <Property Name="ValorUnitario" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="Imposto" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="ValorImposto" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="ValorTotal" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <NavigationProperty Name="PedidoVenda" Relationship="CMDataModel.PedidoVendaItemPedidoVenda" FromRole="PedidoVendaItem" ToRole="PedidoVenda" />
           <Property Name="PedidoVendaId" Type="Int32" Nullable="false" />
@@ -189,20 +327,21 @@
           <Property Name="PrecoVenda" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="DataInclusao" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DataAlteracao" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="PedidoVendaItens" Relationship="CMDataModel.PedidoVendaItemProduto" FromRole="Produto" ToRole="PedidoVendaItem" />
+          <NavigationProperty Name="ItensPedidoVenda" Relationship="CMDataModel.PedidoVendaItemProduto" FromRole="Produto" ToRole="PedidoVendaItem" />
           <NavigationProperty Name="Estoques" Relationship="CMDataModel.EstoqueProduto" FromRole="Produto" ToRole="Estoque" />
+          <NavigationProperty Name="ItensDocumentoEntrada" Relationship="CMDataModel.DocumentoEntradaItemProduto" FromRole="Produto" ToRole="DocumentoEntradaItem" />
         </EntityType>
         <EntityType Name="Usuario">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="PrimeiroNome" Type="String" MaxLength="51" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PrimeiroNome" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="UltimoNome" Type="String" MaxLength="50" Unicode="true" Nullable="false" FixedLength="false" />
           <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="DataInclusao" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DataAlteracao" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="PedidoVendas" Relationship="CMDataModel.PedidoVendaUsuario" FromRole="Usuario" ToRole="PedidoVenda" />
+          <NavigationProperty Name="PedidosVendas" Relationship="CMDataModel.PedidoVendaUsuario" FromRole="Usuario" ToRole="PedidoVenda" />
         </EntityType>
         <EntityContainer Name="CMDataEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Estoque" EntityType="Self.Estoque" />
@@ -225,6 +364,26 @@
           <AssociationSet Name="EstoqueProduto" Association="CMDataModel.EstoqueProduto">
             <End Role="Estoque" EntitySet="Estoque" />
             <End Role="Produto" EntitySet="Produto" />
+          </AssociationSet>
+          <EntitySet Name="DocumentoEntrada" EntityType="CMDataModel.DocumentoEntrada" />
+          <EntitySet Name="Fornecedor" EntityType="CMDataModel.Fornecedor" />
+          <EntitySet Name="Cliente" EntityType="CMDataModel.Cliente" />
+          <AssociationSet Name="DocumentoEntradaFornecedor" Association="CMDataModel.DocumentoEntradaFornecedor">
+            <End Role="DocumentoEntrada" EntitySet="DocumentoEntrada" />
+            <End Role="Fornecedor" EntitySet="Fornecedor" />
+          </AssociationSet>
+          <EntitySet Name="DocumentoEntradaItem" EntityType="CMDataModel.DocumentoEntradaItem" />
+          <AssociationSet Name="DocumentoEntradaItemDocumentoEntrada" Association="CMDataModel.DocumentoEntradaItemDocumentoEntrada">
+            <End Role="DocumentoEntradaItem" EntitySet="DocumentoEntradaItem" />
+            <End Role="DocumentoEntrada" EntitySet="DocumentoEntrada" />
+          </AssociationSet>
+          <AssociationSet Name="DocumentoEntradaItemProduto" Association="CMDataModel.DocumentoEntradaItemProduto">
+            <End Role="DocumentoEntradaItem" EntitySet="DocumentoEntradaItem" />
+            <End Role="Produto" EntitySet="Produto" />
+          </AssociationSet>
+          <AssociationSet Name="PedidoVendaCliente" Association="CMDataModel.PedidoVendaCliente">
+            <End Role="PedidoVenda" EntitySet="PedidoVenda" />
+            <End Role="Cliente" EntitySet="Cliente" />
           </AssociationSet>
         </EntityContainer>
         <Association Name="PedidoVendaItemPedidoVenda">
@@ -275,6 +434,127 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="DocumentoEntrada">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SerieNF" Type="String" Nullable="true" MaxLength="3" />
+          <Property Name="NumeroNF" Type="String" Nullable="true" MaxLength="15" />
+          <Property Name="Data" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="Fornecedor" Relationship="CMDataModel.DocumentoEntradaFornecedor" FromRole="DocumentoEntrada" ToRole="Fornecedor" />
+          <Property Name="FornecedorId" Type="Int32" Nullable="false" />
+          <Property Name="ValorSubTotal" Type="Decimal" Nullable="false" />
+          <Property Name="ValorImposto" Type="Decimal" Nullable="false" />
+          <Property Name="ValorTotal" Type="Decimal" Nullable="false" />
+          <Property Name="DataInclusao" Type="DateTime" Nullable="false" />
+          <Property Name="DataAlteracao" Type="DateTime" Nullable="false" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="1" />
+          <NavigationProperty Name="Itens" Relationship="CMDataModel.DocumentoEntradaItemDocumentoEntrada" FromRole="DocumentoEntrada" ToRole="DocumentoEntradaItem" />
+        </EntityType>
+        <EntityType Name="Fornecedor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="DocumentosEntrada" Relationship="CMDataModel.DocumentoEntradaFornecedor" FromRole="Fornecedor" ToRole="DocumentoEntrada" />
+          <Property Name="RazaoSocial" Type="String" Nullable="false" MaxLength="100" />
+          <Property Name="NomeFantasia" Type="String" Nullable="true" MaxLength="70" />
+          <Property Name="Cnpj" Type="String" Nullable="false" MaxLength="18" />
+          <Property Name="InscricaoEstadual" Type="String" Nullable="true" MaxLength="15" />
+          <Property Name="Fone1" Type="String" Nullable="true" MaxLength="14" />
+          <Property Name="Fone2" Type="String" Nullable="true" MaxLength="14" />
+          <Property Name="Endereco" Type="String" Nullable="true" MaxLength="100" />
+          <Property Name="Complemento" Type="String" Nullable="true" MaxLength="100" />
+          <Property Name="Bairro" Type="String" Nullable="true" MaxLength="70" />
+          <Property Name="Cidade" Type="String" Nullable="true" MaxLength="70" />
+          <Property Name="Estado" Type="String" Nullable="true" MaxLength="2" />
+          <Property Name="Email" Type="String" Nullable="true" MaxLength="256" />
+          <Property Name="DataInclusao" Type="DateTime" Nullable="false" />
+          <Property Name="DataAlteracao" Type="DateTime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Cliente">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="String" Nullable="false" MaxLength="70" />
+          <Property Name="Cpf" Type="String" Nullable="true" MaxLength="14" />
+          <Property Name="Fone1" Type="String" Nullable="true" MaxLength="14" />
+          <Property Name="Fone2" Type="String" Nullable="true" MaxLength="14" />
+          <Property Name="DataNascimento" Type="DateTime" Nullable="true" />
+          <Property Name="Endereco" Type="String" Nullable="true" MaxLength="200" />
+          <Property Name="Complemento" Type="String" Nullable="true" MaxLength="100" />
+          <Property Name="Bairro" Type="String" Nullable="true" MaxLength="70" />
+          <Property Name="Cidade" Type="String" Nullable="true" MaxLength="70" />
+          <Property Name="Estado" Type="String" Nullable="true" MaxLength="2" />
+          <Property Name="DataInclusao" Type="DateTime" Nullable="false" />
+          <Property Name="DataAlteracao" Type="DateTime" Nullable="false" />
+          <Property Name="Email" Type="String" Nullable="true" MaxLength="256" />
+          <NavigationProperty Name="PedidosVendas" Relationship="CMDataModel.PedidoVendaCliente" FromRole="Cliente" ToRole="PedidoVenda" />
+        </EntityType>
+        <Association Name="DocumentoEntradaFornecedor">
+          <End Type="CMDataModel.DocumentoEntrada" Role="DocumentoEntrada" Multiplicity="*" />
+          <End Type="CMDataModel.Fornecedor" Role="Fornecedor" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Fornecedor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DocumentoEntrada">
+              <PropertyRef Name="FornecedorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="DocumentoEntradaItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="DocumentoEntrada" Relationship="CMDataModel.DocumentoEntradaItemDocumentoEntrada" FromRole="DocumentoEntradaItem" ToRole="DocumentoEntrada" />
+          <Property Name="DocumentoEntradaId" Type="Int32" Nullable="false" />
+          <Property Name="Quantidade" Type="Int32" Nullable="false" />
+          <Property Name="ValorUnitario" Type="Decimal" Nullable="false" />
+          <Property Name="ValorImposto" Type="Decimal" Nullable="false" />
+          <Property Name="ValorTotal" Type="Decimal" Nullable="false" />
+          <NavigationProperty Name="Produto" Relationship="CMDataModel.DocumentoEntradaItemProduto" FromRole="DocumentoEntradaItem" ToRole="Produto" />
+          <Property Name="ProdutoId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="DocumentoEntradaItemDocumentoEntrada">
+          <End Type="CMDataModel.DocumentoEntradaItem" Role="DocumentoEntradaItem" Multiplicity="*" />
+          <End Type="CMDataModel.DocumentoEntrada" Role="DocumentoEntrada" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="DocumentoEntrada">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DocumentoEntradaItem">
+              <PropertyRef Name="DocumentoEntradaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="DocumentoEntradaItemProduto">
+          <End Type="CMDataModel.DocumentoEntradaItem" Role="DocumentoEntradaItem" Multiplicity="*" />
+          <End Type="CMDataModel.Produto" Role="Produto" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Produto">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DocumentoEntradaItem">
+              <PropertyRef Name="ProdutoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PedidoVendaCliente">
+          <End Type="CMDataModel.PedidoVenda" Role="PedidoVenda" Multiplicity="*" />
+          <End Type="CMDataModel.Cliente" Role="Cliente" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PedidoVenda">
+              <PropertyRef Name="ClienteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -298,12 +578,13 @@
         <MappingFragment StoreEntitySet="PedidoVenda">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Data" ColumnName="Data" />
-          <ScalarProperty Name="SubTotal" ColumnName="SubTotal" />
-          <ScalarProperty Name="Imposto" ColumnName="Imposto" />
-          <ScalarProperty Name="Total" ColumnName="Total" />
+          <ScalarProperty Name="ValorSubTotal" ColumnName="ValorSubTotal" />
+          <ScalarProperty Name="ValorImposto" ColumnName="ValorImposto" />
+          <ScalarProperty Name="ValorTotal" ColumnName="ValorTotal" />
           <ScalarProperty Name="DataInclusao" ColumnName="DataInclusao" />
           <ScalarProperty Name="DataAlteracao" ColumnName="DataAlteracao" />
           <ScalarProperty Name="UsuarioIdCaixa" ColumnName="UsuarioIdCaixa" />
+          <ScalarProperty Name="ClienteId" ColumnName="ClienteId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -313,7 +594,7 @@
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Quantidade" ColumnName="Quantidade" />
           <ScalarProperty Name="ValorUnitario" ColumnName="ValorUnitario" />
-          <ScalarProperty Name="Imposto" ColumnName="Imposto" />
+          <ScalarProperty Name="ValorImposto" ColumnName="ValorImposto" />
           <ScalarProperty Name="ValorTotal" ColumnName="ValorTotal" />
           <ScalarProperty Name="PedidoVendaId" ColumnName="PedidoVendaId" />
           <ScalarProperty Name="ProdutoId" ColumnName="ProdutoId" />
@@ -341,6 +622,77 @@
           <ScalarProperty Name="Email" ColumnName="Email" />
           <ScalarProperty Name="DataInclusao" ColumnName="DataInclusao" />
           <ScalarProperty Name="DataAlteracao" ColumnName="DataAlteracao" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DocumentoEntrada">
+      <EntityTypeMapping TypeName="IsTypeOf(CMDataModel.DocumentoEntrada)">
+        <MappingFragment StoreEntitySet="DocumentoEntrada">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="SerieNF" ColumnName="SerieNF" />
+          <ScalarProperty Name="NumeroNF" ColumnName="NumeroNF" />
+          <ScalarProperty Name="Data" ColumnName="Data" />
+          <ScalarProperty Name="FornecedorId" ColumnName="FornecedorId" />
+          <ScalarProperty Name="ValorSubTotal" ColumnName="ValorSubTotal" />
+          <ScalarProperty Name="ValorImposto" ColumnName="ValorImposto" />
+          <ScalarProperty Name="ValorTotal" ColumnName="ValorTotal" />
+          <ScalarProperty Name="DataInclusao" ColumnName="DataInclusao" />
+          <ScalarProperty Name="DataAlteracao" ColumnName="DataAlteracao" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Fornecedor">
+      <EntityTypeMapping TypeName="IsTypeOf(CMDataModel.Fornecedor)">
+        <MappingFragment StoreEntitySet="Fornecedor">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="RazaoSocial" ColumnName="RazaoSocial" />
+          <ScalarProperty Name="NomeFantasia" ColumnName="NomeFantasia" />
+          <ScalarProperty Name="Cnpj" ColumnName="Cnpj" />
+          <ScalarProperty Name="InscricaoEstadual" ColumnName="InscricaoEstadual" />
+          <ScalarProperty Name="Fone1" ColumnName="Fone1" />
+          <ScalarProperty Name="Fone2" ColumnName="Fone2" />
+          <ScalarProperty Name="Endereco" ColumnName="Endereco" />
+          <ScalarProperty Name="Complemento" ColumnName="Complemento" />
+          <ScalarProperty Name="Bairro" ColumnName="Bairro" />
+          <ScalarProperty Name="Cidade" ColumnName="Cidade" />
+          <ScalarProperty Name="Estado" ColumnName="Estado" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="DataInclusao" ColumnName="DataInclusao" />
+          <ScalarProperty Name="DataAlteracao" ColumnName="DataAlteracao" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Cliente">
+      <EntityTypeMapping TypeName="IsTypeOf(CMDataModel.Cliente)">
+        <MappingFragment StoreEntitySet="Cliente">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Nome" ColumnName="Nome" />
+          <ScalarProperty Name="Cpf" ColumnName="Cpf" />
+          <ScalarProperty Name="Fone1" ColumnName="Fone1" />
+          <ScalarProperty Name="Fone2" ColumnName="Fone2" />
+          <ScalarProperty Name="DataNascimento" ColumnName="DataNascimento" />
+          <ScalarProperty Name="Endereco" ColumnName="Endereco" />
+          <ScalarProperty Name="Complemento" ColumnName="Complemento" />
+          <ScalarProperty Name="Bairro" ColumnName="Bairro" />
+          <ScalarProperty Name="Cidade" ColumnName="Cidade" />
+          <ScalarProperty Name="Estado" ColumnName="Estado" />
+          <ScalarProperty Name="DataInclusao" ColumnName="DataInclusao" />
+          <ScalarProperty Name="DataAlteracao" ColumnName="DataAlteracao" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DocumentoEntradaItem">
+      <EntityTypeMapping TypeName="IsTypeOf(CMDataModel.DocumentoEntradaItem)">
+        <MappingFragment StoreEntitySet="DocumentoEntradaItem">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="DocumentoEntradaId" ColumnName="DocumentoEntradaId" />
+          <ScalarProperty Name="Quantidade" ColumnName="Quantidade" />
+          <ScalarProperty Name="ValorUnitario" ColumnName="ValorUnitario" />
+          <ScalarProperty Name="ValorImposto" ColumnName="ValorImposto" />
+          <ScalarProperty Name="ValorTotal" ColumnName="ValorTotal" />
+          <ScalarProperty Name="ProdutoId" ColumnName="ProdutoId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

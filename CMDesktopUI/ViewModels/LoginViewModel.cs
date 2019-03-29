@@ -2,10 +2,11 @@
 using CMDesktopUI.Helpers;
 using System;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace CMDesktopUI.ViewModels
 {
-    public class LoginViewModel : Screen
+    public class LoginViewModel : Conductor<object>
     {
         private readonly IApiHelper _apiHelper;
 
@@ -50,7 +51,7 @@ namespace CMDesktopUI.ViewModels
                 NotifyOfPropertyChange(() => MensagemErro);
             }
         }
-        
+
         public bool CanLogIn => Usuario?.Length > 0 && Senha?.Length > 0;
 
         public async Task LogIn()
@@ -60,11 +61,26 @@ namespace CMDesktopUI.ViewModels
                 MensagemErro = string.Empty;
 
                 var resultado = await _apiHelper.Autenticar(Usuario, Senha);
+
+                //parei-- parei aqui tentando avisar o shellview que o login foi autenticado para que o story do menu seja executado.
+                //resultado.UsuarioAutorizado.Invoke(resultado, null);
+
+                TryClose();
             }
             catch (Exception e)
             {
                 MensagemErro = e.Message;
             }
+        }
+
+        public void Sair()
+        {
+            Application.Current.Shutdown();
+        }
+
+        public void EsqueceuSenha()
+        {
+            MensagemErro = "Função ainda não disponível.";
         }
     }
 }

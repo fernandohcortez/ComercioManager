@@ -14,6 +14,14 @@
         <AssociationConnector Association="CMDataModel.PedidoVendaItemProduto" />
         <AssociationConnector Association="CMDataModel.PedidoVendaUsuario" />
         <AssociationConnector Association="CMDataModel.EstoqueProduto" />
+        <EntityTypeShape EntityType="CMDataModel.DocumentoEntrada" Width="2" PointX="5.75" PointY="4.5" />
+        <EntityTypeShape EntityType="CMDataModel.Fornecedor" Width="1.5" PointX="11.625" PointY="0.5" />
+        <EntityTypeShape EntityType="CMDataModel.Cliente" Width="1.5" PointX="8.375" PointY="0.5" />
+        <AssociationConnector Association="CMDataModel.DocumentoEntradaFornecedor" />
+        <EntityTypeShape EntityType="CMDataModel.DocumentoEntradaItem" Width="2.75" PointX="8.875" PointY="6" />
+        <AssociationConnector Association="CMDataModel.DocumentoEntradaItemDocumentoEntrada" />
+        <AssociationConnector Association="CMDataModel.DocumentoEntradaItemProduto" />
+        <AssociationConnector Association="CMDataModel.PedidoVendaCliente" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

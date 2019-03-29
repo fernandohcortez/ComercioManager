@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 03/07/2019 12:41:25
+-- Date Created: 03/26/2019 14:52:54
 -- Generated from EDMX file: C:\ProjetosVS\ComercioManager\CMDataModel\CMEntityDataModel.edmx
 -- --------------------------------------------------
 
@@ -17,11 +17,38 @@ GO
 -- Dropping existing FOREIGN KEY constraints
 -- --------------------------------------------------
 
+IF OBJECT_ID(N'[dbo].[FK_EstoqueProduto]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Estoque] DROP CONSTRAINT [FK_EstoqueProduto];
+GO
+IF OBJECT_ID(N'[dbo].[FK_PedidoVendaItemPedidoVenda]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[PedidoVendaItem] DROP CONSTRAINT [FK_PedidoVendaItemPedidoVenda];
+GO
+IF OBJECT_ID(N'[dbo].[FK_PedidoVendaItemProduto]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[PedidoVendaItem] DROP CONSTRAINT [FK_PedidoVendaItemProduto];
+GO
+IF OBJECT_ID(N'[dbo].[FK_PedidoVendaUsuario]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[PedidoVenda] DROP CONSTRAINT [FK_PedidoVendaUsuario];
+GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
 -- --------------------------------------------------
 
+IF OBJECT_ID(N'[dbo].[Estoque]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Estoque];
+GO
+IF OBJECT_ID(N'[dbo].[PedidoVenda]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[PedidoVenda];
+GO
+IF OBJECT_ID(N'[dbo].[PedidoVendaItem]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[PedidoVendaItem];
+GO
+IF OBJECT_ID(N'[dbo].[Produto]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Produto];
+GO
+IF OBJECT_ID(N'[dbo].[Usuario]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Usuario];
+GO
 
 -- --------------------------------------------------
 -- Creating all tables
@@ -42,12 +69,13 @@ GO
 CREATE TABLE [dbo].[PedidoVenda] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [Data] datetime  NOT NULL,
-    [SubTotal] decimal(19,4)  NOT NULL,
-    [Imposto] decimal(19,4)  NOT NULL,
-    [Total] decimal(19,4)  NOT NULL,
+    [ValorSubTotal] decimal(19,4)  NOT NULL,
+    [ValorImposto] decimal(19,4)  NOT NULL,
+    [ValorTotal] decimal(19,4)  NOT NULL,
     [DataInclusao] datetime  NOT NULL,
     [DataAlteracao] datetime  NOT NULL,
-    [UsuarioIdCaixa] nvarchar(128)  NOT NULL
+    [UsuarioIdCaixa] nvarchar(128)  NOT NULL,
+    [ClienteId] int  NOT NULL
 );
 GO
 
@@ -56,7 +84,7 @@ CREATE TABLE [dbo].[PedidoVendaItem] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [Quantidade] int  NOT NULL,
     [ValorUnitario] decimal(19,4)  NOT NULL,
-    [Imposto] decimal(19,4)  NOT NULL,
+    [ValorImposto] decimal(19,4)  NOT NULL,
     [ValorTotal] decimal(19,4)  NOT NULL,
     [PedidoVendaId] int  NOT NULL,
     [ProdutoId] int  NOT NULL
@@ -82,6 +110,73 @@ CREATE TABLE [dbo].[Usuario] (
     [Email] nvarchar(256)  NOT NULL,
     [DataInclusao] datetime  NOT NULL,
     [DataAlteracao] datetime  NOT NULL
+);
+GO
+
+-- Creating table 'DocumentoEntrada'
+CREATE TABLE [dbo].[DocumentoEntrada] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [SerieNF] nvarchar(3)  NULL,
+    [NumeroNF] nvarchar(15)  NULL,
+    [Data] datetime  NOT NULL,
+    [FornecedorId] int  NOT NULL,
+    [ValorSubTotal] decimal(18,0)  NOT NULL,
+    [ValorImposto] decimal(18,0)  NOT NULL,
+    [ValorTotal] decimal(18,0)  NOT NULL,
+    [DataInclusao] datetime  NOT NULL,
+    [DataAlteracao] datetime  NOT NULL,
+    [Status] nvarchar(1)  NOT NULL
+);
+GO
+
+-- Creating table 'Fornecedor'
+CREATE TABLE [dbo].[Fornecedor] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [RazaoSocial] nvarchar(100)  NOT NULL,
+    [NomeFantasia] nvarchar(70)  NULL,
+    [Cnpj] nvarchar(18)  NOT NULL,
+    [InscricaoEstadual] nvarchar(15)  NULL,
+    [Fone1] nvarchar(14)  NULL,
+    [Fone2] nvarchar(14)  NULL,
+    [Endereco] nvarchar(100)  NULL,
+    [Complemento] nvarchar(100)  NULL,
+    [Bairro] nvarchar(70)  NULL,
+    [Cidade] nvarchar(70)  NULL,
+    [Estado] nvarchar(2)  NULL,
+    [Email] nvarchar(256)  NULL,
+    [DataInclusao] datetime  NOT NULL,
+    [DataAlteracao] datetime  NOT NULL
+);
+GO
+
+-- Creating table 'Cliente'
+CREATE TABLE [dbo].[Cliente] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [Nome] nvarchar(70)  NOT NULL,
+    [Cpf] nvarchar(14)  NULL,
+    [Fone1] nvarchar(14)  NULL,
+    [Fone2] nvarchar(14)  NULL,
+    [DataNascimento] datetime  NULL,
+    [Endereco] nvarchar(200)  NULL,
+    [Complemento] nvarchar(100)  NULL,
+    [Bairro] nvarchar(70)  NULL,
+    [Cidade] nvarchar(70)  NULL,
+    [Estado] nvarchar(2)  NULL,
+    [DataInclusao] datetime  NOT NULL,
+    [DataAlteracao] datetime  NOT NULL,
+    [Email] nvarchar(256)  NULL
+);
+GO
+
+-- Creating table 'DocumentoEntradaItem'
+CREATE TABLE [dbo].[DocumentoEntradaItem] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [DocumentoEntradaId] int  NOT NULL,
+    [Quantidade] int  NOT NULL,
+    [ValorUnitario] decimal(18,0)  NOT NULL,
+    [ValorImposto] decimal(18,0)  NOT NULL,
+    [ValorTotal] decimal(18,0)  NOT NULL,
+    [ProdutoId] int  NOT NULL
 );
 GO
 
@@ -116,6 +211,30 @@ GO
 -- Creating primary key on [Id] in table 'Usuario'
 ALTER TABLE [dbo].[Usuario]
 ADD CONSTRAINT [PK_Usuario]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'DocumentoEntrada'
+ALTER TABLE [dbo].[DocumentoEntrada]
+ADD CONSTRAINT [PK_DocumentoEntrada]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'Fornecedor'
+ALTER TABLE [dbo].[Fornecedor]
+ADD CONSTRAINT [PK_Fornecedor]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'Cliente'
+ALTER TABLE [dbo].[Cliente]
+ADD CONSTRAINT [PK_Cliente]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'DocumentoEntradaItem'
+ALTER TABLE [dbo].[DocumentoEntradaItem]
+ADD CONSTRAINT [PK_DocumentoEntradaItem]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
@@ -181,6 +300,66 @@ GO
 CREATE INDEX [IX_FK_EstoqueProduto]
 ON [dbo].[Estoque]
     ([ProdutoId]);
+GO
+
+-- Creating foreign key on [FornecedorId] in table 'DocumentoEntrada'
+ALTER TABLE [dbo].[DocumentoEntrada]
+ADD CONSTRAINT [FK_DocumentoEntradaFornecedor]
+    FOREIGN KEY ([FornecedorId])
+    REFERENCES [dbo].[Fornecedor]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_DocumentoEntradaFornecedor'
+CREATE INDEX [IX_FK_DocumentoEntradaFornecedor]
+ON [dbo].[DocumentoEntrada]
+    ([FornecedorId]);
+GO
+
+-- Creating foreign key on [DocumentoEntradaId] in table 'DocumentoEntradaItem'
+ALTER TABLE [dbo].[DocumentoEntradaItem]
+ADD CONSTRAINT [FK_DocumentoEntradaItemDocumentoEntrada]
+    FOREIGN KEY ([DocumentoEntradaId])
+    REFERENCES [dbo].[DocumentoEntrada]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_DocumentoEntradaItemDocumentoEntrada'
+CREATE INDEX [IX_FK_DocumentoEntradaItemDocumentoEntrada]
+ON [dbo].[DocumentoEntradaItem]
+    ([DocumentoEntradaId]);
+GO
+
+-- Creating foreign key on [ProdutoId] in table 'DocumentoEntradaItem'
+ALTER TABLE [dbo].[DocumentoEntradaItem]
+ADD CONSTRAINT [FK_DocumentoEntradaItemProduto]
+    FOREIGN KEY ([ProdutoId])
+    REFERENCES [dbo].[Produto]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_DocumentoEntradaItemProduto'
+CREATE INDEX [IX_FK_DocumentoEntradaItemProduto]
+ON [dbo].[DocumentoEntradaItem]
+    ([ProdutoId]);
+GO
+
+-- Creating foreign key on [ClienteId] in table 'PedidoVenda'
+ALTER TABLE [dbo].[PedidoVenda]
+ADD CONSTRAINT [FK_PedidoVendaCliente]
+    FOREIGN KEY ([ClienteId])
+    REFERENCES [dbo].[Cliente]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_PedidoVendaCliente'
+CREATE INDEX [IX_FK_PedidoVendaCliente]
+ON [dbo].[PedidoVenda]
+    ([ClienteId]);
 GO
 
 -- --------------------------------------------------

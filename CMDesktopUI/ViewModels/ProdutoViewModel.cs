@@ -1,10 +1,7 @@
 ﻿using Caliburn.Micro;
 using CMDesktopUI.Helpers;
 using System;
-using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
-using CMDesktopUI.Models;
 
 namespace CMDesktopUI.ViewModels
 {
@@ -66,7 +63,7 @@ namespace CMDesktopUI.ViewModels
         //    return Nome?.Length > 0 && Descricao?.Length > 0 && PrecoVenda > 0;
         //}
 
-        public async Task Incluir()
+        public async Task Salvar()
         {
             try
             {

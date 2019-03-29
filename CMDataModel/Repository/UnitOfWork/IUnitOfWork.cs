@@ -7,7 +7,11 @@ namespace CMDataModel.Repository.UnitOfWork
     public interface IUnitOfWork : IDisposable
     {
         IUsuarioRepository Usuarios { get; }
+        IClienteRepository Clientes { get; }
+        IFornecedorRepository Fornecedores { get; }
         IProdutoRepository Produtos { get; }
+        IDocumentoEntradaRepository DocumentosEntrada { get; }
+        IDocumentoEntradaItemRepository ItensDocumentoEntrada { get; }
         IPedidoVendaRepository PedidosVenda { get; }
         IPedidoVendaItemRepository ItensPedidoVenda { get; }
         IEstoqueRepository Estoque { get; }

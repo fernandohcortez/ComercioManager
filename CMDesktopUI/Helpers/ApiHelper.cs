@@ -12,7 +12,7 @@ namespace CMDesktopUI.Helpers
     public class ApiHelper : IApiHelper
     {
         private HttpClient _apiClient;
-        private UsuarioAutenticado _usuarioAutenticado;
+        public UsuarioAutenticado UsuarioAutenticado;
 
         public ApiHelper()
         {
@@ -46,23 +46,40 @@ namespace CMDesktopUI.Helpers
                 if (!response.IsSuccessStatusCode)
                     throw new Exception(response.ReasonPhrase);
 
-                _usuarioAutenticado = await response.Content.ReadAsAsync<UsuarioAutenticado>();
+                UsuarioAutenticado = await response.Content.ReadAsAsync<UsuarioAutenticado>();
 
-                _apiClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + _usuarioAutenticado.Access_Token);
+                _apiClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + UsuarioAutenticado.Access_Token);
 
-                var dadosUsuarioAutenticado = await ObterUsuario(_usuarioAutenticado.UserName);
+                var dadosUsuarioAutenticado = await ObterUsuario();
 
-                _usuarioAutenticado.Email = dadosUsuarioAutenticado.Email;
-                _usuarioAutenticado.PrimeiroNome = dadosUsuarioAutenticado.PrimeiroNome;
-                _usuarioAutenticado.UltimoNome = dadosUsuarioAutenticado.UltimoNome;
+                if (dadosUsuarioAutenticado == null)
+                {
+                    _apiClient.DefaultRequestHeaders.Remove("Authorization");
 
-                return _usuarioAutenticado;
+                    throw new Exception("Dados do usuário não encontrado. Verifique se o mesmo foi cadastrado.");
+                }
+
+                UsuarioAutenticado.Email = dadosUsuarioAutenticado.Email;
+                UsuarioAutenticado.PrimeiroNome = dadosUsuarioAutenticado.PrimeiroNome;
+                UsuarioAutenticado.UltimoNome = dadosUsuarioAutenticado.UltimoNome;
+
+                return UsuarioAutenticado;
             }
         }
 
-        public async Task<UsuarioAutenticado> ObterUsuario(string id)
+        public Task IncluirCliente()
         {
-            using (var response = await _apiClient.GetAsync($"api/Usuario/{id}/"))
+            throw new NotImplementedException();
+        }
+
+        public Task IncluirFornecedor()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<UsuarioAutenticado> ObterUsuario()
+        {
+            using (var response = await _apiClient.GetAsync("api/Usuario/GetUsuarioCorrente/"))
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -75,15 +92,15 @@ namespace CMDesktopUI.Helpers
 
         public async Task IncluirProduto(string nome, string descricao, decimal precoVenda)
         {
-           var data = new FormUrlEncodedContent(new[]
-            {
+            var data = new FormUrlEncodedContent(new[]
+             {
                 new KeyValuePair<string, string>("Nome", nome),
                 new KeyValuePair<string, string>("Descricao", descricao),
                 new KeyValuePair<string, string>("PrevoVenda", precoVenda.ToString(CultureInfo.CurrentCulture)),
                 new KeyValuePair<string, string>("DataInclusao", DateTime.Now.ToString(CultureInfo.CurrentCulture)),
                 new KeyValuePair<string, string>("DataAlteracao", DateTime.Now.ToString(CultureInfo.CurrentCulture))
             });
-            
+
             using (var response = await _apiClient.PostAsync("api/Produto", data))
             {
                 if (response.IsSuccessStatusCode)
@@ -93,6 +110,29 @@ namespace CMDesktopUI.Helpers
 
                 throw new Exception(response.ReasonPhrase);
             }
+        }
+
+        public async Task<List<Produto>> ListarProdutos()
+        {
+            using (var response = await _apiClient.GetAsync($"api/Produto/"))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsAsync<List<Produto>>();
+                }
+
+                throw new Exception(response.ReasonPhrase);
+            }
+        }
+
+        public Task IncluirDocumentoEntrada()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task IncluirPedidoVenda()
+        {
+            throw new NotImplementedException();
         }
     }
 }

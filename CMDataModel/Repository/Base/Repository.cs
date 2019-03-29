@@ -30,6 +30,13 @@ namespace CMDataModel.Repository.Base
 
         public IEnumerable<TEntity> GetAll()
         {
+            //eee/EntityState ocorrendo erro no get all, provavelmente// ao carregar as tabelas relacionadas.
+            //_context.Configuration.LazyLoadingEnabled = true;
+
+            
+            // aqui está a arquitetura que devo implementar. renomeie tudo da formaque está ali... 
+            //Tb considere deixar de lado o padrao repositorio e unitofwork, pois o EF já implementa eles. 
+            https://stackoverflow.com/questions/48052686/should-i-use-dto-interfaces-in-a-web-api
             return _context.Set<TEntity>().ToList();
         }
 
@@ -48,44 +55,56 @@ namespace CMDataModel.Repository.Base
             return await _context.Set<TEntity>().Where(predicate).ToListAsync();
         }
 
-        public void Add(TEntity entity)
+        public void Add(TEntity entity, bool commit = false)
         {
             _context.Set<TEntity>().Add(entity);
+
+            if (commit)
+                _context.SaveChanges();
         }
 
-        public void AddRange(IEnumerable<TEntity> entities)
+        public void AddRange(IEnumerable<TEntity> entities, bool commit = false)
         {
             _context.Set<TEntity>().AddRange(entities);
+
+            if (commit)
+                _context.SaveChanges();
         }
 
-        public void Update(TEntity entity)
+        public void Update(TEntity entity, bool commit = false)
         {
             //Ignorar
         }
 
-        public void UpdateRange(IEnumerable<TEntity> entities)
+        public void UpdateRange(IEnumerable<TEntity> entities, bool commit = false)
         {
             //Ignorar
         }
 
-        public void Remove(TEntity entity)
+        public void Remove(TEntity entity, bool commit = false)
         {
             _context.Set<TEntity>().Remove(entity);
+
+            if (commit)
+                _context.SaveChanges();
         }
 
-        public void Remove(int id)
+        public void Remove(int id, bool commit = false)
         {
-            _context.Set<TEntity>().Remove(Get(id));
+            Remove(Get(id), commit);
         }
 
-        public void Remove(string id)
+        public void Remove(string id, bool commit = false)
         {
-            _context.Set<TEntity>().Remove(Get(id));
+            Remove(Get(id), commit);
         }
 
-        public void RemoveRange(IEnumerable<TEntity> entities)
+        public void RemoveRange(IEnumerable<TEntity> entities, bool commit = false)
         {
             _context.Set<TEntity>().RemoveRange(entities);
+
+            if (commit)
+                _context.SaveChanges();
         }
     }
 }

@@ -16,15 +16,15 @@ namespace CMDataModel.Repository.Base
         IEnumerable<T> Find(Expression<Func<T, bool>> predicate);
         Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
 
-        void Add(T entity);
-        void AddRange(IEnumerable<T> entities);
+        void Add(T entity, bool commit = false);
+        void AddRange(IEnumerable<T> entities, bool commit = false);
 
-        void Update(T entity);
-        void UpdateRange(IEnumerable<T> entities);
+        void Update(T entity, bool commit = false);
+        void UpdateRange(IEnumerable<T> entities, bool commit = false);
 
-        void Remove(T entity);
-        void Remove(int id);
-        void Remove(string id);
-        void RemoveRange(IEnumerable<T> entities);
+        void Remove(T entity, bool commit = false);
+        void Remove(int id, bool commit = false);
+        void Remove(string id, bool commit = false);
+        void RemoveRange(IEnumerable<T> entities, bool commit = false);
     }
 }

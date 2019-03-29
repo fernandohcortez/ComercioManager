@@ -7,57 +7,62 @@
              xmlns:local="clr-namespace:CMDesktopUI.Views"
              xmlns:behaviors="clr-namespace:CMDesktopUI.Components"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             mc:Ignorable="d"  Background="White" FontSize="24"
+             mc:Ignorable="d"  Background="Transparent" FontSize="24"
              d:DesignHeight="600" d:DesignWidth="800">
     <Grid>
+
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="40"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Rectangle VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
-            <Rectangle.Fill>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#FF2281D1"/>
-                    <GradientStop Color="#FF34268A" Offset="1"/>
-                    <GradientStop Color="#FF332888" Offset="0.5"/>
-                </LinearGradientBrush>
-            </Rectangle.Fill>
-        </Rectangle>
-
-        <Image Grid.Column="0" Grid.Row="0" Source="/Assets/home.png" Width="100" 
-               Height="100" VerticalAlignment="Top" HorizontalAlignment="Left" 
-               Margin="0" />
+        <materialDesign:PackIcon Grid.Column ="0" Grid.Row="0" Kind="Barcode" Width="30" 
+                                 Height="30" VerticalAlignment="Top" 
+                                 HorizontalAlignment="Left" Margin="10"/>
 
         <TextBlock Grid.Column="1" Grid.Row="0" Text="Produtos" HorizontalAlignment="Left" 
-                   VerticalAlignment="Center" Margin="10" Foreground="White" 
-                   FontSize="40" FontWeight="Medium"/>
+                   VerticalAlignment="Center" Foreground="Gray"  FontWeight="Medium"
+                   FontSize="20" Padding="0"/>
 
         <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" 
                     HorizontalAlignment="Right" VerticalAlignment="Center" 
-                    Margin="0,0,10,0" Height="70">
+                    Margin="0,0,10,0" Height="30" >
 
-            <Button x:Name="Incluir" Content="Incluir" HorizontalAlignment="Right"
-                    Width="70" Height="70" Background="Transparent" FontSize="15" Padding="0"/>
+            <Button x:Name="Salvar" ToolTip="Salvar" HorizontalAlignment="Right"
+                    Width="30" Height="30"  Padding="0" Margin="1 0"
+                    Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
+                <materialDesign:PackIcon Kind="ContentSave" />
+            </Button>
 
-            <Button x:Name="Fechar" Content="Fechar" HorizontalAlignment="Right"
-                    Width="70" Height="70" Background="Transparent" FontSize="15" Padding="0"/>
+            <Button x:Name="Cancelar" ToolTip="Cancelar" HorizontalAlignment="Right"
+                    Width="30" Height="30"  Padding="0" Margin="1 0"
+                    Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
+                <materialDesign:PackIcon Kind="Cancel" />
+            </Button>
+
+            <Button x:Name="Fechar" HorizontalAlignment="Right"
+                    Width="30" Height="30" Padding="0" Margin="10 0 0 0"
+                    Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
+                <materialDesign:PackIcon Kind="Door" ToolTip="Fechar"/>
+
+            </Button>
 
         </StackPanel>
 
-        <Rectangle Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"  Fill="White" 
-                   VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10,10">
+        <Rectangle Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" 
+                   VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10 5 10 10"
+                   RadiusY="15" RadiusX="15" Fill="white">
             <Rectangle.Effect>
                 <DropShadowEffect Color="#FFBBBBBB" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"/>
             </Rectangle.Effect>
         </Rectangle>
 
         <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Stretch" 
-              HorizontalAlignment="Stretch" Margin="10,10">
+              HorizontalAlignment="Stretch" Margin="10 5 10 10">
 
             <StackPanel VerticalAlignment="Stretch" Margin="10"
                         FocusManager.FocusedElement="{Binding ElementName=Nome}">
@@ -91,33 +96,5 @@
             </StackPanel>
 
         </Grid>
-
-
-        <!--Descrição Row-->
-        <!--
-        <TextBlock Grid.Row="2" Grid.Column="1" Margin="0 0 0 20">
-            Descrição:
-        </TextBlock>
-        <TextBox x:Name="Descricao" Grid.Row="2" Grid.Column="2" MinWidth="500" Margin="0 0 0 10"/>
-
-        -->
-        <!--Preço Venda Row-->
-        <!--
-        <TextBlock Grid.Row="3" Grid.Column="1" Margin="0 0 0 20">
-            Preço Venda:
-        </TextBlock>
-
-        <TextBox x:Name="PrecoVenda" Grid.Row="3" Grid.Column="2" MinWidth="100" Margin="0 0 0 10">
-            <i:Interaction.Behaviors>
-                <behaviors:TextBoxInputBehavior InputMode="DecimalInput"/>
-            </i:Interaction.Behaviors>
-        </TextBox>
-
-        -->
-        <!--Botão Incluir Row-->
-        <!--
-        <Button x:Name="Incluir"  Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Padding="20 5">
-            Incluir
-        </Button>-->
     </Grid>
 </UserControl>

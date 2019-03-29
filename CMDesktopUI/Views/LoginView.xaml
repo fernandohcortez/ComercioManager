@@ -1,57 +1,68 @@
 ﻿<UserControl x:Class="CMDesktopUI.Views.LoginView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:CMDesktopUI.Views"
-             mc:Ignorable="d"  Background="White" FontSize="24"
-             d:DesignHeight="425" d:DesignWidth="800"
-             Height="500" Width="350">
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"  Height="500" Width="350">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="0 0 0 20" 
-                   HorizontalAlignment="Center" FontSize="64" FontFamily="Segoe UI Light">
-            Login
-        </TextBlock>
+         <Rectangle Height="500" VerticalAlignment="Top" RadiusY="15" RadiusX="15">
+            
+             <Rectangle.Effect>
+                <DropShadowEffect Color="#FFBBBBBB" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"/>
+            </Rectangle.Effect>
+            
+             <Rectangle.Fill>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF2281D1"/>
+                    <GradientStop Color="#FF34268A" Offset="1"/>
+                    <GradientStop Color="#FF33288B" Offset="0.5"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
 
-        <!--Mensagem Erro row-->
-        <TextBlock x:Name="MensagemErro" Grid.Row="1" Grid.Column="1" 
-                   Grid.ColumnSpan="2" Foreground="Red" 
-                   Visibility="{Binding IsErrorVisible, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"
-                   MaxWidth="300" TextWrapping="Wrap" Margin="0 0 0 20">
-            Login
-        </TextBlock>
-
-        <!--Usuário row-->
-
-        <TextBlock Grid.Row="2" Grid.Column="1" Margin="0 0 5 10">
-            Usuário:
-        </TextBlock>
-        <TextBox x:Name="Usuario" Grid.Row="2" Grid.Column="2" MinWidth="350" Margin="0 0 0 10"/>
-
-        <!--Senha Row-->
-        <TextBlock Grid.Row="3" Grid.Column="1" Margin="0 0 5 20">
-            Senha:
-        </TextBlock>
-        <PasswordBox x:Name="Senha" Grid.Row="3" Grid.Column="2" MinWidth="350" Margin="0 0 0 10"/>
-
-        <!--Botão Entrar Row-->
-        <Button x:Name="LogIn"  Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Padding="20 5">
-            Entrar
+        </Rectangle>
+        
+        <Button x:Name="Sair" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" 
+                Width="30" Height="20" Padding="0" Background="{x:Null}" BorderBrush="{x:Null}"
+                IsTabStop="False" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5">
+            <materialDesign:PackIcon Kind="WindowClose"/>
         </Button>
+
+        <Image Source="/Assets/home.png" Width="100" Height="100" VerticalAlignment="Top" Margin="20"/>
+
+        <Rectangle Width="280" Height="240" Fill="White" VerticalAlignment="Bottom" Margin="0,100" RadiusY="15" RadiusX="15">
+            <Rectangle.Effect>
+                <DropShadowEffect Color="#FFBBBBBB" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"/>
+            </Rectangle.Effect>
+        </Rectangle>
+
+        <Grid Width="280" Height="240" VerticalAlignment="Bottom" Margin="0,100">
+
+            <TextBlock Text="Login" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="5" Foreground="Gray" FontSize="25" FontWeight="Medium"/>
+            
+            <StackPanel VerticalAlignment="Center" Margin="10" FocusManager.FocusedElement="{Binding ElementName=Usuario}">
+                
+                <TextBox x:Name="Usuario" materialDesign:HintAssist.Hint="Usuário" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         Margin="0,10" FontFamily="Champagne &amp; Limousines" FontSize="18"/>
+                
+                <PasswordBox x:Name="Senha" materialDesign:HintAssist.Hint="Senha" 
+                             Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" 
+                             Margin="0,10" FontFamily="Champagne &amp; Limousines" FontSize="18"/>
+
+            </StackPanel>
+
+        </Grid>
+
+        <Button x:Name="Login" VerticalAlignment="Bottom" Margin="0,85"  Width="150" Content="Entrar"/>
+           
+        <Button x:Name="EsqueceuSenha" Content="Esqueceu sua senha?" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="60" Foreground="Gray" Cursor="Hand" Background="Transparent" FontSize="12" BorderBrush="Gray" BorderThickness="0 0 0 0.5" Height="15" Padding="0" IsTabStop="False"/>
+        
+        <TextBlock x:Name="MensagemErro" Foreground="Red" Text="MensagemErro" 
+                   MaxWidth="300" TextWrapping="Wrap" Margin="10"
+                   HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                   Visibility="{Binding IsErrorVisible, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"/>
+
     </Grid>
 </UserControl>

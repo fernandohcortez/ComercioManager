@@ -17,8 +17,9 @@ namespace CMDataModel
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Produto()
         {
-            this.PedidoVendaItens = new HashSet<PedidoVendaItem>();
+            this.ItensPedidoVenda = new HashSet<PedidoVendaItem>();
             this.Estoques = new HashSet<Estoque>();
+            this.ItensDocumentoEntrada = new HashSet<DocumentoEntradaItem>();
         }
     
         public int Id { get; set; }
@@ -29,8 +30,10 @@ namespace CMDataModel
         public System.DateTime DataAlteracao { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PedidoVendaItem> PedidoVendaItens { get; set; }
+        public virtual ICollection<PedidoVendaItem> ItensPedidoVenda { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Estoque> Estoques { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DocumentoEntradaItem> ItensDocumentoEntrada { get; set; }
     }
 }

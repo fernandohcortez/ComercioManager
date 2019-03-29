@@ -1,45 +1,21 @@
-﻿using CMDataModel;
+﻿using CMDataManager.Controllers.Base;
+using CMDataModel;
+using CMDataModel.Repository.Interfaces;
 using CMDataModel.Repository.UnitOfWork;
 using System.Collections.Generic;
+using System.Net.Mime;
 using System.Web.Http;
+using Microsoft.AspNet.Identity;
 
 namespace CMDataManager.Controllers
 {
-    //[Authorize]
-    public class UsuarioController : ApiController
+    [RoutePrefix("api/Usuario")]
+    public class UsuarioController : ControllerBase<Usuario, IUsuarioRepository, string>
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        public UsuarioController()
+        [Route("GetUsuarioCorrente")]
+        public Usuario GetUsuarioCorrente()
         {
-            _unitOfWork = UnitOfWork.CriarInstancia();
-        }
-
-        public IEnumerable<Usuario> Get()
-        {
-            return _unitOfWork.Usuarios.GetAll();
-        }
-
-        //[HttpGet]
-        //[Route("api/Usuario/{id:alpha}")]
-        public Usuario Get(string id)
-        {
-            return _unitOfWork.Usuarios.Get(id);
-        }
-
-        public void Post([FromBody]Usuario usuario)
-        {
-            _unitOfWork.Usuarios.Add(usuario);
-        }
-
-        public void Put(string id, [FromBody]Usuario usuario)
-        {
-            _unitOfWork.Usuarios.Update(usuario);
-        }
-
-        public void Delete(string id)
-        {
-            _unitOfWork.Usuarios.Remove(new Usuario { Id = id });
+            return Repository.Get(RequestContext.Principal.Identity.GetUserId());
         }
     }
 }

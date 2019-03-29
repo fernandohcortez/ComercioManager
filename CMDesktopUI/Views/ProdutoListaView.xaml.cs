@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace CMDesktopUI.Views
 {
     /// <summary>
-    /// Interaction logic for LoginView2.xaml
+    /// Interaction logic for LoginView.xaml
     /// </summary>
-    public partial class Login2View : UserControl
+    public partial class ProdutoListaView : UserControl
     {
-        public Login2View()
+        public ProdutoListaView()
         {
             InitializeComponent();
         }
