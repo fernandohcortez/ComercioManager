@@ -37,7 +37,7 @@ namespace CMDesktopUI.ViewModels
 
         public void Sair()
         {
-            ActivateItem(new ProdutoListaViewModel(_apiHelper));
+            ActivateItem(new ProdutoViewModel(_apiHelper));
             //Application.Current.Shutdown();
         }
 

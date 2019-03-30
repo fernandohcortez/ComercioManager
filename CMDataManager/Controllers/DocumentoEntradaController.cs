@@ -1,16 +1,16 @@
-﻿using CM.DataAccess;
-using CM.DataAccess.Repository.Interfaces;
-using CM.WebApi.BLL;
+﻿using CM.Core;
+using CM.Domain;
+using CM.Domain.BLL;
 using CM.WebApi.Controllers.Base;
 
 namespace CM.WebApi.Controllers
 {
-    public class DocumentoEntradaController : ControllerBase<DocumentoEntrada, IDocumentoEntradaRepository, int>
+    public class DocumentoEntradaController : ControllerBase<DocumentoEntradaDTO, DocumentoEntradaBLL, int>
     {
-        public override void Post(DocumentoEntrada documentoEntrada)
+        public override void Post(DocumentoEntradaDTO documentoEntradaDTO)
         {
-            var documentoEntradaBll = new DocumentoEntradaBll(UoW);
-            documentoEntradaBll.Incluir(documentoEntrada);
+            var documentoEntradaBll = new DocumentoEntradaBLL();
+            documentoEntradaBll.Incluir(documentoEntradaDTO);
         }
     }
 }

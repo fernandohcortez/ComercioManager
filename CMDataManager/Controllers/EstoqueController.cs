@@ -1,10 +1,11 @@
-﻿using CM.DataAccess;
-using CM.DataAccess.Repository.Interfaces;
+﻿using CM.Core;
+using CM.Domain;
+using CM.Domain.BLL;
 using CM.WebApi.Controllers.Base;
 
 namespace CM.WebApi.Controllers
 {
-    public class EstoqueController : ControllerBase<Estoque, IEstoqueRepository, int>
+    public class EstoqueController : ControllerBase<EstoqueDTO, EstoqueBLL, int>
     {
         
     }

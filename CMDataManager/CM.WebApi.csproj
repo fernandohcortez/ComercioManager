@@ -46,6 +46,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="FromHeaderAttribute, Version=2.0.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FromHeaderAttribute.2.0.4\lib\net45\FromHeaderAttribute.dll</HintPath>
     </Reference>
@@ -165,12 +171,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.2\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
@@ -225,21 +225,14 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
-    <Compile Include="BLL\Base\BllBase.cs" />
-    <Compile Include="BLL\DocumentoEntradaBll.cs" />
-    <Compile Include="BLL\EstoqueBll.cs" />
-    <Compile Include="BLL\PedidoVendaBll.cs" />
-    <Compile Include="BLL\ProdutoBll.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\EstoqueController.cs" />
-    <Compile Include="Controllers\PedidoVendaItemController.cs" />
     <Compile Include="Controllers\PedidoVendaController.cs" />
     <Compile Include="Controllers\Base\ControllerBase.cs" />
     <Compile Include="Controllers\FornecedorController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\DocumentoEntradaController.cs" />
-    <Compile Include="Controllers\DocumentoEntradaItemController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Controllers\ProdutoController.cs" />
     <Compile Include="Enum.cs" />
@@ -314,6 +307,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="BLL\" />
     <Folder Include="Views\Produto\" />
   </ItemGroup>
   <ItemGroup>
@@ -346,9 +340,13 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CMDataModel\CM.DataAccess.csproj">
-      <Project>{097a632a-3a19-4f72-8318-bfe0314f8b9c}</Project>
-      <Name>CM.DataAccess</Name>
+    <ProjectReference Include="..\CM.Core\CM.Core.csproj">
+      <Project>{aacce3e7-0d5a-48de-884e-1946fc180afe}</Project>
+      <Name>CM.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CM.Model\CM.Domain.csproj">
+      <Project>{4b8c3221-89b3-4c6a-a9da-ec174f0afd35}</Project>
+      <Name>CM.Domain</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

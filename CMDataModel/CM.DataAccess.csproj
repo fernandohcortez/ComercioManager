@@ -114,29 +114,6 @@
     <Compile Include="Produto.cs">
       <DependentUpon>CMEntityDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Repository\Interfaces\IDocumentoEntradaRepository.cs" />
-    <Compile Include="Repository\Interfaces\IDocumentoEntradaItemRepository.cs" />
-    <Compile Include="Repository\Interfaces\IFornecedorRepository.cs" />
-    <Compile Include="Repository\Interfaces\IPedidoVendaRepository.cs" />
-    <Compile Include="Repository\Interfaces\IPedidoVendaItemRepository.cs" />
-    <Compile Include="Repository\Interfaces\IEstoqueRepository.cs" />
-    <Compile Include="Repository\Interfaces\IClienteRepository.cs" />
-    <Compile Include="Repository\ClienteRepository.cs" />
-    <Compile Include="Repository\FornecedorRepository.cs" />
-    <Compile Include="Repository\DocumentoEntradaRepository.cs" />
-    <Compile Include="Repository\DocumentoEntradaItemRepository.cs" />
-    <Compile Include="Repository\ProdutoRepository.cs" />
-    <Compile Include="Repository\PedidoVendaItemRepository.cs" />
-    <Compile Include="Repository\PedidoVendaRepository.cs" />
-    <Compile Include="Repository\Base\UnitOfWorkBase.cs" />
-    <Compile Include="Repository\EstoqueRepository.cs" />
-    <Compile Include="Repository\UsuarioRepository.cs" />
-    <Compile Include="Repository\Interfaces\IProdutoRepository.cs" />
-    <Compile Include="Repository\Interfaces\IUsuarioRepository.cs" />
-    <Compile Include="Repository\UnitOfWork\IUnitOfWork.cs" />
-    <Compile Include="Repository\Base\Repository.cs" />
-    <Compile Include="Repository\Base\IRepository.cs" />
-    <Compile Include="Repository\UnitOfWork\UnitOfWork.cs" />
     <Compile Include="Usuario.cs">
       <DependentUpon>CMEntityDataModel.tt</DependentUpon>
     </Compile>

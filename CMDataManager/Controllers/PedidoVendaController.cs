@@ -1,16 +1,16 @@
-﻿using CM.DataAccess;
-using CM.DataAccess.Repository.Interfaces;
-using CM.WebApi.BLL;
+﻿using CM.Core;
+using CM.Domain;
+using CM.Domain.BLL;
 using CM.WebApi.Controllers.Base;
 
 namespace CM.WebApi.Controllers
 {
-    public class PedidoVendaController : ControllerBase<PedidoVenda, IPedidoVendaRepository, int>
+    public class PedidoVendaController : ControllerBase<PedidoVendaDTO, PedidoVendaBLL, int>
     {
-        public override void Post(PedidoVenda pedidoVenda)
+        public override void Post(PedidoVendaDTO pedidoVendaDTO)
         {
-            var pedidoVendaBll = new PedidoVendaBll(UoW);
-            pedidoVendaBll.Incluir(pedidoVenda);
+            var pedidoVendaBll = new PedidoVendaBLL();
+            pedidoVendaBll.Incluir(pedidoVendaDTO);
         }
     }
 }

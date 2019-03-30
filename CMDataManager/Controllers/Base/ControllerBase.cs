@@ -1,58 +1,47 @@
-﻿using System;
+﻿using CM.Core.Base;
+using CM.Domain.BLL;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http;
-using CM.DataAccess.Repository.Base;
-using CM.DataAccess.Repository.UnitOfWork;
+using CM.Domain.BLL.Base;
 
 namespace CM.WebApi.Controllers.Base
 {
     [Authorize]
-    public class ControllerBase<TEntity, TRepository, TIdType> : ApiController
-        where TEntity : class
-        where TRepository : IRepository<TEntity>
+    public class ControllerBase<TDTO, TBLL, TIdType> : ApiController
+        where TDTO : class, IBaseDTO
+        where TBLL : class, IBaseBLL<TDTO>
     {
-        protected readonly IUnitOfWork UoW;
-
-        protected TRepository Repository => (TRepository)UoW
-            .GetType()
-            .GetProperties()
-            .First(m => m.PropertyType == typeof(TRepository))
-            .GetValue(UoW);
+        protected TBLL BLL { get; }
 
         public ControllerBase()
         {
-            UoW = UnitOfWork.CriarInstancia();
+            BLL = Activator.CreateInstance<TBLL>();
         }
 
-        public virtual IEnumerable<TEntity> Get()
+        public virtual IEnumerable<TDTO> Get()
         {
-            return Repository.GetAll();
+            return BLL.GetAll();
         }
 
-        public virtual TEntity Get(TIdType id)
+        public virtual TDTO Get(TIdType id)
         {
-            if (typeof(TIdType) != typeof(string))
-                return Repository.Get(int.Parse(id.ToString()));
-            if (typeof(TIdType) != typeof(int))
-                return Repository.Get(id.ToString());
-
-            throw new Exception("Id deve ser do tipo [int] ou [string]");
+            return BLL.Get(id);
         }
 
-        public virtual void Post([FromBody]TEntity entity)
+        public virtual void Post([FromBody]TDTO dto)
         {
-            Repository.Add(entity, true);
+            BLL.Add(dto);
         }
 
-        public virtual void Put(int id, [FromBody]TEntity entity)
+        public virtual void Put(int id, [FromBody]TDTO dto)
         {
-            Repository.Update(entity, true);
+            BLL.Update(dto);
         }
 
-        public virtual void Delete(int id)
+        public virtual void Delete(TIdType id)
         {
-            Repository.Remove(id, true);
+            BLL.Remove(id);
         }
     }
 }
