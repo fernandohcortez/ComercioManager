@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:cal="http://www.caliburnproject.org"
         WindowStartupLocation="CenterScreen" WindowStyle="None" WindowState="Maximized"
         mc:Ignorable="d" Title="Comercial Manager" Height="600" Width="1024" Background="Transparent">
 
@@ -27,7 +28,7 @@
                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="-250"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="0"/>
             </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="LViFornecedor">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="LviFornecedor">
                 <EasingDoubleKeyFrame KeyTime="0" Value="-250"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="-250"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:0.9" Value="0"/>
@@ -82,7 +83,11 @@
 
     <Window.Triggers>
 
-        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="AbrirMenu">
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="AbrirMenu" >
+            <BeginStoryboard Storyboard="{StaticResource OpenMenu}"/>
+        </EventTrigger>
+
+        <EventTrigger RoutedEvent="CheckBox.Checked" SourceName="IniciarAnimacaoAbrirMenu" >
             <BeginStoryboard Storyboard="{StaticResource OpenMenu}"/>
         </EventTrigger>
 
@@ -142,7 +147,7 @@
 
             </StackPanel>
 
-            <ListView Cursor="Hand" Foreground="White">
+            <ListView Cursor="Hand" Foreground="White" cal:Message.Attach="[Event SelectionChanged] = [Action OnMenuSelecionado($this)]">
 
                 <ListViewItem x:Name="LviCliente" Height="60" RenderTransformOrigin="0.5,0.5">
                     <ListViewItem.RenderTransform>
@@ -159,7 +164,7 @@
                     </StackPanel>
                 </ListViewItem>
 
-                <ListViewItem x:Name="LViFornecedor" Height="60" RenderTransformOrigin="0.5,0.5">
+                <ListViewItem x:Name="LviFornecedor" Height="60" RenderTransformOrigin="0.5,0.5">
                     <ListViewItem.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -255,10 +260,14 @@
 
         </StackPanel>
 
+        <CheckBox x:Name="IniciarAnimacaoAbrirMenu" Visibility="Collapsed"/>
+
         <TextBlock x:Name="Titulo" Text="Comercial Manager" Foreground="#FFE5EEF1" 
                    FontSize="18" Margin="15" HorizontalAlignment="Center" 
                    VerticalAlignment="Top" Style="{StaticResource MaterialDesignTitleTextBlock}"
                    Background="{x:Null}"/>
+
+
 
         <StackPanel Orientation ="Horizontal"  VerticalAlignment="Top" Height="40"
                     HorizontalAlignment="Right" Margin="10">

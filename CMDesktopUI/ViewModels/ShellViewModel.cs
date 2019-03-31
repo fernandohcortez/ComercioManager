@@ -2,43 +2,52 @@
 using CMDesktopUI.Helpers;
 using CMDesktopUI.Models;
 using System.Windows;
-using System.Windows.Input;
+using System.Windows.Controls;
 
 namespace CMDesktopUI.ViewModels
 {
-    public class ShellViewModel : Conductor<object>
+    public class ShellViewModel : Conductor<object>, IHandle<string>
     {
         private readonly LoginViewModel _loginVm;
-        private readonly ProdutoViewModel _produtoVm;
         private readonly IApiHelper _apiHelper;
         private readonly UsuarioAutenticado _usuarioAutenticado;
+        public bool IniciarAnimacaoAbrirMenu { get; set; }
+        
+        esconder// botao menu abrir até que o usuario logue.
 
-        public ShellViewModel(LoginViewModel loginVM, IApiHelper apiHelper, UsuarioAutenticado usuarioAutenticado)
+        public ShellViewModel(IEventAggregator eventAggregator, LoginViewModel loginVm, IApiHelper apiHelper,
+            UsuarioAutenticado usuarioAutenticado)
         {
+            eventAggregator.Subscribe(this);
+
             _apiHelper = apiHelper;
-
-            _loginVm = loginVM;
-
+            _loginVm = loginVm;
             _usuarioAutenticado = usuarioAutenticado;
 
-            ActivateItem(loginVM);
+            ActivateItem(loginVm);
         }
 
-        public RoutedEvent ProdutoScreen(object sender, MouseButtonEventArgs e)
+        public void OnMenuSelecionado(ListViewItem listViewItem)
         {
-            //_produtoVm = produtoVm;
-
-            ActivateItem(new ProdutoViewModel(_apiHelper));
-
-            return e.RoutedEvent;
+            switch (listViewItem.Name)
+            {
+                case "LviProduto":
+                    ActivateItem(new ProdutoViewModel(_apiHelper));
+                    break;
+                case "LviCliente":
+                    break;
+                case "LviFornecedor":
+                    break;
+                case "LviDocumentoEntrada":
+                    break;
+                case "LviPedidoVenda":
+                    break;
+            }
         }
-
-
 
         public void Sair()
         {
-            ActivateItem(new ProdutoViewModel(_apiHelper));
-            //Application.Current.Shutdown();
+            Application.Current.Shutdown();
         }
 
         public void Restaurar()
@@ -46,8 +55,8 @@ namespace CMDesktopUI.ViewModels
             if (Application.Current.MainWindow == null)
                 return;
 
-            Application.Current.MainWindow.WindowState = Application.Current.MainWindow.WindowState == WindowState.Normal 
-                ? WindowState.Maximized 
+            Application.Current.MainWindow.WindowState = Application.Current.MainWindow.WindowState == WindowState.Normal
+                ? WindowState.Maximized
                 : WindowState.Normal;
         }
 
@@ -69,11 +78,21 @@ namespace CMDesktopUI.ViewModels
             ActivateItem(_loginVm);
         }
 
-        //public void AbrirMenu()
-        //{
-        //    ButtonOpenMenu.Visibility = Visibility.Collapsed;
-        //    ButtonCloseMenu.Visibility = Visibility.Visible;
-        //}
+        public void Handle(string message)
+        {
+            if (message == "LoginOk")
+                InciarAnimacaoAbrirMenu();
+        }
+
+        public void InciarAnimacaoAbrirMenu()
+        {
+            IniciarAnimacaoAbrirMenu = true;
+        }
+
+        public void FecharMenu()
+        {
+
+        }
 
         //public void FecharMenu()
         //{

@@ -12,10 +12,12 @@ namespace CMDesktopUI.ViewModels
     [AddINotifyPropertyChangedInterface]
     public class LoginViewModel : Conductor<object>
     {
+        private readonly IEventAggregator _eventAggregator;
         private readonly IApiHelper _apiHelper;
 
-        public LoginViewModel(IApiHelper apiHelper)
+        public LoginViewModel(IEventAggregator eventAggregator, IApiHelper apiHelper)
         {
+            _eventAggregator = eventAggregator;
             _apiHelper = apiHelper;
         }
 
@@ -57,10 +59,9 @@ namespace CMDesktopUI.ViewModels
             {
                 MensagemErro = string.Empty;
 
-                var resultado = await _apiHelper.Autenticar(Usuario, Senha);
+                await _apiHelper.Autenticar(Usuario, Senha);
 
-                //parei-- parei aqui tentando avisar o shellview que o login foi autenticado para que o story do menu seja executado.
-                //resultado.UsuarioAutorizado.Invoke(resultado, null);
+                _eventAggregator.PublishOnUIThread("LoginOk");
 
                 TryClose();
             }
