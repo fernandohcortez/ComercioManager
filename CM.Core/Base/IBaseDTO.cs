@@ -8,5 +8,7 @@ namespace CM.Core.Base
 {
     public interface IBaseDTO
     {
+        DateTime DataInclusao { get; set; }
+        DateTime DataAlteracao { get; set; }
     }
 }

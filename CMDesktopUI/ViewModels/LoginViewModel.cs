@@ -1,11 +1,15 @@
 ﻿using Caliburn.Micro;
 using CMDesktopUI.Helpers;
+using PropertyChanged;
 using System;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Windows;
 
 namespace CMDesktopUI.ViewModels
 {
+    [DataContract]
+    [AddINotifyPropertyChangedInterface]
     public class LoginViewModel : Conductor<object>
     {
         private readonly IApiHelper _apiHelper;
@@ -15,25 +19,17 @@ namespace CMDesktopUI.ViewModels
             _apiHelper = apiHelper;
         }
 
-        private string _usuario;
-        public string Usuario
-        {
-            get => _usuario;
-            set
-            {
-                _usuario = value;
-                NotifyOfPropertyChange(() => Usuario);
-            }
-        }
+        [DataMember]
+        public string Usuario { get; set; } = "fernandohcortez@gmail.com";
 
-        private string _senha;
+        private string _senha = "Growth@2018";
+        [DataMember]
         public string Senha
         {
             get => _senha;
             set
             {
                 _senha = value;
-                NotifyOfPropertyChange(() => Senha);
                 NotifyOfPropertyChange(() => CanLogIn);
             }
         }
@@ -41,6 +37,7 @@ namespace CMDesktopUI.ViewModels
         public bool IsErrorVisible => MensagemErro?.Length > 0;
 
         private string _mensagemErro;
+        [DataMember]
         public string MensagemErro
         {
             get => _mensagemErro;

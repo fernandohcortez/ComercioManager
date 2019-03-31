@@ -1,10 +1,15 @@
 ﻿using Caliburn.Micro;
+using CM.Core;
 using CMDesktopUI.Helpers;
 using System;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
+using PropertyChanged;
 
 namespace CMDesktopUI.ViewModels
 {
+    [DataContract]
+    [AddINotifyPropertyChangedInterface]
     public class ProdutoViewModel : Conductor<object>
     {
         private readonly IApiHelper _apiHelper;
@@ -14,60 +19,20 @@ namespace CMDesktopUI.ViewModels
             _apiHelper = apiHelper;
         }
 
-        private int _id;
-        public int Id
-        {
-            get => _id;
-            set
-            {
-                _id = value;
-                NotifyOfPropertyChange(() => Id);
-            }
-        }
-
-        private string _nome;
-        public string Nome
-        {
-            get => _nome;
-            set
-            {
-                _nome = value;
-                NotifyOfPropertyChange(() => Nome);
-            }
-        }
-
-        private string _descricao;
-        public string Descricao
-        {
-            get => _descricao;
-            set
-            {
-                _descricao = value;
-                NotifyOfPropertyChange(() => Descricao);
-            }
-        }
-
-        private decimal _precoVenda;
-        public decimal PrecoVenda
-        {
-            get => _precoVenda;
-            set
-            {
-                _precoVenda = value;
-                NotifyOfPropertyChange(() => PrecoVenda);
-            }
-        }
-
-        //public bool CanIncluir()
-        //{
-        //    return Nome?.Length > 0 && Descricao?.Length > 0 && PrecoVenda > 0;
-        //}
+        [DataMember]
+        public int Id { get; set; }
+        [DataMember]
+        public string Nome { get; set; }
+        [DataMember]
+        public string Descricao { get; set; }
+        [DataMember]
+        public decimal PrecoVenda { get; set; }
 
         public async Task Salvar()
         {
             try
             {
-                await _apiHelper.IncluirProduto(Nome, Descricao, PrecoVenda);
+                await _apiHelper.IncluirProduto(this);
             }
             catch (Exception e)
             {

@@ -66,6 +66,9 @@ namespace CM.Domain.BLL.Base
 
         protected void Add<TEntity>(TDTO dto, bool commit = false) where TEntity : class
         {
+            dto.DataInclusao = DateTime.Now;
+            dto.DataAlteracao = DateTime.Now;
+
             var entity = Mapping.Mapping.Mapper.Map<TEntity>(dto);
 
             ContextHelper.DbSet.Add(entity, commit);

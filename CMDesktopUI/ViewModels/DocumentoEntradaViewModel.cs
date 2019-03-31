@@ -2,10 +2,14 @@
 using CMDesktopUI.Helpers;
 using System;
 using System.ComponentModel;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
+using PropertyChanged;
 
 namespace CMDesktopUI.ViewModels
 {
+    [DataContract]
+    [AddINotifyPropertyChangedInterface]
     public class DocumentoEntradaViewModel : Conductor<object>
     {
         private readonly IApiHelper _apiHelper;
@@ -15,104 +19,24 @@ namespace CMDesktopUI.ViewModels
             _apiHelper = apiHelper;
         }
 
-        private int _id;
-        public int Id
-        {
-            get => _id;
-            set
-            {
-                _id = value;
-                NotifyOfPropertyChange(() => Id);
-            }
-        }
-
-        private string _serieNF;
-        public string SerieNF
-        {
-            get => _serieNF;
-            set
-            {
-                _serieNF = value;
-                NotifyOfPropertyChange(() => SerieNF);
-            }
-        }
-
-        private string _numeroNF;
-        public string NumeroNF
-        {
-            get => _numeroNF;
-            set
-            {
-                _numeroNF = value;
-                NotifyOfPropertyChange(() => NumeroNF);
-            }
-        }
-
-        private DateTime _data;
-        public DateTime Data
-        {
-            get => _data;
-            set
-            {
-                _data = value;
-                NotifyOfPropertyChange(() => Data);
-            }
-        }
-
-        private int _fornecedorId;
-        public int FornecedorId
-        {
-            get => _fornecedorId;
-            set
-            {
-                _fornecedorId = value;
-                NotifyOfPropertyChange(() => FornecedorId);
-            }
-        }
-
-        private decimal _valorSubTotal;
-        public decimal ValorSubTotal
-        {
-            get => _valorSubTotal;
-            set
-            {
-                _valorSubTotal = value;
-                NotifyOfPropertyChange(() => ValorSubTotal);
-            }
-        }
-
-        private decimal _valorImposto;
-        public decimal ValorImposto
-        {
-            get => _valorImposto;
-            set
-            {
-                _valorImposto = value;
-                NotifyOfPropertyChange(() => ValorImposto);
-            }
-        }
-
-        private decimal _valorTotal;
-        public decimal ValorTotal
-        {
-            get => _valorTotal;
-            set
-            {
-                _valorTotal = value;
-                NotifyOfPropertyChange(() => ValorTotal);
-            }
-        }
-
-        private string _status;
-        public string Status
-        {
-            get => _status;
-            set
-            {
-                _status = value;
-                NotifyOfPropertyChange(() => Status);
-            }
-        }
+        [DataMember]
+        public int Id { get; set; }
+        [DataMember]
+        public string SerieNF { get; set; }
+        [DataMember]
+        public string NumeroNF { get; set; }
+        [DataMember]
+        public DateTime Data { get; set; }
+        [DataMember]
+        public int FornecedorId { get; set; }
+        [DataMember]
+        public decimal ValorSubTotal { get; set; }
+        [DataMember]
+        public decimal ValorImposto { get; set; }
+        [DataMember]
+        public decimal ValorTotal { get; set; }
+        [DataMember]
+        public string Status { get; set; }
 
         //public BindingList<DocumentoEntradaItem> Itens { get; set; }
 

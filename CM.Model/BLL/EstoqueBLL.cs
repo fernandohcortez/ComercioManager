@@ -1,10 +1,10 @@
-﻿using System;
+﻿using CM.Core;
+using CM.DataAccess;
+using CM.Domain.BLL.Base;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using CM.Core;
-using CM.DataAccess;
-using CM.Domain.BLL.Base;
 
 namespace CM.Domain.BLL
 {

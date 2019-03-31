@@ -4,8 +4,11 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using CM.Core;
+using CMDesktopUI.ViewModels;
 
 namespace CMDesktopUI.Helpers
 {
@@ -90,18 +93,18 @@ namespace CMDesktopUI.Helpers
             }
         }
 
-        public async Task IncluirProduto(string nome, string descricao, decimal precoVenda)
+        public async Task IncluirProduto(ProdutoViewModel produtoViewModel)
         {
-            var data = new FormUrlEncodedContent(new[]
-             {
-                new KeyValuePair<string, string>("Nome", nome),
-                new KeyValuePair<string, string>("Descricao", descricao),
-                new KeyValuePair<string, string>("PrevoVenda", precoVenda.ToString(CultureInfo.CurrentCulture)),
-                new KeyValuePair<string, string>("DataInclusao", DateTime.Now.ToString(CultureInfo.CurrentCulture)),
-                new KeyValuePair<string, string>("DataAlteracao", DateTime.Now.ToString(CultureInfo.CurrentCulture))
-            });
+            //var data = new FormUrlEncodedContent(new[]
+            // {
+            //    new KeyValuePair<string, string>("Nome", produtoDTO.Nome),
+            //    new KeyValuePair<string, string>("Descricao", descricao),
+            //    new KeyValuePair<string, string>("PrevoVenda", precoVenda.ToString(CultureInfo.CurrentCulture)),
+            //    new KeyValuePair<string, string>("DataInclusao", DateTime.Now.ToString(CultureInfo.CurrentCulture)),
+            //    new KeyValuePair<string, string>("DataAlteracao", DateTime.Now.ToString(CultureInfo.CurrentCulture))
+            //});
 
-            using (var response = await _apiClient.PostAsync("api/Produto", data))
+            using (var response = await _apiClient.PostAsync("api/Produto", produtoViewModel, new JsonMediaTypeFormatter()))
             {
                 if (response.IsSuccessStatusCode)
                 {

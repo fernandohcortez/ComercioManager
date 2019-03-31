@@ -9,5 +9,7 @@ namespace CM.Core
 {
     public class FornecedorDTO : IBaseDTO
     {
+        public DateTime DataInclusao { get; set; }
+        public DateTime DataAlteracao { get; set; }
     }
 }

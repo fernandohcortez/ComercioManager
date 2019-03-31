@@ -29,7 +29,7 @@ namespace CM.WebApi.Controllers.Base
             return BLL.Get(id);
         }
 
-        public virtual void Post([FromBody]TDTO dto)
+        public virtual void Post(TDTO dto)
         {
             BLL.Add(dto);
         }

@@ -14,5 +14,7 @@ namespace CM.Core
         public int Quantidade { get; set; }
         public decimal ValorUnitario { get; set; }
         public decimal ValorTotal { get; set; }
+        public DateTime DataInclusao { get; set; }
+        public DateTime DataAlteracao { get; set; }
     }
 }

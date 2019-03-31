@@ -12,5 +12,7 @@ namespace CM.Core
         public int Id { get; set; }
         
         public List<DocumentoEntradaItemDTO> Itens;
+        public DateTime DataInclusao { get; set; }
+        public DateTime DataAlteracao { get; set; }
     }
 }
