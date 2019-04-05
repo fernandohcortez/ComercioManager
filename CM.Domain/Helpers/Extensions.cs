@@ -28,6 +28,13 @@ namespace CM.Domain.Helpers
             return convertido ? valorConvertido : (int?)null;
         }
 
+        public static int IsNullOrEmptyThenZero(this object valor)
+        {
+            var convertido = int.TryParse(valor.IsNullThenEmpty(), out var valorConvertido);
+
+            return convertido ? valorConvertido : 0;
+        }
+
         public static string IsNullThenEmpty(this object valor)
         {
             return valor?.ToString() ?? string.Empty;

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CM.Domain.BLLs.Base
 {
-    public abstract class BaseBLL<TDTO> : IBaseBLL<TDTO> where TDTO : IBaseDTO
+    public abstract class BaseBLL<TDTO> : IBaseBLL<TDTO> where TDTO : class, IBaseDTO
     {
         protected readonly ContextHelper ContextHelper;
 
@@ -76,13 +76,23 @@ namespace CM.Domain.BLLs.Base
 
         protected void AddRange<TEntity>(IEnumerable<TDTO> listDto, bool commit = false) where TEntity : class
         {
-            var listEntity = Mapping.Mapping.Mapper.ProjectTo<TEntity>(listDto.AsQueryable());
+            var lista = listDto.ToList();
+           
+            foreach (var dto in lista)
+            {
+                dto.DataInclusao = DateTime.Now;
+                dto.DataAlteracao = DateTime.Now;
+            }
+
+            var listEntity = Mapping.Mapping.Mapper.ProjectTo<TEntity>(lista.AsQueryable());
 
             ContextHelper.DbSet.AddRange(listEntity, commit);
         }
 
         protected void Update<TEntity>(TDTO dto, bool commit = false) where TEntity : class
         {
+            dto.DataAlteracao = DateTime.Now;
+
             var entity = Mapping.Mapping.Mapper.Map<TEntity>(dto);
 
             ContextHelper.DbSet.Update(entity, commit);
@@ -90,7 +100,14 @@ namespace CM.Domain.BLLs.Base
 
         protected void UpdateRange<TEntity>(IEnumerable<TDTO> listDto, bool commit = false) where TEntity : class
         {
-            var listEntity = Mapping.Mapping.Mapper.ProjectTo<TEntity>(listDto.AsQueryable());
+            var lista = listDto.ToList();
+
+            foreach (var dto in lista)
+            {
+                dto.DataAlteracao = DateTime.Now;
+            }
+
+            var listEntity = Mapping.Mapping.Mapper.ProjectTo<TEntity>(lista.AsQueryable());
 
             ContextHelper.DbSet.UpdateRange(listEntity, commit);
         }

@@ -1,22 +1,30 @@
 ﻿using Caliburn.Micro;
+using CM.UI.Desktop.Components;
 using CM.UI.Model.Helpers;
 using CM.UI.Model.Models.Interface;
+using PropertyChanged;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace CM.UI.Desktop.ViewModels
 {
+    [AddINotifyPropertyChangedInterface]
     public class ShellViewModel : Conductor<object>, IHandle<string>
     {
-        private readonly LoginViewModel _loginVm;
         private readonly IApiHelper _apiHelper;
         private readonly IUsuarioLogadoModel _usuarioLogadoModel;
+
+        private readonly LoginViewModel _loginVm;
+
         public bool IniciarAnimacaoAbrirMenu { get; set; }
         public bool IsBotaoAbrirMenuVisible { get; set; }
         public bool IsBotaoFecharMenuVisible { get; set; }
         public string NomeUsuario { get; set; }
 
-        public ShellViewModel(IEventAggregator eventAggregator, LoginViewModel loginVm, IApiHelper apiHelper, IUsuarioLogadoModel usuarioLogadoModel)
+        public ShellViewModel(
+            IEventAggregator eventAggregator,
+            IApiHelper apiHelper,
+            IUsuarioLogadoModel usuarioLogadoModel,
+            LoginViewModel loginVm)
         {
             eventAggregator.Subscribe(this);
 
@@ -24,29 +32,44 @@ namespace CM.UI.Desktop.ViewModels
             _loginVm = loginVm;
             _usuarioLogadoModel = usuarioLogadoModel;
 
-            ActivateItem(loginVm);
+            ActivateItem(_loginVm);
         }
 
-        public void OnMenuSelecionado(ListViewItem listViewItem)
+        public void MenuClienteSelecionado()
         {
-            switch (listViewItem.Name)
-            {
-                case "LviProduto":
-                    ActivateItem(new ProdutoViewModel(_apiHelper));
-                    break;
-                case "LviCliente":
-                    break;
-                case "LviFornecedor":
-                    break;
-                case "LviDocumentoEntrada":
-                    break;
-                case "LviPedidoVenda":
-                    break;
-            }
+
+        }
+
+        public void MenuFornecedorSelecionado()
+        {
+
+        }
+
+        public void MenuProdutoSelecionado()
+        {
+            ActivateItem(ProdutoListaViewModel.Create());
+        }
+
+        public void MenuDocumentoEntradaSelecionado()
+        {
+
+        }
+
+        public void MenuPedidoVendaSelecionado()
+        {
+
+        }
+
+        public void MenuEstoqueSelecionado()
+        {
+
         }
 
         public void Sair()
         {
+            if (Mensagem.Create().MostrarPergunta("Deseja encerrar o sistema?") == MessageBoxResult.No)
+                return;
+
             Application.Current.Shutdown();
         }
 
@@ -75,7 +98,7 @@ namespace CM.UI.Desktop.ViewModels
 
         public void Procurar()
         {
-            ActivateItem(_loginVm);
+
         }
 
         public void Handle(string message)

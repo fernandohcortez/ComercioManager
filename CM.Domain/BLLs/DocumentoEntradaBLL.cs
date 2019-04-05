@@ -24,12 +24,12 @@ namespace CM.Domain.BLLs
 
         public override void Update(DocumentoEntradaDTO dto)
         {
-            Update<DocumentoEntrada>(dto);
+            Update<DocumentoEntrada>(dto, true);
         }
 
         public override void Remove(object id)
         {
-            Remove<DocumentoEntrada>(id.ToString());
+            Remove<DocumentoEntrada>(id.ToString(), true);
         }
 
         public void Incluir(DocumentoEntradaDTO documentoEntradaDTO)

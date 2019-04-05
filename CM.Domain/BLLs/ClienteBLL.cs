@@ -19,17 +19,17 @@ namespace CM.Domain.BLLs
 
         public override void Add(ClienteDTO dto)
         {
-            Add<Cliente>(dto);
+            Add<Cliente>(dto, true);
         }
 
         public override void Update(ClienteDTO dto)
         {
-            Update<Cliente>(dto);
+            Update<Cliente>(dto, true);
         }
 
         public override void Remove(object id)
         {
-            Remove<Cliente>(id.ToString());
+            Remove<Cliente>(id.ToString(), true);
         }
     }
 }

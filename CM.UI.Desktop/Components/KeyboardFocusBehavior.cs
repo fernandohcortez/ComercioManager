@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace CM.UI.Desktop.Components
@@ -27,10 +28,17 @@ namespace CM.UI.Desktop.Components
             DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
             var frameworkElement = (FrameworkElement)dependencyObject;
+
             var target = GetOn(frameworkElement);
 
             if (target == null)
                 return;
+
+            //if (target is TextBox textBox)
+            //{
+            //    if (textBox.IsReadOnly)
+            //        return;
+            //}
 
             frameworkElement.Loaded += (s, e) => Keyboard.Focus(target);
         }

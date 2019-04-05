@@ -24,12 +24,12 @@ namespace CM.Domain.BLLs
 
         public override void Update(PedidoVendaDTO dto)
         {
-            Update<PedidoVenda>(dto);
+            Update<PedidoVenda>(dto, true);
         }
 
         public override void Remove(object id)
         {
-            Remove<PedidoVenda>(id.ToString());
+            Remove<PedidoVenda>(id.ToString(), true);
         }
 
         public void Incluir(PedidoVendaDTO pedidoVendaDTO)

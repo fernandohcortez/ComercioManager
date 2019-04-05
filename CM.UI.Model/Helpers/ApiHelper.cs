@@ -1,12 +1,13 @@
-﻿using System;
+﻿using CM.UI.Model.Models;
+using CM.UI.Model.Models.Interface;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using CM.UI.Model.Models;
-using CM.UI.Model.Models.Interface;
 
 namespace CM.UI.Model.Helpers
 {
@@ -14,7 +15,7 @@ namespace CM.UI.Model.Helpers
     {
         private readonly IUsuarioLogadoModel _usuarioLogadoModel;
         private HttpClient _apiClient;
-        
+
         public ApiHelper(IUsuarioLogadoModel usuarioLogadoModel)
         {
             InitializeClient();
@@ -97,14 +98,36 @@ namespace CM.UI.Model.Helpers
             }
         }
 
-        public async Task<List<ProdutoModel>> ListarProdutos()
+        public async Task AlterarProduto(ProdutoModel produtoModel)
+        {
+            using (var response = await _apiClient.PutAsync($"api/Produto/{produtoModel.Id}", produtoModel, new JsonMediaTypeFormatter()))
+            {
+                if (!response.IsSuccessStatusCode)
+                    throw new Exception(response.ReasonPhrase);
+
+                await response.Content.ReadAsAsync<object>();
+            }
+        }
+
+        public async Task RemoverProduto(ProdutoModel produtoModel)
+        {
+            using (var response = await _apiClient.DeleteAsync($"api/Produto/{produtoModel.Id}"))
+            {
+                if (!response.IsSuccessStatusCode)
+                    throw new Exception(response.ReasonPhrase);
+
+                await response.Content.ReadAsAsync<object>();
+            }
+        }
+
+        public async Task<ObservableCollection<ProdutoModel>> ListarProdutos()
         {
             using (var response = await _apiClient.GetAsync("api/Produto/"))
             {
                 if (!response.IsSuccessStatusCode)
                     throw new Exception(response.ReasonPhrase);
 
-                return await response.Content.ReadAsAsync<List<ProdutoModel>>();
+                return await response.Content.ReadAsAsync<ObservableCollection<ProdutoModel>>();
             }
         }
 

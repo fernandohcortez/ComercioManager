@@ -26,17 +26,17 @@ namespace CM.Domain.BLLs
 
         public override void Add(EstoqueDTO dto)
         {
-            Add<Estoque>(dto);
+            Add<Estoque>(dto, true);
         }
 
         public override void Update(EstoqueDTO dto)
         {
-            Update<Estoque>(dto);
+            Update<Estoque>(dto, true);
         }
 
         public override void Remove(object id)
         {
-            Remove<Estoque>(id.ToString());
+            Remove<Estoque>(id.ToString(), true);
         }
 
         public EstoqueDTO ObterEstoqueAtual(int produtoId)
@@ -59,6 +59,16 @@ namespace CM.Domain.BLLs
         public void IncluirEstoqueInicial(int produtoId)
         {
             MovimentarEstoque(TipoMovimentoEstoque.Entrada, produtoId, 0, 0);
+        }
+
+        internal void RemoverEstoqueProduto(Produto produto)
+        {
+            var houveMovimentacaoEstoque = produto.Estoques.Count > 1;
+
+            if (houveMovimentacaoEstoque)
+                throw new ValidationException($"O produto [{produto.Nome}] não pode ser excluído porque já houve movimentação de estoque.");
+
+            ContextHelper.DbSet.RemoveRange(produto.Estoques);
         }
 
         public void MovimentarEstoque(TipoMovimentoEstoque tipoMovimentoEstoque, int produtoId, int quantidade, decimal valorUnitario)

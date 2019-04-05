@@ -19,17 +19,17 @@ namespace CM.Domain.BLLs
 
         public override void Add(UsuarioDTO usuarioDTO)
         {
-            Add<Usuario>(usuarioDTO);
+            Add<Usuario>(usuarioDTO, true);
         }
 
         public override void Update(UsuarioDTO usuarioDTO)
         {
-            Update<Usuario>(usuarioDTO);
+            Update<Usuario>(usuarioDTO, true);
         }
 
         public override void Remove(object id)
         {
-            Remove<Usuario>(id.ToString());
+            Remove<Usuario>(id.ToString(), true);
         }
     }
 }

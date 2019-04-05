@@ -1,7 +1,13 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Security.Permissions;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
+using CM.UI.Desktop.Helpers;
+
 
 namespace CM.UI.Desktop
 {
@@ -23,7 +29,7 @@ namespace CM.UI.Desktop
 
             EventManager.RegisterClassHandler(typeof(TextBox),UIElement.GotFocusEvent,new RoutedEventHandler(TextBox_GotFocus));
             EventManager.RegisterClassHandler(typeof(Window), UIElement.GotMouseCaptureEvent,new RoutedEventHandler(Window_MouseCapture));
-            
+
             base.OnStartup(e);
         }
 

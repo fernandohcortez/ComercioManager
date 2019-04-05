@@ -38,7 +38,7 @@ namespace CM.DataAccess
 
         public IEnumerable<T> Find<T>(Expression<Func<T, bool>> predicate) where T : class
         {
-            return _context.Set<T>().Where(predicate);
+            return _context.Set<T>().Where(predicate).ToList();
         }
 
         public async Task<IEnumerable<T>> FindAsync<T>(Expression<Func<T, bool>> predicate) where T : class
@@ -64,12 +64,25 @@ namespace CM.DataAccess
 
         public void Update<T>(T entity, bool commit = false) where T : class
         {
-            //Ignorar
+            _context.Entry(entity).State = EntityState.Modified;
+
+            _context.Entry(entity).Property("DataInclusao").IsModified = false;
+
+            if (commit)
+                _context.SaveChanges();
         }
 
         public void UpdateRange<T>(IEnumerable<T> entities, bool commit = false) where T : class
         {
-            //Ignorar
+            foreach (var entity in entities)
+            {
+                _context.Entry(entity).CurrentValues.SetValues(entity);
+
+                _context.Entry(entity).Property("DataInclusao").IsModified = false;
+            }
+
+            if (commit)
+                _context.SaveChanges();
         }
 
         public void Remove<T>(T entity, bool commit = false) where T : class
@@ -96,6 +109,13 @@ namespace CM.DataAccess
 
             if (commit)
                 _context.SaveChanges();
+        }
+
+        public void RemoveAll<T>(Expression<Func<T, bool>> predicate, bool commit = false) where T : class
+        {
+            var recordsToRemove = _context.Set<T>().Where(predicate);
+
+            RemoveRange(recordsToRemove, commit);
         }
     }
 }

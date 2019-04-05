@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Caliburn.Micro;
 using CM.UI.Model.Models;
 
 namespace CM.UI.Model.Helpers
@@ -11,8 +13,10 @@ namespace CM.UI.Model.Helpers
         Task IncluirCliente();
         Task IncluirFornecedor();
         Task IncluirProduto(ProdutoModel produtoModel);
+        Task AlterarProduto(ProdutoModel produtoModel);
+        Task RemoverProduto(ProdutoModel produtoModeld);
         Task IncluirDocumentoEntrada();
         Task IncluirPedidoVenda();
-        Task<List<ProdutoModel>> ListarProdutos();
+        Task<ObservableCollection<ProdutoModel>> ListarProdutos();
     }
 }

@@ -3,13 +3,13 @@ using CM.UI.Desktop.Helpers;
 using CM.UI.Desktop.ViewModels;
 using CM.UI.Model.Helpers;
 using CM.UI.Model.Models;
+using CM.UI.Model.Models.Interface;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using CM.UI.Model.Models.Interface;
+using CM.UI.Desktop.Components;
 
 namespace CM.UI.Desktop
 {
@@ -36,6 +36,11 @@ namespace CM.UI.Desktop
                         _container.RegisterPerRequest(viewModelType, viewModelType.ToString(), viewModelType));
             }
 
+            void RegisterInContainerAllOtherClasses()
+            {
+                _container.PerRequest<IMensagem, Mensagem>();
+            }
+
             void RegisterAllSingletons()
             {
                 _container
@@ -50,6 +55,8 @@ namespace CM.UI.Desktop
             RegisterAllSingletons();
 
             RegisterInContainerAllViewModels();
+
+            RegisterInContainerAllOtherClasses();
         }
 
         protected override void OnStartup(object sender, StartupEventArgs e)

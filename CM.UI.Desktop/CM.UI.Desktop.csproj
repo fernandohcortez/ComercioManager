@@ -101,7 +101,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Components\ColumnHeaderBehavior.cs" />
+    <Compile Include="Components\IMensagem.cs" />
+    <Compile Include="Components\Mensagem.cs" />
     <Compile Include="Components\TextBoxInputBehavior.cs" />
+    <Compile Include="Enum.cs" />
     <Compile Include="Helpers\InverseBooleanConverter.cs" />
     <Compile Include="Components\KeyboardFocusBehavior.cs" />
     <Compile Include="Helpers\PasswordBoxHelper.cs" />

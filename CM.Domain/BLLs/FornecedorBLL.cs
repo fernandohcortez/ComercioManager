@@ -19,17 +19,17 @@ namespace CM.Domain.BLLs
 
         public override void Add(FornecedorDTO dto)
         {
-            Add<Fornecedor>(dto);
+            Add<Fornecedor>(dto, true);
         }
 
         public override void Update(FornecedorDTO dto)
         {
-            Update<Fornecedor>(dto);
+            Update<Fornecedor>(dto, true);
         }
 
         public override void Remove(object id)
         {
-            Remove<Fornecedor>(id.ToString());
+            Remove<Fornecedor>(id.ToString(), true);
         }
     }
 }
