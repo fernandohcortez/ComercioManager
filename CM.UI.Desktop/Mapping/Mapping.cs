@@ -17,7 +17,7 @@ namespace CM.UI.Desktop.Mapping
         {
             AutoMapper.Mapper.Initialize(cfg =>
             {
-                cfg.CreateMap<ProdutoViewModel, ProdutoModel>().ReverseMap();
+                cfg.CreateMap<ProdutoEdicaoViewModel, ProdutoModel>().ReverseMap();
             });
         }
     }

@@ -6,7 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interactivity;
 
-namespace CM.UI.Desktop.Components
+namespace CM.UI.Desktop.Behaviors
 {
     public class TextBoxInputBehavior : Behavior<TextBox>
     {

@@ -1,8 +1,7 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace CM.UI.Desktop.Components
+namespace CM.UI.Desktop.Behaviors
 {
     public static class KeyboardFocusBehavior
     {

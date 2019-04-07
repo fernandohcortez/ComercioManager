@@ -10,6 +10,7 @@ namespace CM.UI.Desktop.ViewModels
     [AddINotifyPropertyChangedInterface]
     public class ShellViewModel : Conductor<object>, IHandle<string>
     {
+        private readonly IWindowManager _windowManager;
         private readonly IApiHelper _apiHelper;
         private readonly IUsuarioLogadoModel _usuarioLogadoModel;
 
@@ -22,12 +23,14 @@ namespace CM.UI.Desktop.ViewModels
 
         public ShellViewModel(
             IEventAggregator eventAggregator,
+            IWindowManager windowManager,
             IApiHelper apiHelper,
             IUsuarioLogadoModel usuarioLogadoModel,
             LoginViewModel loginVm)
         {
             eventAggregator.Subscribe(this);
 
+            _windowManager = windowManager;
             _apiHelper = apiHelper;
             _loginVm = loginVm;
             _usuarioLogadoModel = usuarioLogadoModel;
@@ -47,7 +50,10 @@ namespace CM.UI.Desktop.ViewModels
 
         public void MenuProdutoSelecionado()
         {
-            ActivateItem(ProdutoListaViewModel.Create());
+            //_windowManager.ShowWindow(IoC.Get<ProdutoListaViewModel>().IsActive);
+           //var windows = IoC.
+
+            ActivateItem(ProdutoViewModel.Create());
         }
 
         public void MenuDocumentoEntradaSelecionado()

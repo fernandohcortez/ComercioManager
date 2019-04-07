@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.Serialization;
 
 namespace CM.UI.Model.Models
@@ -17,5 +18,11 @@ namespace CM.UI.Model.Models
         [DataMember]
         [DisplayName("Preço")]
         public decimal PrecoVenda { get; set; }
+        [DataMember]
+        [DisplayName("Incluso em")]
+        public DateTime DataInclusao { get; set; }
+        [DataMember]
+        [DisplayName("Alterado em")]
+        public DateTime DataAlteracao { get; set; }
     }
 }

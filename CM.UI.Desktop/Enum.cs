@@ -8,6 +8,7 @@ namespace CM.UI.Desktop
 {
     public enum AcaoCrud
     {
+        Nenhuma,
         Incluir,
         Alterar,
         Visualizar,

@@ -1,107 +1,39 @@
-﻿using Caliburn.Micro;
-using CM.UI.Desktop.Components;
-using CM.UI.Model.Helpers;
+﻿using System;
+using Caliburn.Micro;
 using CM.UI.Model.Models;
 using PropertyChanged;
-using System;
 using System.Collections.ObjectModel;
-using System.Dynamic;
-using System.Windows;
+using Action = System.Action;
 
 namespace CM.UI.Desktop.ViewModels
 {
     [AddINotifyPropertyChangedInterface]
-    public class ProdutoListaViewModel : Conductor<object>
+    public class ProdutoListaViewModel : Screen
     {
-        private readonly IWindowManager _windowManager;
-        private readonly IApiHelper _apiHelper;
+        public ObservableCollection<ProdutoModel> ListaRegistros { get; set; }
 
-        public ObservableCollection<ProdutoModel> Grid { get; set; }
+        public ProdutoModel RegistroSelecionado { get; set; }
 
-        public ProdutoModel RegistroSelecionadoGrid { get; set; }
+        private Action _actionVisualizarRegistro;
 
-        public static ProdutoListaViewModel Create()
+        public static ProdutoListaViewModel Create(Action actionVisualizarRegistro)
         {
-            return IoC.Get<ProdutoListaViewModel>();
+            var instancia = IoC.Get<ProdutoListaViewModel>();
+            instancia._actionVisualizarRegistro = actionVisualizarRegistro;
+
+            return instancia;
         }
 
-        public ProdutoListaViewModel(IWindowManager windowManager, IApiHelper apiHelper)
+        public ProdutoListaViewModel()
         {
-            _windowManager = windowManager;
-            _apiHelper = apiHelper;
 
-            CarregarGrid();
         }
 
-        public async void CarregarGrid()
+        public void AbrirRegistroVisualizacao()
         {
-            var listaProdutos = await _apiHelper.ListarProdutos();
-
-            Grid = listaProdutos;
-        }
-
-        public void LinhaGridSelecionada()
-        {
-            AbrirTelaDetalhes(AcaoCrud.Visualizar);
-        }
-
-        public void AbrirTelaDetalhes(AcaoCrud acaoCrud)
-        {
-            dynamic settings = new ExpandoObject();
-            settings.Width = 1024;
-            settings.Height = 768;
-            settings.SizeToContent = SizeToContent.Manual;
-            settings.WindowStyle = WindowStyle.None;
-            settings.AllowsTransparency = true;
-
-            var dialogResult = _windowManager.ShowDialog(ProdutoViewModel.Create(acaoCrud, RegistroSelecionadoGrid), null, settings);
-
-            if (dialogResult)
-                CarregarGrid();
-        }
-
-        public void Incluir()
-        {
-            AbrirTelaDetalhes(AcaoCrud.Incluir);
-        }
-
-        public void Alterar()
-        {
-            AbrirTelaDetalhes(AcaoCrud.Alterar);
-        }
-
-        public void Visualizar()
-        {
-            AbrirTelaDetalhes(AcaoCrud.Visualizar);
-        }
-
-        public async void Remover()
-        {
-            if (RegistroSelecionadoGrid == null)
-                return;
-
-            if (Mensagem.Create().MostrarPergunta("Deseja remover o registro selecionado?") == MessageBoxResult.No)
-                return;
-            try
-            {
-                await _apiHelper.RemoverProduto(RegistroSelecionadoGrid);
-
-                Grid.Remove(RegistroSelecionadoGrid);
-            }
-            catch (Exception e)
-            {
-                Mensagem.Create().MostrarErro($"Erro na remoção do registro.\r\n\r\n{e.Message}");
-            }
-        }
-
-        public void Atualizar()
-        {
-            CarregarGrid();
-        }
-
-        public void Fechar()
-        {
-            TryClose();
+            _actionVisualizarRegistro.Invoke();
+            //var conductor = Parent as IConductor;
+            //conductor?.ActivateItem(ProdutoEdicaoViewModel.Create(true, RegistroSelecionado));
         }
     }
 }

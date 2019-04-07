@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using CM.UI.Desktop.Components;
 using CM.UI.Desktop.Helpers;
 using CM.UI.Desktop.ViewModels;
 using CM.UI.Model.Helpers;
@@ -9,7 +10,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using CM.UI.Desktop.Components;
 
 namespace CM.UI.Desktop
 {
@@ -33,7 +33,7 @@ namespace CM.UI.Desktop
                     .Where(type => type.Name.EndsWith("ViewModel"))
                     .ToList()
                     .ForEach(viewModelType =>
-                        _container.RegisterPerRequest(viewModelType, viewModelType.ToString(), viewModelType));
+                        _container.RegisterSingleton(viewModelType, viewModelType.ToString(), viewModelType));
             }
 
             void RegisterInContainerAllOtherClasses()
@@ -44,7 +44,7 @@ namespace CM.UI.Desktop
             void RegisterAllSingletons()
             {
                 _container
-                    .Singleton<IWindowManager, WindowManager>()
+                    .Singleton<IWindowManager, CortezWindowManager>()
                     .Singleton<IEventAggregator, EventAggregator>()
                     .Singleton<IApiHelper, ApiHelper>()
                     .Singleton<IUsuarioLogadoModel, UsuarioLogadoModel>();
