@@ -110,7 +110,7 @@
     <Compile Include="Behaviors\KeyboardFocusBehavior.cs" />
     <Compile Include="Helpers\PasswordBoxHelper.cs" />
     <Compile Include="CortezWindowManager.cs" />
-    <Compile Include="Mapping\Mapping.cs" />
+    <Compile Include="Mapping.cs" />
     <Compile Include="ViewModels\FornecedorViewModel.cs" />
     <Compile Include="ViewModels\PedidoVendaViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />

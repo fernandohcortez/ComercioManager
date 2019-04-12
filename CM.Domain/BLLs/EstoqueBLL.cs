@@ -24,9 +24,9 @@ namespace CM.Domain.BLLs
             return GetAll<Estoque>();
         }
 
-        public override void Add(EstoqueDTO dto)
+        public override EstoqueDTO Add(EstoqueDTO dto)
         {
-            Add<Estoque>(dto, true);
+            return Add<Estoque>(dto, true);
         }
 
         public override void Update(EstoqueDTO dto)

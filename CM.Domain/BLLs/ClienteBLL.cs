@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using CM.Core;
+﻿using CM.Core;
 using CM.DataAccess;
 using CM.Domain.BLLs.Base;
+using System.Collections.Generic;
 
 namespace CM.Domain.BLLs
 {
@@ -17,9 +17,9 @@ namespace CM.Domain.BLLs
             return GetAll<Cliente>();
         }
 
-        public override void Add(ClienteDTO dto)
+        public override ClienteDTO Add(ClienteDTO dto)
         {
-            Add<Cliente>(dto, true);
+            return Add<Cliente>(dto, true);
         }
 
         public override void Update(ClienteDTO dto)

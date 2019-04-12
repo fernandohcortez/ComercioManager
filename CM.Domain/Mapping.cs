@@ -4,7 +4,7 @@ using AutoMapper;
 using CM.Core;
 using CM.DataAccess;
 
-namespace CM.Domain.Mapping
+namespace CM.Domain
 {
     public static class Mapping
     {

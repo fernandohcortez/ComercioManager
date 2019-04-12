@@ -87,25 +87,25 @@ namespace CM.UI.Model.Helpers
             }
         }
 
-        public async Task IncluirProduto(ProdutoModel produtoModel)
+        public async Task<ProdutoModel> IncluirProduto(ProdutoModel produtoModel)
         {
             using (var response = await _apiClient.PostAsync("api/Produto", produtoModel, new JsonMediaTypeFormatter()))
             {
                 if (!response.IsSuccessStatusCode)
                     throw new Exception(response.ReasonPhrase);
 
-                await response.Content.ReadAsAsync<object>();
+                return await response.Content.ReadAsAsync<ProdutoModel>();
             }
         }
 
-        public async Task AlterarProduto(ProdutoModel produtoModel)
+        public async Task<ProdutoModel> AlterarProduto(ProdutoModel produtoModel)
         {
             using (var response = await _apiClient.PutAsync($"api/Produto/{produtoModel.Id}", produtoModel, new JsonMediaTypeFormatter()))
             {
                 if (!response.IsSuccessStatusCode)
                     throw new Exception(response.ReasonPhrase);
 
-                await response.Content.ReadAsAsync<object>();
+                return await response.Content.ReadAsAsync<ProdutoModel>();
             }
         }
 
@@ -117,6 +117,17 @@ namespace CM.UI.Model.Helpers
                     throw new Exception(response.ReasonPhrase);
 
                 await response.Content.ReadAsAsync<object>();
+            }
+        }
+
+        public async Task<ProdutoModel> ObterProduto(int id)
+        {
+            using (var response = await _apiClient.GetAsync($"api/Produto/{id}"))
+            {
+                if (!response.IsSuccessStatusCode)
+                    throw new Exception(response.ReasonPhrase);
+
+                return await response.Content.ReadAsAsync<ProdutoModel>();
             }
         }
 

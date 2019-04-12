@@ -6,10 +6,10 @@ namespace CM.WebApi.Controllers
 {
     public class PedidoVendaController : ControllerBase<PedidoVendaDTO, PedidoVendaBLL, int>
     {
-        public override void Post(PedidoVendaDTO pedidoVendaDTO)
+        public override PedidoVendaDTO Post(PedidoVendaDTO pedidoVendaDTO)
         {
             var pedidoVendaBll = new PedidoVendaBLL();
-            pedidoVendaBll.Incluir(pedidoVendaDTO);
+            return pedidoVendaBll.Incluir(pedidoVendaDTO);
         }
     }
 }

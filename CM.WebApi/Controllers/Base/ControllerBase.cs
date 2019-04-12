@@ -28,14 +28,16 @@ namespace CM.WebApi.Controllers.Base
             return BLL.Get(id);
         }
 
-        public virtual void Post(TDTO dto)
+        public virtual TDTO Post(TDTO dto)
         {
-            BLL.Add(dto);
+            return BLL.Add(dto);
         }
 
-        public virtual void Put(int id, [FromBody]TDTO dto)
+        public virtual TDTO Put(int id, [FromBody]TDTO dto)
         {
             BLL.Update(dto);
+
+            return dto;
         }
 
         public virtual void Delete(TIdType id)

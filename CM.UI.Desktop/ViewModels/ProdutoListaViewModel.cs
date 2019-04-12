@@ -1,5 +1,4 @@
-﻿using System;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using CM.UI.Model.Models;
 using PropertyChanged;
 using System.Collections.ObjectModel;
@@ -10,11 +9,16 @@ namespace CM.UI.Desktop.ViewModels
     [AddINotifyPropertyChangedInterface]
     public class ProdutoListaViewModel : Screen
     {
-        public ObservableCollection<ProdutoModel> ListaRegistros { get; set; }
-
-        public ProdutoModel RegistroSelecionado { get; set; }
+        #region Campos e Propriedades
 
         private Action _actionVisualizarRegistro;
+
+        public ObservableCollection<ProdutoModel> ListaRegistros { get; set; }
+        public ProdutoModel RegistroCorrente { get; set; }
+
+        #endregion
+
+        #region Construtores
 
         public static ProdutoListaViewModel Create(Action actionVisualizarRegistro)
         {
@@ -24,16 +28,15 @@ namespace CM.UI.Desktop.ViewModels
             return instancia;
         }
 
-        public ProdutoListaViewModel()
-        {
+        #endregion
 
-        }
+        #region Ações Lista Registro
 
-        public void AbrirRegistroVisualizacao()
+        public void CarregarRegistroCorrenteVisualizacao()
         {
             _actionVisualizarRegistro.Invoke();
-            //var conductor = Parent as IConductor;
-            //conductor?.ActivateItem(ProdutoEdicaoViewModel.Create(true, RegistroSelecionado));
         }
+
+        #endregion
     }
 }

@@ -5,6 +5,7 @@ using CM.UI.Model.Models;
 using PropertyChanged;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -13,19 +14,40 @@ namespace CM.UI.Desktop.ViewModels
     [AddINotifyPropertyChangedInterface]
     public class ProdutoViewModel : Conductor<object>.Collection.OneActive
     {
+        #region Campos e Propriedades
+
         private readonly IApiHelper _apiHelper;
-
-        private ProdutoListaViewModel _produtoListaViewModel;
-
-        private ProdutoModel RegistroCorrente => _produtoListaViewModel?.RegistroSelecionado;
-
         private AcaoCrud _acaoCrud;
+        private ProdutoListaViewModel _produtoListaViewModel;
+        private ProdutoEdicaoViewModel _produtoEdicaoViewModel;
 
-        public ObservableCollection<ProdutoModel> ListaRegistros { get; set; }
+        private ObservableCollection<ProdutoModel> ListaRegistros
+        {
+            set
+            {
+                var idSelecionado = RegistroCorrente?.Id;
+
+                _produtoListaViewModel.ListaRegistros = value;
+
+                RegistroCorrente = idSelecionado == null
+                    ? ListaRegistros.FirstOrDefault()
+                    : ListaRegistros.FirstOrDefault(m => m.Id == idSelecionado);
+            }
+            get => _produtoListaViewModel?.ListaRegistros;
+        }
+        private ProdutoModel RegistroCorrente
+        {
+            set => _produtoListaViewModel.RegistroCorrente = value;
+            get => _produtoListaViewModel?.RegistroCorrente;
+        }
+
         public bool IsBotaoSalvarVisivel { get; set; }
         public bool IsBotoesModoListaVisivel { get; set; } = true;
+        public bool IsWaiting { get; set; }
 
-        private ProdutoEdicaoViewModel _produtoEdicaoViewModel;
+        #endregion
+
+        #region Construtores
 
         public static ProdutoViewModel Create()
         {
@@ -36,23 +58,12 @@ namespace CM.UI.Desktop.ViewModels
         {
             _apiHelper = apiHelper;
 
-            MostrarLista();
+            CarregarViewLista();
         }
 
-        private async void MostrarLista()
-        {
-            await CarregarRegistros();
+        #endregion
 
-            _produtoListaViewModel = ProdutoListaViewModel.Create(Visualizar);
-            _produtoListaViewModel.ListaRegistros = ListaRegistros;
-
-            ActivateItem(_produtoListaViewModel);
-        }
-
-        public void LinhaGridSelecionada()
-        {
-            AbrirTelaEdicao(AcaoCrud.Visualizar);
-        }
+        #region Botões
 
         private void ControlarVisibilidadeBotoes()
         {
@@ -60,51 +71,19 @@ namespace CM.UI.Desktop.ViewModels
             IsBotaoSalvarVisivel = _acaoCrud == AcaoCrud.Incluir || _acaoCrud == AcaoCrud.Alterar;
         }
 
-        public void AbrirTelaEdicao(AcaoCrud acaoCrud)
-        {
-            _acaoCrud = acaoCrud;
-
-            ControlarVisibilidadeBotoes();
-
-            var somenteLeitura = acaoCrud == AcaoCrud.Visualizar;
-
-            var registro = acaoCrud == AcaoCrud.Incluir ? new ProdutoModel() : RegistroCorrente;
-
-            _produtoEdicaoViewModel = ProdutoEdicaoViewModel.Create(somenteLeitura, registro);
-
-            ActivateItem(_produtoEdicaoViewModel);
-
-            //var conductor = Parent as IConductor;
-            //conductor?.ActivateItem(ProdutoEdicaoViewModel.Create(acaoCrud, RegistroSelecionadoGrid));
-
-            //return;
-
-            //dynamic settings = new ExpandoObject();
-            //settings.Width = 1024;
-            //settings.Height = 768;
-            //settings.SizeToContent = SizeToContent.Manual;
-            //settings.WindowStyle = WindowStyle.None;
-            //settings.AllowsTransparency = true;
-
-            //var dialogResult = _windowManager.ShowDialog(ProdutoViewModel.Create(acaoCrud, RegistroSelecionadoGrid), null, settings);
-
-            //if (dialogResult)
-            //    CarregarGrid();
-        }
-
         public void Incluir()
         {
-            AbrirTelaEdicao(AcaoCrud.Incluir);
+            CarregarViewEdicao(AcaoCrud.Incluir);
         }
 
         public void Alterar()
         {
-            AbrirTelaEdicao(AcaoCrud.Alterar);
+            CarregarViewEdicao(AcaoCrud.Alterar);
         }
 
         public void Visualizar()
         {
-            AbrirTelaEdicao(AcaoCrud.Visualizar);
+            CarregarViewEdicao(AcaoCrud.Visualizar);
         }
 
         public async void Remover()
@@ -116,6 +95,8 @@ namespace CM.UI.Desktop.ViewModels
                 return;
             try
             {
+                IsWaiting = true;
+
                 await _apiHelper.RemoverProduto(RegistroCorrente);
 
                 ListaRegistros.Remove(RegistroCorrente);
@@ -124,33 +105,36 @@ namespace CM.UI.Desktop.ViewModels
             {
                 Mensagem.Create().MostrarErro($"Erro na remoção do registro.\r\n\r\n{e.Message}");
             }
+            finally
+            {
+                IsWaiting = false;
+            }
         }
 
         public async void Atualizar()
         {
-            await CarregarRegistros();
-        }
-
-        public async Task CarregarRegistros()
-        {
-            var result = await _apiHelper.ListarProdutos();
-
-            ListaRegistros = result;
+            await AtualizarListaRegistros();
         }
 
         public async void Salvar()
         {
             try
             {
+                IsWaiting = true;
+
+                ProdutoModel registroInclusoAlterado = null;
+
                 switch (_acaoCrud)
                 {
                     case AcaoCrud.Incluir:
-                        await _apiHelper.IncluirProduto(RegistroCorrente);
+                        registroInclusoAlterado = await _apiHelper.IncluirProduto(RegistroCorrente);
                         break;
                     case AcaoCrud.Alterar:
-                        await _apiHelper.AlterarProduto(RegistroCorrente);
+                        registroInclusoAlterado = await _apiHelper.AlterarProduto(RegistroCorrente);
                         break;
                 }
+
+                Mapping.Mapper.Map(registroInclusoAlterado, RegistroCorrente);
 
                 _acaoCrud = AcaoCrud.Nenhuma;
 
@@ -158,25 +142,138 @@ namespace CM.UI.Desktop.ViewModels
             }
             catch (Exception e)
             {
-                Mensagem.Create().MostrarErro($"Erro na inclusão do registro.\r\n\r\n{e.Message}");
+                Mensagem.Create().MostrarErro($"Erro ao salvar o registro.\r\n\r\n{e.Message}");
+            }
+            finally
+            {
+                IsWaiting = false;
             }
         }
 
-        public void Voltar()
+        public async void Voltar()
         {
             if (!(ActiveItem is ProdutoEdicaoViewModel produtoEdicaoViewModel))
                 return;
 
-            _acaoCrud = AcaoCrud.Nenhuma;
+            try
+            {
+                IsWaiting = true;
 
-            ControlarVisibilidadeBotoes();
+                if (_acaoCrud == AcaoCrud.Incluir || _acaoCrud == AcaoCrud.Alterar)
+                {
+                    if (Mensagem.Create().MostrarPergunta("O registro ainda não foi salvo e as informações serão perdidas.\r\nDeseja continuar?") == MessageBoxResult.No)
+                        return;
 
-            produtoEdicaoViewModel.TryClose();
+                    if (_acaoCrud == AcaoCrud.Incluir)
+                        ListaRegistros.Remove(RegistroCorrente);
+                    else
+                        await AtualizarRegistroCorrente();
+                }
+                else
+                    _acaoCrud = AcaoCrud.Nenhuma;
+
+                ControlarVisibilidadeBotoes();
+
+                produtoEdicaoViewModel.TryClose();
+            }
+            finally
+            {
+                IsWaiting = false;
+            }
         }
 
         public void Fechar()
         {
             TryClose();
         }
+
+        #endregion
+
+        #region Manipulação Registros
+
+        public async Task AtualizarListaRegistros()
+        {
+            try
+            {
+                IsWaiting = true;
+
+                var listaRegistrosAtualizados = await _apiHelper.ListarProdutos();
+
+                ListaRegistros = listaRegistrosAtualizados;
+            }
+            finally
+            {
+                IsWaiting = false;
+            }
+        }
+
+        public async Task AtualizarRegistroCorrente()
+        {
+            try
+            {
+                IsWaiting = true;
+
+                var registroAtualizado = await _apiHelper.ObterProduto(RegistroCorrente.Id);
+
+                Mapping.Mapper.Map(registroAtualizado, RegistroCorrente);
+            }
+            catch (Exception e)
+            {
+                Mensagem.Create().MostrarErro($"Erro ao obter o registro do servidor.\r\n\r\n{e.Message}");
+            }
+            finally
+            {
+                IsWaiting = false;
+            }
+        }
+
+        private void IncluirNovoRegistroListaRegistros()
+        {
+            var registro = new ProdutoModel();
+            ListaRegistros.Add(registro);
+            RegistroCorrente = registro;
+        }
+
+        #endregion
+
+        #region Carregamento Views
+
+        private async void CarregarViewLista()
+        {
+            try
+            {
+                IsWaiting = true;
+
+                _produtoListaViewModel = ProdutoListaViewModel.Create(Visualizar);
+
+                await AtualizarListaRegistros();
+
+                ActivateItem(_produtoListaViewModel);
+            }
+            finally
+            {
+                IsWaiting = false;
+            }
+        }
+
+        private void CarregarViewEdicao(AcaoCrud acaoCrud)
+        {
+            _acaoCrud = acaoCrud;
+
+            ControlarVisibilidadeBotoes();
+
+            if (acaoCrud == AcaoCrud.Incluir)
+            {
+                IncluirNovoRegistroListaRegistros();
+            }
+
+            var somenteLeitura = acaoCrud == AcaoCrud.Visualizar;
+
+            _produtoEdicaoViewModel = ProdutoEdicaoViewModel.Create(somenteLeitura, RegistroCorrente);
+
+            ActivateItem(_produtoEdicaoViewModel);
+        }
+
+        #endregion
     }
 }

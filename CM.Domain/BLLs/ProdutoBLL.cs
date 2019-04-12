@@ -4,6 +4,7 @@ using CM.Domain.BLLs.Base;
 using CM.Domain.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace CM.Domain.BLLs
 {
@@ -21,13 +22,21 @@ namespace CM.Domain.BLLs
             return GetAll<Produto>();
         }
 
-        public override void Add(ProdutoDTO dto)
+        public override ProdutoDTO Add(ProdutoDTO dto)
         {
             try
             {
-                Add<Produto>(dto);
+                var entity = Mapping.Mapper.Map<Produto>(dto);
 
-                EstoqueBLL.IncluirEstoqueInicial(dto.Id);
+                Add(entity);
+
+                EstoqueBLL.IncluirEstoqueInicial(entity.Id);
+
+                ContextHelper.Commit();
+
+                dto = Mapping.Mapper.Map<ProdutoDTO>(entity);
+
+                return dto;
             }
             catch (Exception)
             {
@@ -44,6 +53,7 @@ namespace CM.Domain.BLLs
 
         public override void Remove(object id)
         {
+
             var produtoId = id.IsNullOrEmptyThenZero();
 
             try

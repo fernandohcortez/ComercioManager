@@ -6,10 +6,10 @@ namespace CM.WebApi.Controllers
 {
     public class DocumentoEntradaController : ControllerBase<DocumentoEntradaDTO, DocumentoEntradaBLL, int>
     {
-        public override void Post(DocumentoEntradaDTO documentoEntradaDTO)
+        public override DocumentoEntradaDTO Post(DocumentoEntradaDTO documentoEntradaDTO)
         {
             var documentoEntradaBll = new DocumentoEntradaBLL();
-            documentoEntradaBll.Incluir(documentoEntradaDTO);
+            return documentoEntradaBll.Incluir(documentoEntradaDTO);
         }
     }
 }

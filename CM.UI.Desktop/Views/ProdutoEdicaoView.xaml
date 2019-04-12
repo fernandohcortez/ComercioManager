@@ -9,13 +9,7 @@
              mc:Ignorable="d"  Background="Transparent" FontSize="24"
              d:DesignHeight="600" d:DesignWidth="800">
     <Grid>
-        <!--<Rectangle Grid.Column="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
-                   Margin="10 5 10 10" RadiusY="15" RadiusX="15" Fill="white">
-            <Rectangle.Effect>
-                <DropShadowEffect Color="#FFBBBBBB" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"/>
-            </Rectangle.Effect>
-        </Rectangle>-->
-
+        
         <Grid Grid.Column="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="5">
 
             <StackPanel VerticalAlignment="Stretch" Margin="10" 

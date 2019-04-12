@@ -17,9 +17,9 @@ namespace CM.Domain.BLLs
             return GetAll<PedidoVenda>();
         }
 
-        public override void Add(PedidoVendaDTO dto)
+        public override PedidoVendaDTO Add(PedidoVendaDTO dto)
         {
-            Add<PedidoVenda>(dto);
+            return Add<PedidoVenda>(dto);
         }
 
         public override void Update(PedidoVendaDTO dto)
@@ -32,9 +32,9 @@ namespace CM.Domain.BLLs
             Remove<PedidoVenda>(id.ToString(), true);
         }
 
-        public void Incluir(PedidoVendaDTO pedidoVendaDTO)
+        public PedidoVendaDTO Incluir(PedidoVendaDTO pedidoVendaDTO)
         {
-            Add(pedidoVendaDTO);
+            var pedidoVendaInclusoDTO = Add(pedidoVendaDTO);
 
             var estoqueBll = new EstoqueBLL(ContextHelper);
 
@@ -44,6 +44,8 @@ namespace CM.Domain.BLLs
             }
 
             ContextHelper.Commit();
+
+            return pedidoVendaInclusoDTO;
         }
     }
 }

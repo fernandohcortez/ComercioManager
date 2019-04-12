@@ -17,9 +17,9 @@ namespace CM.Domain.BLLs
             return GetAll<Usuario>();
         }
 
-        public override void Add(UsuarioDTO usuarioDTO)
+        public override UsuarioDTO Add(UsuarioDTO usuarioDTO)
         {
-            Add<Usuario>(usuarioDTO, true);
+            return Add<Usuario>(usuarioDTO, true);
         }
 
         public override void Update(UsuarioDTO usuarioDTO)

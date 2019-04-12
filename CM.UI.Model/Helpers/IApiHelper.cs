@@ -12,9 +12,10 @@ namespace CM.UI.Model.Helpers
         Task ObterInfoUsuarioLogado(string token);
         Task IncluirCliente();
         Task IncluirFornecedor();
-        Task IncluirProduto(ProdutoModel produtoModel);
-        Task AlterarProduto(ProdutoModel produtoModel);
-        Task RemoverProduto(ProdutoModel produtoModeld);
+        Task<ProdutoModel> IncluirProduto(ProdutoModel produtoModel);
+        Task<ProdutoModel> AlterarProduto(ProdutoModel produtoModel);
+        Task RemoverProduto(ProdutoModel produtoModel);
+        Task<ProdutoModel> ObterProduto(int id);
         Task IncluirDocumentoEntrada();
         Task IncluirPedidoVenda();
         Task<ObservableCollection<ProdutoModel>> ListarProdutos();

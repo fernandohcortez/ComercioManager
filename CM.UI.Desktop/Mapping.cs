@@ -2,7 +2,7 @@
 using CM.UI.Desktop.ViewModels;
 using CM.UI.Model.Models;
 
-namespace CM.UI.Desktop.Mapping
+namespace CM.UI.Desktop
 {
     public static class Mapping
     {
@@ -18,6 +18,7 @@ namespace CM.UI.Desktop.Mapping
             AutoMapper.Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<ProdutoEdicaoViewModel, ProdutoModel>().ReverseMap();
+                cfg.CreateMap<ProdutoModel, ProdutoModel>();
             });
         }
     }

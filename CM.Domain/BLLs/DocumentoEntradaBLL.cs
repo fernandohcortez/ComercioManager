@@ -17,9 +17,9 @@ namespace CM.Domain.BLLs
             return GetAll<DocumentoEntrada>();
         }
 
-        public override void Add(DocumentoEntradaDTO dto)
+        public override DocumentoEntradaDTO Add(DocumentoEntradaDTO dto)
         {
-            Add<Cliente>(dto);
+            return Add<Cliente>(dto);
         }
 
         public override void Update(DocumentoEntradaDTO dto)
@@ -32,9 +32,9 @@ namespace CM.Domain.BLLs
             Remove<DocumentoEntrada>(id.ToString(), true);
         }
 
-        public void Incluir(DocumentoEntradaDTO documentoEntradaDTO)
+        public DocumentoEntradaDTO Incluir(DocumentoEntradaDTO documentoEntradaDTO)
         {
-            Add(documentoEntradaDTO);
+            var documentoEntradaIncluso = Add(documentoEntradaDTO);
 
             var estoqueBll = new EstoqueBLL(ContextHelper);
 
@@ -44,6 +44,8 @@ namespace CM.Domain.BLLs
             }
 
             ContextHelper.Commit();
+
+            return documentoEntradaIncluso;
         }
     }
 }

@@ -55,7 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BLLs\Base\IBaseBLL2.cs" />
-    <Compile Include="Mapping\Mapping.cs" />
+    <Compile Include="Mapping.cs" />
     <Compile Include="BLLs\Base\BaseBLL.cs" />
     <Compile Include="BLLs\ClienteBLL.cs" />
     <Compile Include="BLLs\DocumentoEntradaBLL.cs" />

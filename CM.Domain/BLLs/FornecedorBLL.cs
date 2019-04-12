@@ -17,9 +17,9 @@ namespace CM.Domain.BLLs
             return GetAll<Fornecedor>();
         }
 
-        public override void Add(FornecedorDTO dto)
+        public override FornecedorDTO Add(FornecedorDTO dto)
         {
-            Add<Fornecedor>(dto, true);
+            return Add<Fornecedor>(dto, true);
         }
 
         public override void Update(FornecedorDTO dto)

@@ -1,11 +1,10 @@
-﻿using System;
+﻿using CM.UI.Model.Models.Base;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 
 namespace CM.UI.Model.Models
 {
-    [DataContract]
-    public class ProdutoModel
+    public class ProdutoModel : ModelBase
     {
         [DataMember]
         [DisplayName("Código")]
@@ -18,11 +17,5 @@ namespace CM.UI.Model.Models
         [DataMember]
         [DisplayName("Preço")]
         public decimal PrecoVenda { get; set; }
-        [DataMember]
-        [DisplayName("Incluso em")]
-        public DateTime DataInclusao { get; set; }
-        [DataMember]
-        [DisplayName("Alterado em")]
-        public DateTime DataAlteracao { get; set; }
     }
 }

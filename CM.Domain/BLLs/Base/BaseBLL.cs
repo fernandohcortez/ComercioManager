@@ -26,50 +26,69 @@ namespace CM.Domain.BLLs.Base
         {
             var entity = ContextHelper.DbSet.Get<TEntity>(id);
 
-            return Mapping.Mapping.Mapper.Map<TDTO>(entity);
+            return Mapping.Mapper.Map<TDTO>(entity);
         }
 
         protected TDTO Get<TEntity>(string id) where TEntity : class
         {
             var entity = ContextHelper.DbSet.Get<TEntity>(id);
 
-            return Mapping.Mapping.Mapper.Map<TDTO>(entity);
+            return Mapping.Mapper.Map<TDTO>(entity);
         }
 
         protected IEnumerable<TDTO> GetAll<TEntity>() where TEntity : class
         {
             var listEntity = ContextHelper.DbSet.GetAll<TEntity>();
 
-            return Mapping.Mapping.Mapper.Map<IEnumerable<TDTO>>(listEntity);
+            return Mapping.Mapper.Map<IEnumerable<TDTO>>(listEntity);
         }
 
         protected async Task<IEnumerable<TDTO>> GetAllAsync<TEntity>() where TEntity : class
         {
             var listEntity = await ContextHelper.DbSet.GetAllAsync<TEntity>();
 
-            return Mapping.Mapping.Mapper.Map<IEnumerable<TDTO>>(listEntity);
+            return Mapping.Mapper.Map<IEnumerable<TDTO>>(listEntity);
         }
 
         protected IEnumerable<TDTO> Find<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
         {
             var listEntity = ContextHelper.DbSet.Find(predicate);
 
-            return Mapping.Mapping.Mapper.Map<IEnumerable<TDTO>>(listEntity);
+            return Mapping.Mapper.Map<IEnumerable<TDTO>>(listEntity);
         }
 
         protected async Task<IEnumerable<TDTO>> FindAsync<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
         {
             var listEntity = await ContextHelper.DbSet.FindAsync(predicate);
 
-            return Mapping.Mapping.Mapper.Map<IEnumerable<TDTO>>(listEntity);
+            return Mapping.Mapper.Map<IEnumerable<TDTO>>(listEntity);
         }
 
-        protected void Add<TEntity>(TDTO dto, bool commit = false) where TEntity : class
+        protected TDTO Add<TEntity>(TDTO dto, bool commit = false) where TEntity : class
         {
             dto.DataInclusao = DateTime.Now;
             dto.DataAlteracao = DateTime.Now;
 
-            var entity = Mapping.Mapping.Mapper.Map<TEntity>(dto);
+            var entity = Mapping.Mapper.Map<TEntity>(dto);
+
+            ContextHelper.DbSet.Add(entity, commit);
+
+            dto = Mapping.Mapper.Map<TDTO>(entity);
+
+            return dto;
+        }
+
+        protected internal void Add<TEntity>(TEntity entity, bool commit = false) where TEntity : class
+        {
+            var tipoEntity = entity.GetType();
+
+            foreach (var propertyInfo in tipoEntity.GetProperties())
+            {
+                if (propertyInfo.Name == "DataInclusao" || propertyInfo.Name == "DataAlteracao")
+                {
+                    propertyInfo.SetValue(entity, DateTime.Now);
+                }
+            }
 
             ContextHelper.DbSet.Add(entity, commit);
         }
@@ -77,14 +96,14 @@ namespace CM.Domain.BLLs.Base
         protected void AddRange<TEntity>(IEnumerable<TDTO> listDto, bool commit = false) where TEntity : class
         {
             var lista = listDto.ToList();
-           
+
             foreach (var dto in lista)
             {
                 dto.DataInclusao = DateTime.Now;
                 dto.DataAlteracao = DateTime.Now;
             }
 
-            var listEntity = Mapping.Mapping.Mapper.ProjectTo<TEntity>(lista.AsQueryable());
+            var listEntity = Mapping.Mapper.ProjectTo<TEntity>(lista.AsQueryable());
 
             ContextHelper.DbSet.AddRange(listEntity, commit);
         }
@@ -93,7 +112,7 @@ namespace CM.Domain.BLLs.Base
         {
             dto.DataAlteracao = DateTime.Now;
 
-            var entity = Mapping.Mapping.Mapper.Map<TEntity>(dto);
+            var entity = Mapping.Mapper.Map<TEntity>(dto);
 
             ContextHelper.DbSet.Update(entity, commit);
         }
@@ -107,14 +126,14 @@ namespace CM.Domain.BLLs.Base
                 dto.DataAlteracao = DateTime.Now;
             }
 
-            var listEntity = Mapping.Mapping.Mapper.ProjectTo<TEntity>(lista.AsQueryable());
+            var listEntity = Mapping.Mapper.ProjectTo<TEntity>(lista.AsQueryable());
 
             ContextHelper.DbSet.UpdateRange(listEntity, commit);
         }
 
         protected void Remove<TEntity>(TDTO dto, bool commit = false) where TEntity : class
         {
-            var entity = Mapping.Mapping.Mapper.Map<TEntity>(dto);
+            var entity = Mapping.Mapper.Map<TEntity>(dto);
 
             ContextHelper.DbSet.Remove(entity, commit);
         }
@@ -131,12 +150,12 @@ namespace CM.Domain.BLLs.Base
 
         protected void RemoveRange<TEntity>(IEnumerable<TDTO> listDto, bool commit = false) where TEntity : class
         {
-            var listEntity = Mapping.Mapping.Mapper.ProjectTo<TEntity>(listDto.AsQueryable());
+            var listEntity = Mapping.Mapper.ProjectTo<TEntity>(listDto.AsQueryable());
 
             ContextHelper.DbSet.RemoveRange(listEntity, commit);
         }
 
-        public abstract void Add(TDTO dto);
+        public abstract TDTO Add(TDTO dto);
 
         public abstract TDTO Get(object id);
 
