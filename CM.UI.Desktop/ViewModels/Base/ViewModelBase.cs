@@ -1,7 +1,7 @@
 ﻿using Caliburn.Micro;
 using CM.UI.Desktop.Components;
 using CM.UI.Model.Helpers;
-using CM.UI.Model.Models;
+using CM.UI.Model.Models.Base;
 using PropertyChanged;
 using System;
 using System.Collections.ObjectModel;
@@ -9,37 +9,36 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace CM.UI.Desktop.ViewModels
+namespace CM.UI.Desktop.ViewModels.Base
 {
     [AddINotifyPropertyChangedInterface]
-    public class ProdutoViewModel : Conductor<object>.Collection.OneActive
+    public class ViewModelBase<TListaViewModel, TEdicaoViewModel, TModel> : Conductor<object>.Collection.OneActive where TModel : ModelBase where TListaViewModel : ListaViewModelBase<TModel> where TEdicaoViewModel : EdicaoViewModelBase<TModel>
     {
         #region Campos e Propriedades
 
-        private readonly IApiHelper _apiHelper;
-        private AcaoCrud _acaoCrud;
-        private ProdutoListaViewModel _produtoListaViewModel;
-        private ProdutoEdicaoViewModel _produtoEdicaoViewModel;
+        protected readonly IApiHelper ApiHelper;
+        protected AcaoCrud AcaoCrud;
+        protected TListaViewModel ListaViewModel;
+        protected TEdicaoViewModel EdicaoViewModel;
 
-        private ObservableCollection<ProdutoModel> ListaRegistros
+        private ObservableCollection<TModel> ListaRegistros
         {
             set
             {
                 var idSelecionado = RegistroCorrente?.Id;
 
-                _produtoListaViewModel.ListaRegistros = value;
+                ListaViewModel.ListaRegistros = value;
 
                 RegistroCorrente = idSelecionado == null
                     ? ListaRegistros.FirstOrDefault()
                     : ListaRegistros.FirstOrDefault(m => m.Id == idSelecionado);
             }
-            get => _produtoListaViewModel?.ListaRegistros;
+            get => ListaViewModel?.ListaRegistros;
         }
-
-        private ProdutoModel RegistroCorrente
+        private TModel RegistroCorrente
         {
-            set => _produtoListaViewModel.RegistroCorrente = value;
-            get => _produtoListaViewModel?.RegistroCorrente;
+            set => ListaViewModel.RegistroCorrente = value;
+            get => ListaViewModel?.RegistroCorrente;
         }
 
         public bool IsBotaoSalvarVisivel { get; set; }
@@ -50,16 +49,16 @@ namespace CM.UI.Desktop.ViewModels
 
         #region Construtores
 
-        public static ProdutoViewModel Create()
+        public ViewModelBase(IApiHelper apiHelper)
         {
-            return IoC.Get<ProdutoViewModel>();
-        }
-
-        public ProdutoViewModel(IApiHelper apiHelper)
-        {
-            _apiHelper = apiHelper;
+            ApiHelper = apiHelper;
 
             CarregarViewLista();
+        }
+
+        public static T Create<T>() where T : ViewModelBase<TListaViewModel, TEdicaoViewModel, TModel>
+        {
+            return IoC.Get<T>();
         }
 
         #endregion
@@ -68,8 +67,8 @@ namespace CM.UI.Desktop.ViewModels
 
         private void ControlarVisibilidadeBotoes()
         {
-            IsBotoesModoListaVisivel = _acaoCrud == AcaoCrud.Nenhuma;
-            IsBotaoSalvarVisivel = _acaoCrud == AcaoCrud.Incluir || _acaoCrud == AcaoCrud.Alterar;
+            IsBotoesModoListaVisivel = AcaoCrud == AcaoCrud.Nenhuma;
+            IsBotaoSalvarVisivel = AcaoCrud == AcaoCrud.Incluir || AcaoCrud == AcaoCrud.Alterar;
         }
 
         public void Incluir()
@@ -98,7 +97,7 @@ namespace CM.UI.Desktop.ViewModels
             {
                 IsWaiting = true;
 
-                await _apiHelper.RemoverProduto(RegistroCorrente);
+                await ApiHelper.Remover<TModel>(RegistroCorrente.Id);
 
                 ListaRegistros.Remove(RegistroCorrente);
             }
@@ -123,21 +122,21 @@ namespace CM.UI.Desktop.ViewModels
             {
                 IsWaiting = true;
 
-                ProdutoModel registroInclusoAlterado = null;
+                TModel registroInclusoAlterado = null;
 
-                switch (_acaoCrud)
+                switch (AcaoCrud)
                 {
                     case AcaoCrud.Incluir:
-                        registroInclusoAlterado = await _apiHelper.IncluirProduto(RegistroCorrente);
+                        registroInclusoAlterado = await ApiHelper.Incluir(RegistroCorrente);
                         break;
                     case AcaoCrud.Alterar:
-                        registroInclusoAlterado = await _apiHelper.AlterarProduto(RegistroCorrente);
+                        registroInclusoAlterado = await ApiHelper.Alterar(RegistroCorrente, RegistroCorrente.Id);
                         break;
                 }
 
                 Mapping.Mapper.Map(registroInclusoAlterado, RegistroCorrente);
 
-                _acaoCrud = AcaoCrud.Nenhuma;
+                AcaoCrud = AcaoCrud.Nenhuma;
 
                 Voltar();
             }
@@ -153,29 +152,29 @@ namespace CM.UI.Desktop.ViewModels
 
         public async void Voltar()
         {
-            if (!(ActiveItem is ProdutoEdicaoViewModel produtoEdicaoViewModel))
+            if (!(ActiveItem is TEdicaoViewModel edicaoViewModel))
                 return;
 
             try
             {
                 IsWaiting = true;
 
-                if (_acaoCrud == AcaoCrud.Incluir || _acaoCrud == AcaoCrud.Alterar)
+                if (AcaoCrud == AcaoCrud.Incluir || AcaoCrud == AcaoCrud.Alterar)
                 {
                     if (Mensagem.Create().MostrarPergunta("O registro ainda não foi salvo e as informações serão perdidas.\r\nDeseja continuar?") == MessageBoxResult.No)
                         return;
 
-                    if (_acaoCrud == AcaoCrud.Incluir)
+                    if (AcaoCrud == AcaoCrud.Incluir)
                         ListaRegistros.Remove(RegistroCorrente);
                     else
                         await AtualizarRegistroCorrente();
                 }
                 else
-                    _acaoCrud = AcaoCrud.Nenhuma;
+                    AcaoCrud = AcaoCrud.Nenhuma;
 
                 ControlarVisibilidadeBotoes();
 
-                produtoEdicaoViewModel.TryClose();
+                edicaoViewModel.TryClose();
             }
             finally
             {
@@ -198,7 +197,7 @@ namespace CM.UI.Desktop.ViewModels
             {
                 IsWaiting = true;
 
-                var listaRegistrosAtualizados = await _apiHelper.ListarProdutos();
+                var listaRegistrosAtualizados = await ApiHelper.Listar<TModel>();
 
                 ListaRegistros = listaRegistrosAtualizados;
             }
@@ -214,7 +213,7 @@ namespace CM.UI.Desktop.ViewModels
             {
                 IsWaiting = true;
 
-                var registroAtualizado = await _apiHelper.ObterProduto(RegistroCorrente.Id);
+                var registroAtualizado = await ApiHelper.Obter<TModel>(RegistroCorrente.Id);
 
                 Mapping.Mapper.Map(registroAtualizado, RegistroCorrente);
             }
@@ -230,7 +229,7 @@ namespace CM.UI.Desktop.ViewModels
 
         private void IncluirNovoRegistroListaRegistros()
         {
-            var registro = new ProdutoModel();
+            var registro = Activator.CreateInstance<TModel>();
             ListaRegistros.Add(registro);
             RegistroCorrente = registro;
         }
@@ -245,11 +244,12 @@ namespace CM.UI.Desktop.ViewModels
             {
                 IsWaiting = true;
 
-                _produtoListaViewModel = ProdutoListaViewModel.Create(Visualizar);
-
+                ListaViewModel = IoC.Get<TListaViewModel>();
+                ListaViewModel.ActionVisualizarRegistro = Visualizar;
+                
                 await AtualizarListaRegistros();
 
-                ActivateItem(_produtoListaViewModel);
+                ActivateItem(ListaViewModel);
             }
             finally
             {
@@ -259,7 +259,7 @@ namespace CM.UI.Desktop.ViewModels
 
         private void CarregarViewEdicao(AcaoCrud acaoCrud)
         {
-            _acaoCrud = acaoCrud;
+            AcaoCrud = acaoCrud;
 
             ControlarVisibilidadeBotoes();
 
@@ -268,11 +268,12 @@ namespace CM.UI.Desktop.ViewModels
                 IncluirNovoRegistroListaRegistros();
             }
 
-            var somenteLeitura = acaoCrud == AcaoCrud.Visualizar;
+            EdicaoViewModel = IoC.Get<TEdicaoViewModel>();
 
-            _produtoEdicaoViewModel = ProdutoEdicaoViewModel.Create(somenteLeitura, RegistroCorrente);
+            EdicaoViewModel.IsViewSomenteLeitura = acaoCrud == AcaoCrud.Visualizar;
+            EdicaoViewModel.Model = RegistroCorrente;
 
-            ActivateItem(_produtoEdicaoViewModel);
+            ActivateItem(EdicaoViewModel);
         }
 
         #endregion

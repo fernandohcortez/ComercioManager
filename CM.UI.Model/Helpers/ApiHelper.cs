@@ -87,6 +87,75 @@ namespace CM.UI.Model.Helpers
             }
         }
 
+        #region Métodos CRUD Padrão
+
+        public async Task<T> Incluir<T>(T model, string nomeUri = null)
+        {
+            nomeUri = nomeUri ?? model.ToString().Replace("Model", string.Empty);
+
+            using (var response = await _apiClient.PostAsync($"api/{nomeUri}", model, new JsonMediaTypeFormatter()))
+            {
+                if (!response.IsSuccessStatusCode)
+                    throw new Exception(response.ReasonPhrase);
+
+                return await response.Content.ReadAsAsync<T>();
+            }
+        }
+
+        public async Task<T> Alterar<T>(T model, object id, string nomeUri = null)
+        {
+            nomeUri = nomeUri ?? model.ToString().Replace("Model", string.Empty);
+
+            using (var response = await _apiClient.PutAsync($"api/{nomeUri}/{id}", model, new JsonMediaTypeFormatter()))
+            {
+                if (!response.IsSuccessStatusCode)
+                    throw new Exception(response.ReasonPhrase);
+
+                return await response.Content.ReadAsAsync<T>();
+            }
+        }
+
+        public async Task Remover<T>(object id, string nomeUri = null)
+        {
+            nomeUri = nomeUri ?? typeof(T).Name.Replace("Model", string.Empty);
+
+            using (var response = await _apiClient.DeleteAsync($"api/{nomeUri}/{id}"))
+            {
+                if (!response.IsSuccessStatusCode)
+                    throw new Exception(response.ReasonPhrase);
+
+                await response.Content.ReadAsAsync<object>();
+            }
+        }
+
+        public async Task<T> Obter<T>(object id, string nomeUri = null)
+        {
+            nomeUri = nomeUri ?? typeof(T).Name.Replace("Model", string.Empty);
+
+            using (var response = await _apiClient.GetAsync($"api/{nomeUri}/{id}"))
+            {
+                if (!response.IsSuccessStatusCode)
+                    throw new Exception(response.ReasonPhrase);
+
+                return await response.Content.ReadAsAsync<T>();
+            }
+        }
+
+        public async Task<ObservableCollection<T>> Listar<T>(string nomeUri = null)
+        {
+            nomeUri = nomeUri ?? typeof(T).Name.Replace("Model", string.Empty);
+
+            using (var response = await _apiClient.GetAsync($"api/{nomeUri}/"))
+            {
+                if (!response.IsSuccessStatusCode)
+                    throw new Exception(response.ReasonPhrase);
+
+                return await response.Content.ReadAsAsync<ObservableCollection<T>>();
+            }
+        }
+
+        #endregion
+
         public async Task<ProdutoModel> IncluirProduto(ProdutoModel produtoModel)
         {
             using (var response = await _apiClient.PostAsync("api/Produto", produtoModel, new JsonMediaTypeFormatter()))

@@ -10,6 +10,9 @@ namespace CM.UI.Model.Models.Base
     public class ModelBase
     {
         [DataMember]
+        [DisplayName("Código")]
+        public DateTime Id { get; set; }
+        [DataMember]
         [DisplayName("Incluso em")]
         public DateTime DataInclusao { get; set; }
         [DataMember]
