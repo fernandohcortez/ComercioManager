@@ -13,17 +13,27 @@ namespace CM.UI.Model.Helpers
 {
     public class ApiHelper : IApiHelper
     {
+        #region Campos e Propriedades
+
         private readonly IUsuarioLogadoModel _usuarioLogadoModel;
         private HttpClient _apiClient;
+        
+        #endregion
+
+        #region Contrutores
 
         public ApiHelper(IUsuarioLogadoModel usuarioLogadoModel)
         {
-            InitializeClient();
+            IniciarClient();
 
             _usuarioLogadoModel = usuarioLogadoModel;
         }
 
-        private void InitializeClient()
+        #endregion
+
+        #region HTTP Client
+
+        private void IniciarClient()
         {
             var api = ConfigurationManager.AppSettings["api"];
 
@@ -35,6 +45,10 @@ namespace CM.UI.Model.Helpers
             _apiClient.DefaultRequestHeaders.Accept.Clear();
             _apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
+
+        #endregion
+
+        #region Autenticação Usuário
 
         public async Task<AutenticarUsuario> Autenticar(string usuario, string senha)
         {
@@ -52,16 +66,6 @@ namespace CM.UI.Model.Helpers
 
                 return await response.Content.ReadAsAsync<AutenticarUsuario>();
             }
-        }
-
-        public Task IncluirCliente()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task IncluirFornecedor()
-        {
-            throw new NotImplementedException();
         }
 
         public async Task ObterInfoUsuarioLogado(string token)
@@ -87,11 +91,18 @@ namespace CM.UI.Model.Helpers
             }
         }
 
+        #endregion
+
         #region Métodos CRUD Padrão
+
+        private string ObterNomeUriPadraoModel<T>()
+        {
+            return typeof(T).Name.Replace("Model", string.Empty);
+        }
 
         public async Task<T> Incluir<T>(T model, string nomeUri = null)
         {
-            nomeUri = nomeUri ?? model.ToString().Replace("Model", string.Empty);
+            nomeUri = nomeUri ?? ObterNomeUriPadraoModel<T>();
 
             using (var response = await _apiClient.PostAsync($"api/{nomeUri}", model, new JsonMediaTypeFormatter()))
             {
@@ -104,7 +115,7 @@ namespace CM.UI.Model.Helpers
 
         public async Task<T> Alterar<T>(T model, object id, string nomeUri = null)
         {
-            nomeUri = nomeUri ?? model.ToString().Replace("Model", string.Empty);
+            nomeUri = nomeUri ?? ObterNomeUriPadraoModel<T>();
 
             using (var response = await _apiClient.PutAsync($"api/{nomeUri}/{id}", model, new JsonMediaTypeFormatter()))
             {
@@ -117,7 +128,7 @@ namespace CM.UI.Model.Helpers
 
         public async Task Remover<T>(object id, string nomeUri = null)
         {
-            nomeUri = nomeUri ?? typeof(T).Name.Replace("Model", string.Empty);
+            nomeUri = nomeUri ?? ObterNomeUriPadraoModel<T>();
 
             using (var response = await _apiClient.DeleteAsync($"api/{nomeUri}/{id}"))
             {
@@ -130,7 +141,7 @@ namespace CM.UI.Model.Helpers
 
         public async Task<T> Obter<T>(object id, string nomeUri = null)
         {
-            nomeUri = nomeUri ?? typeof(T).Name.Replace("Model", string.Empty);
+            nomeUri = nomeUri ?? ObterNomeUriPadraoModel<T>();
 
             using (var response = await _apiClient.GetAsync($"api/{nomeUri}/{id}"))
             {
@@ -143,7 +154,7 @@ namespace CM.UI.Model.Helpers
 
         public async Task<ObservableCollection<T>> Listar<T>(string nomeUri = null)
         {
-            nomeUri = nomeUri ?? typeof(T).Name.Replace("Model", string.Empty);
+            nomeUri = nomeUri ?? ObterNomeUriPadraoModel<T>();
 
             using (var response = await _apiClient.GetAsync($"api/{nomeUri}/"))
             {
@@ -155,70 +166,5 @@ namespace CM.UI.Model.Helpers
         }
 
         #endregion
-
-        public async Task<ProdutoModel> IncluirProduto(ProdutoModel produtoModel)
-        {
-            using (var response = await _apiClient.PostAsync("api/Produto", produtoModel, new JsonMediaTypeFormatter()))
-            {
-                if (!response.IsSuccessStatusCode)
-                    throw new Exception(response.ReasonPhrase);
-
-                return await response.Content.ReadAsAsync<ProdutoModel>();
-            }
-        }
-
-        public async Task<ProdutoModel> AlterarProduto(ProdutoModel produtoModel)
-        {
-            using (var response = await _apiClient.PutAsync($"api/Produto/{produtoModel.Id}", produtoModel, new JsonMediaTypeFormatter()))
-            {
-                if (!response.IsSuccessStatusCode)
-                    throw new Exception(response.ReasonPhrase);
-
-                return await response.Content.ReadAsAsync<ProdutoModel>();
-            }
-        }
-
-        public async Task RemoverProduto(ProdutoModel produtoModel)
-        {
-            using (var response = await _apiClient.DeleteAsync($"api/Produto/{produtoModel.Id}"))
-            {
-                if (!response.IsSuccessStatusCode)
-                    throw new Exception(response.ReasonPhrase);
-
-                await response.Content.ReadAsAsync<object>();
-            }
-        }
-
-        public async Task<ProdutoModel> ObterProduto(int id)
-        {
-            using (var response = await _apiClient.GetAsync($"api/Produto/{id}"))
-            {
-                if (!response.IsSuccessStatusCode)
-                    throw new Exception(response.ReasonPhrase);
-
-                return await response.Content.ReadAsAsync<ProdutoModel>();
-            }
-        }
-
-        public async Task<ObservableCollection<ProdutoModel>> ListarProdutos()
-        {
-            using (var response = await _apiClient.GetAsync("api/Produto/"))
-            {
-                if (!response.IsSuccessStatusCode)
-                    throw new Exception(response.ReasonPhrase);
-
-                return await response.Content.ReadAsAsync<ObservableCollection<ProdutoModel>>();
-            }
-        }
-
-        public Task IncluirDocumentoEntrada()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task IncluirPedidoVenda()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -2,6 +2,7 @@
 using CM.Core;
 using CM.DataAccess;
 using CM.Domain.BLLs.Base;
+using CM.Domain.Helpers;
 
 namespace CM.Domain.BLLs
 {
@@ -9,7 +10,7 @@ namespace CM.Domain.BLLs
     {
         public override PedidoVendaDTO Get(object id)
         {
-            return Get<PedidoVenda>(id.ToString());
+            return Get<PedidoVenda>(id.IsNullOrEmptyThenZero());
         }
 
         public override IEnumerable<PedidoVendaDTO> GetAll()
@@ -29,7 +30,7 @@ namespace CM.Domain.BLLs
 
         public override void Remove(object id)
         {
-            Remove<PedidoVenda>(id.ToString(), true);
+            Remove<PedidoVenda>(id.IsNullOrEmptyThenZero(), true);
         }
 
         public PedidoVendaDTO Incluir(PedidoVendaDTO pedidoVendaDTO)

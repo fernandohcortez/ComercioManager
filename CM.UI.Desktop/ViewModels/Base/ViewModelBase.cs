@@ -155,30 +155,39 @@ namespace CM.UI.Desktop.ViewModels.Base
             if (!(ActiveItem is TEdicaoViewModel edicaoViewModel))
                 return;
 
-            try
+            void FecharViewEdicao()
             {
-                IsWaiting = true;
+                AcaoCrud = AcaoCrud.Nenhuma;
 
-                if (AcaoCrud == AcaoCrud.Incluir || AcaoCrud == AcaoCrud.Alterar)
+                ControlarVisibilidadeBotoes();
+
+                edicaoViewModel.TryClose();
+            }
+
+            if (AcaoCrud == AcaoCrud.Incluir || AcaoCrud == AcaoCrud.Alterar)
+            {
+                if (Mensagem.Create().MostrarPergunta("O registro ainda não foi salvo e as informações serão perdidas.\r\nDeseja continuar?") == MessageBoxResult.No)
+                    return;
+
+                try
                 {
-                    if (Mensagem.Create().MostrarPergunta("O registro ainda não foi salvo e as informações serão perdidas.\r\nDeseja continuar?") == MessageBoxResult.No)
-                        return;
+                    IsWaiting = true;
 
                     if (AcaoCrud == AcaoCrud.Incluir)
                         ListaRegistros.Remove(RegistroCorrente);
                     else
                         await AtualizarRegistroCorrente();
                 }
-                else
-                    AcaoCrud = AcaoCrud.Nenhuma;
+                finally
+                {
+                    FecharViewEdicao();
 
-                ControlarVisibilidadeBotoes();
-
-                edicaoViewModel.TryClose();
+                    IsWaiting = false;
+                }
             }
-            finally
+            else
             {
-                IsWaiting = false;
+                FecharViewEdicao();
             }
         }
 
@@ -246,7 +255,7 @@ namespace CM.UI.Desktop.ViewModels.Base
 
                 ListaViewModel = IoC.Get<TListaViewModel>();
                 ListaViewModel.ActionVisualizarRegistro = Visualizar;
-                
+
                 await AtualizarListaRegistros();
 
                 ActivateItem(ListaViewModel);

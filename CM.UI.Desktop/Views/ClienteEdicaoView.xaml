@@ -1,0 +1,103 @@
+﻿<UserControl x:Class="CM.UI.Desktop.Views.ClienteEdicaoView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:behaviors="clr-namespace:CM.UI.Desktop.Behaviors"
+             mc:Ignorable="d"  Background="White" FontSize="24"
+             d:DesignHeight="600" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <Style TargetType="{x:Type FrameworkElement}" x:Key="ValidatingControl">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip" Value="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+
+        <Grid Grid.Column="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="5">
+
+            <StackPanel VerticalAlignment="Stretch" Margin="10" 
+                        behaviors:KeyboardFocusBehavior.On="{Binding ElementName=Model_Nome}">
+
+                <TextBox Text="{Binding Model.Nome, ValidatesOnDataErrors=True}" 
+                materialDesign:HintAssist.Hint="Nome" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         Margin="0,10" FontFamily="Champagne &amp; Limousines" 
+                         IsReadOnly="{Binding IsViewSomenteLeitura}"
+                         FontSize="15"/>
+
+                <TextBox Text="{Binding Model.Cpf, Converter={StaticResource StringToCpfCnpjConverter}}" 
+                         materialDesign:HintAssist.Hint="CPF"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         Margin="0,10" FontFamily="Champagne &amp; Limousines" 
+                         FontSize="15" Width="110" HorizontalAlignment="Left"
+                         IsReadOnly="{Binding IsViewSomenteLeitura}">
+                </TextBox>
+
+                <DatePicker Text="{Binding Model.DataNascimento, TargetNullValue=''}" 
+                         materialDesign:HintAssist.Hint="Data Nascimento" 
+                         Style="{StaticResource MaterialDesignFloatingHintDatePicker}" Width="140"
+                         Margin="0,10" FontFamily="Champagne &amp; Limousines" 
+                         FontSize="15" HorizontalAlignment="Left"
+                         IsEnabled="{Binding IsViewSomenteLeitura, Converter={StaticResource InverseBooleanConverter}}"/>
+
+                <TextBox x:Name="Model_Endereco" materialDesign:HintAssist.Hint="Endereço" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         Margin="0,10" FontFamily="Champagne &amp; Limousines" 
+                         FontSize="15" IsReadOnly="{Binding IsViewSomenteLeitura}"/>
+
+                <TextBox x:Name="Model_Complemento" materialDesign:HintAssist.Hint="Complemento" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         Margin="0,10" FontFamily="Champagne &amp; Limousines" 
+                         FontSize="15" IsReadOnly="{Binding IsViewSomenteLeitura}"/>
+
+                <TextBox x:Name="Model_Bairro" materialDesign:HintAssist.Hint="Bairro" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         Margin="0,10" FontFamily="Champagne &amp; Limousines" 
+                         FontSize="15" IsReadOnly="{Binding IsViewSomenteLeitura}"/>
+
+                <TextBox x:Name="Model_Cidade" materialDesign:HintAssist.Hint="Cidade" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         Margin="0,10" FontFamily="Champagne &amp; Limousines" 
+                         FontSize="15" IsReadOnly="{Binding IsViewSomenteLeitura}"/>
+
+                <ComboBox x:Name="ListaEstados" SelectedValue="{Binding Model.Estado}" 
+                          SelectedValuePath="Estado" DisplayMemberPath="Descricao" 
+                          materialDesign:HintAssist.Hint="Estado" 
+                          Style="{StaticResource MaterialDesignFloatingHintComboBox}" 
+                          Margin="0,10" FontFamily="Champagne &amp; Limousines" 
+                          Width="150" HorizontalAlignment="Left"
+                          FontSize="15" IsReadOnly="{Binding IsViewSomenteLeitura}"/>
+
+                <TextBox Text="{Binding Model.Fone1, Converter={StaticResource StringToPhoneConverter}}" 
+                         materialDesign:HintAssist.Hint="Fone 1"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         Margin="0,10" FontFamily="Champagne &amp; Limousines" 
+                         FontSize="15" Width="100" HorizontalAlignment="Left"
+                         IsReadOnly="{Binding IsViewSomenteLeitura}">
+                </TextBox>
+
+                <TextBox Text="{Binding Model.Fone2, Converter={StaticResource StringToPhoneConverter}}" 
+                         materialDesign:HintAssist.Hint="Fone 2"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         Margin="0,10" FontFamily="Champagne &amp; Limousines" 
+                         FontSize="15" Width="100" HorizontalAlignment="Left"
+                         IsReadOnly="{Binding IsViewSomenteLeitura}">
+                </TextBox>
+
+                <TextBox x:Name="Model_Email" materialDesign:HintAssist.Hint="Email" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         Margin="0,10" FontFamily="Champagne &amp; Limousines" 
+                         FontSize="15" IsReadOnly="{Binding IsViewSomenteLeitura}"/>
+
+            </StackPanel>
+
+        </Grid>
+    </Grid>
+</UserControl>

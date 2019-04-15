@@ -2,6 +2,7 @@
 using CM.Core;
 using CM.DataAccess;
 using CM.Domain.BLLs.Base;
+using CM.Domain.Helpers;
 
 namespace CM.Domain.BLLs
 {
@@ -9,7 +10,7 @@ namespace CM.Domain.BLLs
     {
         public override FornecedorDTO Get(object id)
         {
-            return Get<Fornecedor>(id.ToString());
+            return Get<Fornecedor>(id.IsNullOrEmptyThenZero());
         }
 
         public override IEnumerable<FornecedorDTO> GetAll()
@@ -29,7 +30,7 @@ namespace CM.Domain.BLLs
 
         public override void Remove(object id)
         {
-            Remove<Fornecedor>(id.ToString(), true);
+            Remove<Fornecedor>(id.IsNullOrEmptyThenZero(), true);
         }
     }
 }

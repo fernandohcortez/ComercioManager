@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CM.UI.Model;
+using CM.UI.Model.Attributes;
+using System;
 using System.ComponentModel;
 using System.Reflection;
 using System.Windows;
@@ -6,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Interactivity;
+using TextAlignment = System.Windows.TextAlignment;
 
 namespace CM.UI.Desktop.Behaviors
 {
@@ -23,10 +26,15 @@ namespace CM.UI.Desktop.Behaviors
 
         protected void OnAutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
-            var displayName = GetPropertyDisplayName(e.PropertyDescriptor);
+            var attributeBrowser = GetAttributeBrowser(e.PropertyDescriptor);
 
-            e.Column.Header = !string.IsNullOrEmpty(displayName) ? displayName : e.PropertyName;
+            if (attributeBrowser != null && !attributeBrowser.Visible)
+            {
+                e.Cancel = true;
+                return;
+            }
 
+            e.Column.Header = !string.IsNullOrEmpty(attributeBrowser?.Title) ? attributeBrowser.Title : e.PropertyName;
             e.Column.HeaderStyle = new Style(typeof(DataGridColumnHeader));
             e.Column.HeaderStyle.Setters.Add(new Setter(Control.HorizontalContentAlignmentProperty, HorizontalAlignment.Center));
 
@@ -37,22 +45,22 @@ namespace CM.UI.Desktop.Behaviors
 
             if (e.PropertyType == typeof(int) || e.PropertyType == typeof(int?))
             {
-                e.Column.CellStyle.Setters.Add(new Setter(TextBlock.TextAlignmentProperty, TextAlignment.Center));
+                e.Column.CellStyle.Setters.Add(new Setter(TextBlock.TextAlignmentProperty, ObterTextAlignment(attributeBrowser?.Alignment, TextAlignment.Center)));
 
                 if (e.PropertyName == "Id")
                     e.Column.Width = new DataGridLength(60, DataGridLengthUnitType.Pixel);
             }
             else if (e.PropertyType == typeof(decimal) || e.PropertyType == typeof(decimal?))
             {
-                e.Column.CellStyle.Setters.Add(new Setter(TextBlock.TextAlignmentProperty, TextAlignment.Right));
+                e.Column.CellStyle.Setters.Add(new Setter(TextBlock.TextAlignmentProperty, ObterTextAlignment(attributeBrowser?.Alignment, TextAlignment.Right)));
 
                 dataGridTextColumn.Binding = new Binding(e.PropertyName) { StringFormat = "{0:N}" };
 
-                e.Column.Width = new DataGridLength(80, DataGridLengthUnitType.Pixel);
+                e.Column.Width = new DataGridLength(attributeBrowser?.FixedWidth > 0 ? attributeBrowser.FixedWidth : 80, DataGridLengthUnitType.Pixel);
             }
             else if (e.PropertyType == typeof(DateTime) || e.PropertyType == typeof(DateTime?))
             {
-                e.Column.CellStyle.Setters.Add(new Setter(TextBlock.TextAlignmentProperty, TextAlignment.Center));
+                e.Column.CellStyle.Setters.Add(new Setter(TextBlock.TextAlignmentProperty, ObterTextAlignment(attributeBrowser?.Alignment, TextAlignment.Center)));
 
                 if (e.PropertyName == "DataInclusao" || e.PropertyName == "DataAlteracao")
                 {
@@ -62,42 +70,103 @@ namespace CM.UI.Desktop.Behaviors
                 else
                 {
                     dataGridTextColumn.Binding = new Binding(e.PropertyName) { StringFormat = "dd/MM/yyyy" };
-                    e.Column.Width = new DataGridLength(100, DataGridLengthUnitType.Pixel);
+                    e.Column.Width = new DataGridLength(attributeBrowser?.FixedWidth > 0 ? attributeBrowser.FixedWidth : 100, DataGridLengthUnitType.Pixel);
                 }
             }
             else
             {
-                e.Column.CellStyle.Setters.Add(new Setter(TextBlock.TextWrappingProperty, TextWrapping.Wrap));
-                e.Column.CellStyle.Setters.Add(new Setter(TextBlock.TextAlignmentProperty, TextAlignment.Left));
+                if (e.PropertyType == typeof(string) && e.PropertyName == "Id")
+                {
+                    e.Column.CellStyle.Setters.Add(new Setter(TextBlock.TextAlignmentProperty, ObterTextAlignment(attributeBrowser?.Alignment, TextAlignment.Center)));
 
-                e.Column.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+                    e.Column.Width = new DataGridLength(attributeBrowser?.FixedWidth > 0 ? attributeBrowser.FixedWidth : 60, DataGridLengthUnitType.Pixel);
+
+                    e.Column.DisplayIndex = 0;
+                }
+                else
+                {
+                    if (attributeBrowser != null && attributeBrowser.WrapText)
+                        e.Column.CellStyle.Setters.Add(new Setter(TextBlock.TextWrappingProperty, TextWrapping.Wrap));
+
+                    e.Column.CellStyle.Setters.Add(new Setter(TextBlock.TextAlignmentProperty, ObterTextAlignment(attributeBrowser?.Alignment, TextAlignment.Left)));
+
+                    e.Column.Width = attributeBrowser?.FixedWidth > 0
+                        ? new DataGridLength(attributeBrowser.FixedWidth, DataGridLengthUnitType.Pixel)
+                        : new DataGridLength(1, DataGridLengthUnitType.Star);
+                }
             }
         }
 
-        protected static string GetPropertyDisplayName(object descriptor)
+        private TextAlignment? ObterTextAlignment(BrowserAttributeAlignment? browserAttributeAlignment, TextAlignment? defaultTextAlignment = null)
         {
-            if (descriptor is PropertyDescriptor pd)
+            if (browserAttributeAlignment == null)
+                return defaultTextAlignment;
+
+            switch (browserAttributeAlignment)
             {
-                if ((pd.Attributes[typeof(DisplayNameAttribute)] is DisplayNameAttribute attr) && (attr != DisplayNameAttribute.Default))
-                {
-                    return attr.DisplayName;
-                }
+                case BrowserAttributeAlignment.Justify:
+                    return TextAlignment.Justify;
+                case BrowserAttributeAlignment.Center:
+                    return TextAlignment.Center;
+                case BrowserAttributeAlignment.Left:
+                    return TextAlignment.Left;
+                case BrowserAttributeAlignment.Right:
+                    return TextAlignment.Right;
+                default:
+                    return defaultTextAlignment;
+            }
+        }
+
+        //protected static string GetAttributeDisplayName(object descriptor)
+        //{
+        //    if (descriptor is PropertyDescriptor pd)
+        //    {
+        //        if (pd.Attributes[typeof(DisplayNameAttribute)] is DisplayNameAttribute attr && (attr != DisplayNameAttribute.Default))
+        //        {
+        //            return attr.DisplayName;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        var propertyInfo = descriptor as PropertyInfo;
+
+        //        if (propertyInfo == null)
+        //            return null;
+
+        //        var attrs = propertyInfo.GetCustomAttributes(typeof(DisplayNameAttribute), true);
+
+        //        foreach (var att in attrs)
+        //        {
+        //            if ((att is DisplayNameAttribute attribute) && (attribute != DisplayNameAttribute.Default))
+        //                return attribute.DisplayName;
+        //        }
+        //    }
+
+        //    return null;
+        //}
+
+        protected static BrowserAttribute GetAttributeBrowser(object descriptor)
+        {
+            ValidatesOnDataErrors // adicionar esta propriedade em todos os campos no form.
+
+            if (descriptor is PropertyDescriptor propertyDescriptor)
+            {
+                if (propertyDescriptor.Attributes[typeof(BrowserAttribute)] is BrowserAttribute attributeBrowser)
+                    return attributeBrowser;
             }
             else
             {
-                var pi = descriptor as PropertyInfo;
+                var propertyInfo = descriptor as PropertyInfo;
 
-                if (pi == null)
+                if (propertyInfo == null)
                     return null;
 
-                var attrs = pi.GetCustomAttributes(typeof(DisplayNameAttribute), true);
+                var attributes = propertyInfo.GetCustomAttributes(typeof(BrowserAttribute), true);
 
-                foreach (var att in attrs)
+                foreach (var attribute in attributes)
                 {
-                    if ((att is DisplayNameAttribute attribute) && (attribute != DisplayNameAttribute.Default))
-                    {
-                        return attribute.DisplayName;
-                    }
+                    if (attribute is BrowserAttribute attributeBrowser)
+                        return attributeBrowser;
                 }
             }
 

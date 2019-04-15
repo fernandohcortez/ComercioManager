@@ -34,7 +34,7 @@ namespace CM.UI.Desktop.ViewModels
         {
             try
             {
-                await _apiHelper.IncluirDocumentoEntrada();
+                //await _apiHelper.IncluirDocumentoEntrada();
             }
             catch (Exception e)
             {

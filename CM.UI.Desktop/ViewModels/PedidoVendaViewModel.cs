@@ -30,7 +30,7 @@ namespace CM.UI.Desktop.ViewModels
         {
             try
             {
-                await _apiHelper.IncluirPedidoVenda();
+               //await _apiHelper.IncluirPedidoVenda();
             }
             catch (Exception e)
             {

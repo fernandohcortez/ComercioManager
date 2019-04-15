@@ -5,8 +5,8 @@ using PropertyChanged;
 namespace CM.UI.Desktop.ViewModels
 {
     [AddINotifyPropertyChangedInterface]
-    public class ProdutoEdicaoViewModel : EdicaoViewModelBase<ProdutoModel>
+    public class ClienteListaViewModel : ListaViewModelBase<ClienteModel>
     {
-        
+       
     }
 }

@@ -16,6 +16,8 @@
             </ResourceDictionary.MergedDictionaries>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
             <helpers:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+            <helpers:StringToPhoneConverter x:Key="StringToPhoneConverter"/>
+            <helpers:StringToCpfCnpjConverter x:Key="StringToCpfCnpjConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

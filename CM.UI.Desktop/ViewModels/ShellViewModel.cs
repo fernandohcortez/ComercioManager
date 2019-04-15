@@ -10,10 +10,9 @@ namespace CM.UI.Desktop.ViewModels
     [AddINotifyPropertyChangedInterface]
     public class ShellViewModel : Conductor<object>, IHandle<string>
     {
-        private readonly IWindowManager _windowManager;
-        private readonly IApiHelper _apiHelper;
-        private readonly IUsuarioLogadoModel _usuarioLogadoModel;
+        #region Campos e Propriedades
 
+        private readonly IUsuarioLogadoModel _usuarioLogadoModel;
         private readonly LoginViewModel _loginVm;
 
         public bool IniciarAnimacaoAbrirMenu { get; set; }
@@ -21,38 +20,39 @@ namespace CM.UI.Desktop.ViewModels
         public bool IsBotaoFecharMenuVisible { get; set; }
         public string NomeUsuario { get; set; }
 
+        #endregion
+
+        #region Construtor
+
         public ShellViewModel(
             IEventAggregator eventAggregator,
-            IWindowManager windowManager,
-            IApiHelper apiHelper,
             IUsuarioLogadoModel usuarioLogadoModel,
             LoginViewModel loginVm)
         {
             eventAggregator.Subscribe(this);
 
-            _windowManager = windowManager;
-            _apiHelper = apiHelper;
             _loginVm = loginVm;
             _usuarioLogadoModel = usuarioLogadoModel;
 
             ActivateItem(_loginVm);
         }
 
+        #endregion
+
+        #region Menus
+
         public void MenuClienteSelecionado()
         {
-
+            ActivateItem(ClienteViewModel.Create());
         }
 
         public void MenuFornecedorSelecionado()
         {
-
+            ActivateItem(FornecedorViewModel.Create());
         }
 
         public void MenuProdutoSelecionado()
         {
-            //_windowManager.ShowWindow(IoC.Get<ProdutoListaViewModel>().IsActive);
-           //var windows = IoC.
-
             ActivateItem(ProdutoViewModel.Create());
         }
 
@@ -70,6 +70,10 @@ namespace CM.UI.Desktop.ViewModels
         {
 
         }
+
+        #endregion
+
+        #region Botões
 
         public void Sair()
         {
@@ -102,10 +106,9 @@ namespace CM.UI.Desktop.ViewModels
             ActivateItem(_loginVm);
         }
 
-        public void Procurar()
-        {
+        #endregion
 
-        }
+        #region Eventos
 
         public void Handle(string message)
         {
@@ -134,5 +137,7 @@ namespace CM.UI.Desktop.ViewModels
             IsBotaoAbrirMenuVisible = true;
             IsBotaoFecharMenuVisible = false;
         }
+
+        #endregion
     }
 }

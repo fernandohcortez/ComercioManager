@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using CM.Domain.Helpers;
 
 namespace CM.Domain.BLLs
 {
@@ -16,7 +17,7 @@ namespace CM.Domain.BLLs
 
         public override EstoqueDTO Get(object id)
         {
-            return Get<Estoque>(id.ToString());
+            return Get<Estoque>(id.IsNullOrEmptyThenZero());
         }
 
         public override IEnumerable<EstoqueDTO> GetAll()
@@ -36,7 +37,7 @@ namespace CM.Domain.BLLs
 
         public override void Remove(object id)
         {
-            Remove<Estoque>(id.ToString(), true);
+            Remove<Estoque>(id.IsNullOrEmptyThenZero(), true);
         }
 
         public EstoqueDTO ObterEstoqueAtual(int produtoId)

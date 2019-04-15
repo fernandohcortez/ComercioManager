@@ -1,51 +1,26 @@
-﻿using System;
-using System.Runtime.Serialization;
-using System.Threading.Tasks;
-using Caliburn.Micro;
-using CM.UI.Desktop.Helpers;
+﻿using Caliburn.Micro;
+using CM.UI.Desktop.ViewModels.Base;
 using CM.UI.Model.Helpers;
+using CM.UI.Model.Models;
 using PropertyChanged;
 
 namespace CM.UI.Desktop.ViewModels
 {
     [AddINotifyPropertyChangedInterface]
-    public class ClienteViewModel : Conductor<object>
+    public class ClienteViewModel : ViewModelBase<ClienteListaViewModel,ClienteEdicaoViewModel, ClienteModel>
     {
-        private readonly IApiHelper _apiHelper;
+        #region Construtores
 
-        public ClienteViewModel(IApiHelper apiHelper)
+        public static ClienteViewModel Create()
         {
-            _apiHelper = apiHelper;
+            return IoC.Get<ClienteViewModel>();
         }
 
-        public int Id { get; set; }
-        public string Nome { get; set; }
-        public string Cpf { get; set; }
-        public string Fone1 { get; set; }
-        public string Fone2 { get; set; }
-        public DateTime DataNascimento { get; set; }
-        public string Endereco { get; set; }
-        public string Complemento { get; set; }
-        public string Bairro { get; set; }
-        public string Cidade { get; set; }
-        public string Estado { get; set; }
-        public string Email { get; set; }
-
-        public async Task Incluir()
+        public ClienteViewModel(IApiHelper apiHelper) : base(apiHelper)
         {
-            try
-            {
-                await _apiHelper.IncluirCliente();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            
         }
 
-        public void Fechar()
-        {
-            TryClose();
-        }
+        #endregion
     }
 }
