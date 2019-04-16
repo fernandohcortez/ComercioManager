@@ -2,9 +2,12 @@
 using CM.UI.Desktop.Components;
 using CM.UI.Model.Helpers;
 using CM.UI.Model.Models.Base;
+using FluentValidation;
 using PropertyChanged;
 using System;
+using System.Collections;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,7 +15,7 @@ using System.Windows;
 namespace CM.UI.Desktop.ViewModels.Base
 {
     [AddINotifyPropertyChangedInterface]
-    public class ViewModelBase<TListaViewModel, TEdicaoViewModel, TModel> : Conductor<object>.Collection.OneActive where TModel : ModelBase where TListaViewModel : ListaViewModelBase<TModel> where TEdicaoViewModel : EdicaoViewModelBase<TModel>
+    public class ViewModelBase<TListaViewModel, TEdicaoViewModel, TModel, TModelValidator> : Conductor<object>.Collection.OneActive where TModel : ModelBase where TListaViewModel : ListaViewModelBase<TModel> where TEdicaoViewModel : EdicaoViewModelBase<TModel> where TModelValidator : AbstractValidator<TModel>
     {
         #region Campos e Propriedades
 
@@ -20,6 +23,7 @@ namespace CM.UI.Desktop.ViewModels.Base
         protected AcaoCrud AcaoCrud;
         protected TListaViewModel ListaViewModel;
         protected TEdicaoViewModel EdicaoViewModel;
+        protected TModelValidator ModelValidator;
 
         private ObservableCollection<TModel> ListaRegistros
         {
@@ -53,10 +57,12 @@ namespace CM.UI.Desktop.ViewModels.Base
         {
             ApiHelper = apiHelper;
 
+            ModelValidator = Activator.CreateInstance<TModelValidator>();
+
             CarregarViewLista();
         }
 
-        public static T Create<T>() where T : ViewModelBase<TListaViewModel, TEdicaoViewModel, TModel>
+        public static T Create<T>() where T : ViewModelBase<TListaViewModel, TEdicaoViewModel, TModel, TModelValidator>
         {
             return IoC.Get<T>();
         }
@@ -122,6 +128,8 @@ namespace CM.UI.Desktop.ViewModels.Base
             {
                 IsWaiting = true;
 
+                Validar();
+                
                 TModel registroInclusoAlterado = null;
 
                 switch (AcaoCrud)
@@ -140,6 +148,11 @@ namespace CM.UI.Desktop.ViewModels.Base
 
                 Voltar();
             }
+
+            catch (ValidationException e)
+            {
+                Mensagem.Create().MostrarAlerta(e.Message);
+            }
             catch (Exception e)
             {
                 Mensagem.Create().MostrarErro($"Erro ao salvar o registro.\r\n\r\n{e.Message}");
@@ -148,6 +161,21 @@ namespace CM.UI.Desktop.ViewModels.Base
             {
                 IsWaiting = false;
             }
+        }
+
+        private void Validar()
+        {
+            RegistroCorrente.ClearAllErrors();
+
+            var resultValidator = ModelValidator.Validate(RegistroCorrente);
+
+            foreach (var error in resultValidator.Errors)
+            {
+                RegistroCorrente.SetError(error.PropertyName, error.ErrorMessage);
+            }
+
+            if (!resultValidator.IsValid)
+                throw new ValidationException(resultValidator.ToString());
         }
 
         public async void Voltar()

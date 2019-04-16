@@ -11,12 +11,10 @@ namespace CM.UI.Model.Models
     {
         [DataMember]
         [Browser(WrapText = true)]
-        [Required(ErrorMessage = "Obrigatório")]
         public string Nome { get; set; }
 
         [DataMember]
         [Browser(Title = "CPF", FixedWidth = 100, Alignment = BrowserAttributeAlignment.Center)]
-        [Required(ErrorMessage = "Obrigatório")]
         public string Cpf { get; set; }
 
         [DataMember]

@@ -6,5 +6,6 @@ namespace CM.WebApi.Controllers
 {
     public class ClienteController : ControllerBase<ClienteDTO, ClienteBLL, int>
     {
+        
     }
 }

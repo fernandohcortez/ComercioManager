@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
-using System.Windows.Interactivity;
+using Microsoft.Xaml.Behaviors;
 using TextAlignment = System.Windows.TextAlignment;
 
 namespace CM.UI.Desktop.Behaviors
@@ -147,8 +147,6 @@ namespace CM.UI.Desktop.Behaviors
 
         protected static BrowserAttribute GetAttributeBrowser(object descriptor)
         {
-            ValidatesOnDataErrors // adicionar esta propriedade em todos os campos no form.
-
             if (descriptor is PropertyDescriptor propertyDescriptor)
             {
                 if (propertyDescriptor.Attributes[typeof(BrowserAttribute)] is BrowserAttribute attributeBrowser)

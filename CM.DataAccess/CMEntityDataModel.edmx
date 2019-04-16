@@ -479,7 +479,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nome" Type="String" Nullable="false" MaxLength="70" />
-          <Property Name="Cpf" Type="String" Nullable="true" MaxLength="14" />
+          <Property Name="Cpf" Type="String" MaxLength="14" Nullable="true" />
           <Property Name="Fone1" Type="String" Nullable="true" MaxLength="14" />
           <Property Name="Fone2" Type="String" Nullable="true" MaxLength="14" />
           <Property Name="DataNascimento" Type="DateTime" Nullable="true" />

@@ -2,12 +2,13 @@
 using CM.UI.Desktop.ViewModels.Base;
 using CM.UI.Model.Helpers;
 using CM.UI.Model.Models;
+using CM.UI.Model.Validators;
 using PropertyChanged;
 
 namespace CM.UI.Desktop.ViewModels
 {
     [AddINotifyPropertyChangedInterface]
-    public class ClienteViewModel : ViewModelBase<ClienteListaViewModel,ClienteEdicaoViewModel, ClienteModel>
+    public class ClienteViewModel : ViewModelBase<ClienteListaViewModel,ClienteEdicaoViewModel, ClienteModel, ClienteValidator>
     {
         #region Construtores
 
