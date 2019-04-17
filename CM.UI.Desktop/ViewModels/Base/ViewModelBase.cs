@@ -144,6 +144,9 @@ namespace CM.UI.Desktop.ViewModels.Base
 
                 Mapping.Mapper.Map(registroInclusoAlterado, RegistroCorrente);
 
+                if (RegistroCorrente.Id == null)
+                    throw new Exception($"Não foi possível obter o registro atualizado.\r\nCertifique-se que model [{RegistroCorrente.GetType().Name}] foi configurado na classe Mapping.");
+
                 AcaoCrud = AcaoCrud.Nenhuma;
 
                 Voltar();

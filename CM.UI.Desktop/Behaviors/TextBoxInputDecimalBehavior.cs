@@ -8,11 +8,11 @@ using System.Windows.Interactivity;
 
 namespace CM.UI.Desktop.Behaviors
 {
-    public class TextBoxInputBehavior : Behavior<TextBox>
+    public class TextBoxInputDecimalBehavior : Behavior<TextBox>
     {
         private const NumberStyles ValidNumberStyles = NumberStyles.AllowDecimalPoint | NumberStyles.AllowThousands | NumberStyles.AllowLeadingSign;
 
-        public TextBoxInputBehavior()
+        public TextBoxInputDecimalBehavior()
         {
             InputMode = TextBoxInputMode.None;
             JustPositivDecimalInput = false;
@@ -20,7 +20,7 @@ namespace CM.UI.Desktop.Behaviors
 
         public TextBoxInputMode InputMode { get; set; }
         
-        public static readonly DependencyProperty JustPositivDecimalInputProperty = DependencyProperty.Register("JustPositivDecimalInput", typeof(bool),typeof(TextBoxInputBehavior), new FrameworkPropertyMetadata(false));
+        public static readonly DependencyProperty JustPositivDecimalInputProperty = DependencyProperty.Register("JustPositivDecimalInput", typeof(bool),typeof(TextBoxInputDecimalBehavior), new FrameworkPropertyMetadata(false));
 
         public bool JustPositivDecimalInput
         {

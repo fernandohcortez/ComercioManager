@@ -14,11 +14,14 @@
 
             <StackPanel VerticalAlignment="Stretch" Margin="10" 
                         behaviors:KeyboardFocusBehavior.On="{Binding ElementName=Nome}">
-
                 <TextBox x:Name="Nome" Text="{Binding Model.Nome, ValidatesOnNotifyDataErrors=True}" 
                          materialDesign:HintAssist.Hint="Nome" 
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                         Margin="0,10" IsReadOnly="{Binding IsViewSomenteLeitura}"/>
+                         Margin="0,10" IsReadOnly="{Binding IsViewSomenteLeitura}">
+                    <!--<Interactions:Interaction.Behaviors>
+                        <behaviors:TextBoxInputMaxLengthBehavior/>
+                    </Interactions:Interaction.Behaviors>-->
+                </TextBox>
 
                 <TextBox Text="{Binding Model.Cpf, ValidatesOnNotifyDataErrors=True, Converter={StaticResource StringToCpfCnpjConverter}}" 
                          materialDesign:HintAssist.Hint="CPF"

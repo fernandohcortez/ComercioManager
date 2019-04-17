@@ -78,6 +78,10 @@
       <Project>{097a632a-3a19-4f72-8318-bfe0314f8b9c}</Project>
       <Name>CM.DataAccess</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Helpers\Helpers.csproj">
+      <Project>{369C5B03-F10D-42D1-AF2A-EE47496A83EC}</Project>
+      <Name>Helpers</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

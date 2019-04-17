@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using CM.Domain.Helpers;
+using Helpers;
 
 namespace CM.Domain.BLLs
 {

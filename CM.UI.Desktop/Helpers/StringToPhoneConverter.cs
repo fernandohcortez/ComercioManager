@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows.Data;
+using Helpers;
 
 namespace CM.UI.Desktop.Helpers
 {
@@ -12,8 +13,7 @@ namespace CM.UI.Desktop.Helpers
             if (value == null)
                 return string.Empty;
 
-            //retrieve only numbers in case we are dealing with already formatted phone no
-            var phoneNo = value.ToString().Replace("(", string.Empty).Replace(")", string.Empty).Replace(" ", string.Empty).Replace("-", string.Empty).Replace("+", string.Empty);
+            var phoneNo = value.ToString().RemoveNonNumeric();
 
             switch (phoneNo.Length)
             {
@@ -34,7 +34,7 @@ namespace CM.UI.Desktop.Helpers
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value;
+            return value?.ToString().RemoveNonNumeric();
         }
     }
 }

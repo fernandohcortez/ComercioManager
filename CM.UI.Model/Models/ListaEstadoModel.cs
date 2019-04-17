@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace CM.UI.Model.Models
 {
@@ -10,6 +11,7 @@ namespace CM.UI.Model.Models
         {
             Estados = new List<EstadoModel>
             {
+                new EstadoModel {Estado = "", Descricao = ""},
                 new EstadoModel {Estado = "AC", Descricao = "Acre"},
                 new EstadoModel {Estado = "AL", Descricao = "Alagoas"},
                 new EstadoModel {Estado = "AP", Descricao = "Amapá"},
@@ -38,7 +40,14 @@ namespace CM.UI.Model.Models
                 new EstadoModel {Estado = "SE", Descricao = "Sergipe"},
                 new EstadoModel {Estado = "TO", Descricao = "Tocantis"},
             };
+        }
 
+        public bool ValidateEstado(string estado, bool required = false)
+        {
+            if (string.IsNullOrEmpty(estado))
+                return !required;
+
+            return Estados.Any(m => m.Estado == estado);
         }
     }
 }

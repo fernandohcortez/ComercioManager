@@ -35,7 +35,7 @@
                          FontSize="15" Width="100" HorizontalAlignment="Left"
                          IsReadOnly="{Binding IsViewSomenteLeitura}">
                     <interactions:Interaction.Behaviors>
-                        <behaviors:TextBoxInputBehavior InputMode="DecimalInput"/>
+                        <behaviors:TextBoxInputDecimalBehavior InputMode="DecimalInput"/>
                     </interactions:Interaction.Behaviors>
                     </TextBox>
 

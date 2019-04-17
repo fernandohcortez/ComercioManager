@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using CM.UI.Desktop.ViewModels;
-using CM.UI.Model.Models;
+using CM.UI.Model.Models.Base;
+using System.Linq;
 
 namespace CM.UI.Desktop
 {
@@ -17,8 +17,11 @@ namespace CM.UI.Desktop
         {
             AutoMapper.Mapper.Initialize(cfg =>
             {
-                cfg.CreateMap<ProdutoEdicaoViewModel, ProdutoModel>().ReverseMap();
-                cfg.CreateMap<ProdutoModel, ProdutoModel>();
+                typeof(ModelBase).Assembly.GetTypes()
+                    .Where(type => type.IsClass)
+                    .Where(type => type.Name.EndsWith("Model"))
+                    .ToList()
+                    .ForEach(t => cfg.CreateMap(t, t));
             });
         }
     }

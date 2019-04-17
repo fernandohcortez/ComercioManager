@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CM.UI.Model.Models;
+﻿using CM.UI.Model.Models;
+using CM.UI.Model.Validators.Custom;
 using FluentValidation;
 
 namespace CM.UI.Model.Validators
@@ -12,36 +8,40 @@ namespace CM.UI.Model.Validators
     {
         public ClienteValidator()
         {
-            RuleFor(m => m.Nome).NotEmpty().WithMessage("Informe um {PropertyName}.");
+            RuleFor(m => m.Nome)
+                .NotEmpty()
+                .MaximumLength(70);
 
-            RuleFor(m => m.Cpf).Must(Validator.BeAValidCpf).WithMessage("Informe um CPF válido.");
+            RuleFor(m => m.Cpf)
+                .IsAValidCpf();
 
-            RuleFor(m => m.DataNascimento).Must(BeAValidDataNascimento).WithMessage("Informe uma data de nascimento válida.");
+            RuleFor(m => m.DataNascimento)
+                .IsAValidDataNascimento();
 
-            RuleFor(m => m.Estado).Must(BeAValidEstado).WithMessage("Informe um estado válido.");
+            RuleFor(m => m.Estado)
+                .IsAValidEstado();
 
-            RuleFor(m => m.Email).EmailAddress().WithMessage("Informe um email válido.");
-        }
+            RuleFor(m => m.Email)
+                .EmailAddress()
+                .MaximumLength(256);
 
-        protected bool BeAValidDataNascimento(DateTime? dataNascimento)
-        {
-            if (dataNascimento == null)
-                return true;
+            RuleFor(m => m.Fone1)
+                .IsAValidTelefone();
 
-            var anoCorrente = DateTime.Now.Year;
-            var anoNascimento = dataNascimento.GetValueOrDefault().Year;
+            RuleFor(m => m.Fone2)
+                .IsAValidTelefone();
 
-            return anoNascimento <= anoCorrente && anoNascimento > anoCorrente - 120;
-        }
+            RuleFor(m => m.Endereco)
+                .MaximumLength(200);
 
-        protected bool BeAValidEstado(string estado)
-        {
-            if (string.IsNullOrEmpty(estado))
-                return true;
+            RuleFor(m => m.Complemento)
+                .MaximumLength(100);
 
-            return new ListaEstadoModel().Estados.Any(m => m.Estado == estado);
+            RuleFor(m => m.Bairro)
+                .MaximumLength(70);
+
+            RuleFor(m => m.Cidade)
+                .MaximumLength(70);
         }
     }
-
-    
 }

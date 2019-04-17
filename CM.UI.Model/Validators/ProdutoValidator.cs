@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CM.UI.Model.Models;
+﻿using CM.UI.Model.Models;
 using FluentValidation;
 
 namespace CM.UI.Model.Validators
@@ -12,7 +7,12 @@ namespace CM.UI.Model.Validators
     {
         public ProdutoValidator()
         {
-            RuleFor(m => m.Nome).NotEmpty().WithMessage("Nome é obrigatório.");
+            RuleFor(m => m.Nome)
+                .NotEmpty()
+                .MaximumLength(100);
+
+            RuleFor(m => m.PrecoVenda)
+                .NotEmpty();
         }
     }
 }

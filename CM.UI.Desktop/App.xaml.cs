@@ -7,6 +7,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
 using CM.UI.Desktop.Helpers;
+using CM.UI.Model.Validators;
+using CM.UI.Model.Validators.Language;
+using FluentValidation;
 
 
 namespace CM.UI.Desktop
@@ -29,6 +32,11 @@ namespace CM.UI.Desktop
 
             EventManager.RegisterClassHandler(typeof(TextBox),UIElement.GotFocusEvent,new RoutedEventHandler(TextBox_GotFocus));
             EventManager.RegisterClassHandler(typeof(Window), UIElement.GotMouseCaptureEvent,new RoutedEventHandler(Window_MouseCapture));
+
+            ValidatorOptions.LanguageManager = new CustomLanguageManager
+            {
+                Culture = new CultureInfo("pt")
+            };
 
             base.OnStartup(e);
         }
