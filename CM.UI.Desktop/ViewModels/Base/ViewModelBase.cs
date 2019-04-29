@@ -5,12 +5,12 @@ using CM.UI.Model.Models.Base;
 using FluentValidation;
 using PropertyChanged;
 using System;
-using System.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 
 namespace CM.UI.Desktop.ViewModels.Base
 {
@@ -25,20 +25,28 @@ namespace CM.UI.Desktop.ViewModels.Base
         protected TEdicaoViewModel EdicaoViewModel;
         protected TModelValidator ModelValidator;
 
-        private ObservableCollection<TModel> ListaRegistros
+        private ObservableCollection<TModel> _listaRegistrosSource;
+        private ObservableCollection<TModel> ListaRegistrosSource
         {
             set
             {
                 var idSelecionado = RegistroCorrente?.Id;
 
-                ListaViewModel.ListaRegistros = value;
+                _listaRegistrosSource = value;
 
                 RegistroCorrente = idSelecionado == null
-                    ? ListaRegistros.FirstOrDefault()
-                    : ListaRegistros.FirstOrDefault(m => m.Id == idSelecionado);
+                    ? ListaRegistrosSource.FirstOrDefault()
+                    : ListaRegistrosSource.FirstOrDefault(m => m.Id == idSelecionado);
             }
-            get => ListaViewModel?.ListaRegistros;
+            get => _listaRegistrosSource;
         }
+
+        public ICollectionView ListaRegistros
+        {
+            get => ListaViewModel.ListaRegistros;
+            set => ListaViewModel.ListaRegistros = value;
+        }
+
         private TModel RegistroCorrente
         {
             set => ListaViewModel.RegistroCorrente = value;
@@ -105,7 +113,7 @@ namespace CM.UI.Desktop.ViewModels.Base
 
                 await ApiHelper.Remover<TModel>(RegistroCorrente.Id);
 
-                ListaRegistros.Remove(RegistroCorrente);
+                ListaRegistrosSource.Remove(RegistroCorrente);
             }
             catch (Exception e)
             {
@@ -129,7 +137,7 @@ namespace CM.UI.Desktop.ViewModels.Base
                 IsWaiting = true;
 
                 Validar();
-                
+
                 TModel registroInclusoAlterado = null;
 
                 switch (AcaoCrud)
@@ -205,7 +213,7 @@ namespace CM.UI.Desktop.ViewModels.Base
                     IsWaiting = true;
 
                     if (AcaoCrud == AcaoCrud.Incluir)
-                        ListaRegistros.Remove(RegistroCorrente);
+                        ListaRegistrosSource.Remove(RegistroCorrente);
                     else
                         await AtualizarRegistroCorrente();
                 }
@@ -239,7 +247,9 @@ namespace CM.UI.Desktop.ViewModels.Base
 
                 var listaRegistrosAtualizados = await ApiHelper.Listar<TModel>();
 
-                ListaRegistros = listaRegistrosAtualizados;
+                ListaRegistrosSource = listaRegistrosAtualizados;
+
+                ListaRegistros = CollectionViewSource.GetDefaultView(ListaRegistrosSource);
             }
             finally
             {
@@ -270,7 +280,7 @@ namespace CM.UI.Desktop.ViewModels.Base
         private void IncluirNovoRegistroListaRegistros()
         {
             var registro = Activator.CreateInstance<TModel>();
-            ListaRegistros.Add(registro);
+            ListaRegistrosSource.Add(registro);
             RegistroCorrente = registro;
         }
 

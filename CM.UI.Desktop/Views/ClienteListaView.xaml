@@ -6,14 +6,39 @@
              xmlns:interactions="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:behaviors="clr-namespace:CM.UI.Desktop.Behaviors"
-             mc:Ignorable="d"  Background="Transparent" FontSize="24"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" FontSize="13"
              d:DesignHeight="600" d:DesignWidth="800">
-    <Grid>
 
-        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="5">
+    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="3">
 
-            <DataGrid x:Name="ListaRegistros" CanUserAddRows="False" 
-                      AutoGenerateColumns="True" AlternatingRowBackground="#FFE5EEF1" Margin="5"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Rectangle Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
+                   Margin="3 0 3 3" RadiusY="15" RadiusX="15" Fill="White"/>
+
+        <Grid Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="3">
+
+            <TextBox x:Name="FiltroNome" VerticalAlignment="Center"  HorizontalAlignment="Stretch"
+                     materialDesign:HintAssist.Hint="Filtrar por Nome" Margin="10,5,140,5" FontSize="12"
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+
+            <TextBox x:Name="FiltroCpf" VerticalAlignment="Center"  HorizontalAlignment="Right"
+                     materialDesign:HintAssist.Hint="Filtrar por CPF" Margin="10,5" FontSize="12" Width="110"
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+
+        </Grid>
+
+        <Rectangle Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
+                   Margin="3" RadiusY="15" RadiusX="15" Fill="White"/>
+
+        <Grid Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="3">
+
+            <DataGrid x:Name="ListaRegistros" CanUserAddRows="False" Margin="5"
+                      AutoGenerateColumns="True" AlternatingRowBackground="#FFE5EEF1" 
                       SelectedItem="{Binding RegistroCorrente}"
                       SelectionMode="Extended"
                       IsReadOnly="True" 
@@ -25,5 +50,6 @@
             </DataGrid>
 
         </Grid>
+
     </Grid>
 </UserControl>

@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using Caliburn.Micro;
 using CM.UI.Model.Models;
 using PropertyChanged;
@@ -13,7 +14,7 @@ namespace CM.UI.Desktop.ViewModels.Base
 
         public Action ActionVisualizarRegistro;
 
-        public ObservableCollection<TModel> ListaRegistros { get; set; }
+        public ICollectionView ListaRegistros { get; set; }
         public TModel RegistroCorrente { get; set; }
 
         #endregion

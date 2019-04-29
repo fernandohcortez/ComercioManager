@@ -5,85 +5,87 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:behaviors="clr-namespace:CM.UI.Desktop.Behaviors"
-             mc:Ignorable="d"  Background="Transparent" FontSize="15"
+             mc:Ignorable="d" FontSize="15"
              d:DesignHeight="600" d:DesignWidth="800">
-    <Grid>
 
-        <Grid Grid.Column="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
-              Margin="5">
+    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="3 0 3 3">
 
-            <StackPanel VerticalAlignment="Stretch" Margin="10" 
+        <Rectangle VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
+                   Margin="3" RadiusY="15" RadiusX="15" Fill="White"/>
+
+        <StackPanel VerticalAlignment="Stretch" Margin="10" 
                         behaviors:KeyboardFocusBehavior.On="{Binding ElementName=Nome}">
-                <TextBox x:Name="Nome" Text="{Binding Model.Nome, ValidatesOnNotifyDataErrors=True}" 
+
+            <TextBox x:Name="Nome" Text="{Binding Model.Nome, ValidatesOnNotifyDataErrors=True}" 
                          materialDesign:HintAssist.Hint="Nome" 
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                          Margin="0,10" IsReadOnly="{Binding IsViewSomenteLeitura}">
-                    <!--<Interactions:Interaction.Behaviors>
+                <!--<Interactions:Interaction.Behaviors>
                         <behaviors:TextBoxInputMaxLengthBehavior/>
                     </Interactions:Interaction.Behaviors>-->
-                </TextBox>
+            </TextBox>
 
-                <TextBox Text="{Binding Model.Cpf, ValidatesOnNotifyDataErrors=True, Converter={StaticResource StringToCpfCnpjConverter}}" 
+            <TextBox Text="{Binding Model.Cpf, ValidatesOnNotifyDataErrors=True, Converter={StaticResource StringToCpfCnpjConverter}}" 
                          materialDesign:HintAssist.Hint="CPF"
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                          Margin="0,10" Width="110" HorizontalAlignment="Left"
                          IsReadOnly="{Binding IsViewSomenteLeitura}">
-                </TextBox>
+            </TextBox>
 
-                <DatePicker SelectedDate="{Binding Model.DataNascimento, ValidatesOnNotifyDataErrors=True, TargetNullValue=''}" 
+            <DatePicker SelectedDate="{Binding Model.DataNascimento, ValidatesOnNotifyDataErrors=True, TargetNullValue=''}" 
                          materialDesign:HintAssist.Hint="Data Nascimento" 
                          Style="{StaticResource MaterialDesignFloatingHintDatePicker}" 
                          Width="140" Margin="0,10" HorizontalAlignment="Left"
                          IsEnabled="{Binding IsViewSomenteLeitura, Converter={StaticResource InverseBooleanConverter}}"/>
 
-                <TextBox Text="{Binding Model.Endereco, ValidatesOnNotifyDataErrors=True}"
+            <TextBox Text="{Binding Model.Endereco, ValidatesOnNotifyDataErrors=True}"
                          materialDesign:HintAssist.Hint="Endereço" 
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                          Margin="0,10" IsReadOnly="{Binding IsViewSomenteLeitura}"/>
 
-                <TextBox Text="{Binding Model.Complemento, ValidatesOnNotifyDataErrors=True}"
+            <TextBox Text="{Binding Model.Complemento, ValidatesOnNotifyDataErrors=True}"
                          materialDesign:HintAssist.Hint="Complemento" 
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                          Margin="0,10" IsReadOnly="{Binding IsViewSomenteLeitura}"/>
 
-                <TextBox Text="{Binding Model.Bairro, ValidatesOnNotifyDataErrors=True}"
+            <TextBox Text="{Binding Model.Bairro, ValidatesOnNotifyDataErrors=True}"
                          materialDesign:HintAssist.Hint="Bairro" 
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                          Margin="0,10" IsReadOnly="{Binding IsViewSomenteLeitura}"/>
 
-                <TextBox Text="{Binding Model.Cidade, ValidatesOnNotifyDataErrors=True}"
+            <TextBox Text="{Binding Model.Cidade, ValidatesOnNotifyDataErrors=True}"
                          materialDesign:HintAssist.Hint="Cidade" 
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                          Margin="0,10" IsReadOnly="{Binding IsViewSomenteLeitura}"/>
 
-                <ComboBox x:Name="ListaEstados" SelectedValue="{Binding Model.Estado, ValidatesOnNotifyDataErrors=True}" 
+            <ComboBox x:Name="ListaEstados" SelectedValue="{Binding Model.Estado, ValidatesOnNotifyDataErrors=True}" 
                           SelectedValuePath="Estado" DisplayMemberPath="Descricao" Background="White"
                           materialDesign:HintAssist.Hint="Estado" 
                           Style="{StaticResource MaterialDesignFloatingHintComboBox}" 
                           Margin="0,10" Width="150" HorizontalAlignment="Left"
                           IsReadOnly="{Binding IsViewSomenteLeitura}"/>
 
-                <TextBox Text="{Binding Model.Fone1, ValidatesOnNotifyDataErrors=True, Converter={StaticResource StringToPhoneConverter}}" 
+            <TextBox Text="{Binding Model.Fone1, ValidatesOnNotifyDataErrors=True, Converter={StaticResource StringToPhoneConverter}}" 
                          materialDesign:HintAssist.Hint="Fone 1"
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                          Margin="0,10" Width="120" HorizontalAlignment="Left"
                          IsReadOnly="{Binding IsViewSomenteLeitura}">
-                </TextBox>
+            </TextBox>
 
-                <TextBox Text="{Binding Model.Fone2, ValidatesOnNotifyDataErrors=True, Converter={StaticResource StringToPhoneConverter}}" 
+            <TextBox Text="{Binding Model.Fone2, ValidatesOnNotifyDataErrors=True, Converter={StaticResource StringToPhoneConverter}}" 
                          materialDesign:HintAssist.Hint="Fone 2"
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                          Margin="0,10" Width="120" HorizontalAlignment="Left"
                          IsReadOnly="{Binding IsViewSomenteLeitura}">
-                </TextBox>
+            </TextBox>
 
-                <TextBox Text="{Binding Model.Email, ValidatesOnNotifyDataErrors=True}" 
+            <TextBox Text="{Binding Model.Email, ValidatesOnNotifyDataErrors=True}" 
                          materialDesign:HintAssist.Hint="Email" 
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                          Margin="0,10" IsReadOnly="{Binding IsViewSomenteLeitura}"/>
 
-            </StackPanel>
+        </StackPanel>
 
-        </Grid>
     </Grid>
+
 </UserControl>
