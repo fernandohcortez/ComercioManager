@@ -2,42 +2,58 @@
 using CM.UI.Model.Models.Base;
 using System.ComponentModel;
 using System.Runtime.Serialization;
+using CM.UI.Model.Attributes;
 
 namespace CM.UI.Model.Models
 {
     public class FornecedorModel : ModelBase
     {
         [DataMember]
-        [DisplayName("Razão Social")]
+        [Browser(Title = "Razão Social", WrapText = true)]
         public string RazaoSocial { get; set; }
+
         [DataMember]
-        [DisplayName("Nome Fantasia")]
+        [Browser(Title = "Nome Fantasia", WrapText = true, FixedWidth = 100)]
         public string NomeFantasia { get; set; }
+
         [DataMember]
-        [DisplayName("CNPJ")]
+        [Browser(Title = "CNPJ", FixedWidth = 120, Alignment = BrowserAttributeAlignment.Center)]
         public string Cnpj { get; set; }
+
         [DataMember]
-        [DisplayName("Insc. Est.")]
+        [Browser(Title = "Inscr. Est.", Visible = false)]
         public string InscricaoEstadual { get; set; }
+
         [DataMember]
-        [DisplayName("Endereço")]
+        [Browser(Title = "Endereço", Visible = false)]
         public string Endereco { get; set; }
+
         [DataMember]
+        [Browser(Visible = false)]
         public string Complemento { get; set; }
+
         [DataMember]
+        [Browser(Visible = false)]
         public string Bairro { get; set; }
+
         [DataMember]
+        [Browser(Visible = false)]
         public string Cidade { get; set; }
+
         [DataMember]
-        [DisplayName("UF")]
+        [Browser(Title = "UF", Visible = false)]
         public string Estado { get; set; }
+
         [DataMember]
-        [DisplayName("Fone 1")]
+        [Browser(Title = "Fone 1", Visible = false)]
         public string Fone1 { get; set; }
+
         [DataMember]
-        [DisplayName("Fone 2")]
+        [Browser(Title = "Fone 2", Visible = false)]
         public string Fone2 { get; set; }
+
         [DataMember]
+        [Browser(Visible = false)]
         public string Email { get; set; }
     }
 }

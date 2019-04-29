@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="CM.UI.Desktop.Views.ClienteView"
+﻿<UserControl x:Class="CM.UI.Desktop.Views.FornecedorView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -23,7 +23,7 @@
                                  Height="30" VerticalAlignment="Top" 
                                  HorizontalAlignment="Left" Margin="5"/>
 
-        <TextBlock Grid.Column="1" Grid.Row="0" Text="Clientes" HorizontalAlignment="Left" 
+        <TextBlock Grid.Column="1" Grid.Row="0" Text="Fornecedores" HorizontalAlignment="Left" 
                    VerticalAlignment="Center" Foreground="Gray"  FontWeight="Medium"
                    FontSize="20" Padding="0"/>
 

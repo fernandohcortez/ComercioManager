@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="CM.UI.Desktop.Views.ClienteEdicaoView"
+﻿<UserControl x:Class="CM.UI.Desktop.Views.FornecedorEdicaoView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -14,26 +14,33 @@
                    Margin="3" RadiusY="15" RadiusX="15" Fill="White"/>
 
         <StackPanel VerticalAlignment="Stretch" Margin="10" 
-                        behaviors:KeyboardFocusBehavior.On="{Binding ElementName=Nome}">
+                        behaviors:KeyboardFocusBehavior.On="{Binding ElementName=RazaoSocial}">
 
-            <TextBox x:Name="Nome" Text="{Binding Model.Nome, ValidatesOnNotifyDataErrors=True}" 
-                         materialDesign:HintAssist.Hint="Nome" 
+            <TextBox x:Name="RazaoSocial" Text="{Binding Model.RazaoSocial, ValidatesOnNotifyDataErrors=True}" 
+                         materialDesign:HintAssist.Hint="Razão Social" 
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                          Margin="0,10" IsReadOnly="{Binding IsViewSomenteLeitura}">
             </TextBox>
 
-            <TextBox Text="{Binding Model.Cpf, ValidatesOnNotifyDataErrors=True, Converter={StaticResource StringToCpfCnpjConverter}}" 
-                         materialDesign:HintAssist.Hint="CPF"
+            <TextBox Text="{Binding Model.NomeFantasia, ValidatesOnNotifyDataErrors=True}" 
+                     materialDesign:HintAssist.Hint="Nome Fantasia" 
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                     Margin="0,10" IsReadOnly="{Binding IsViewSomenteLeitura}">
+            </TextBox>
+
+            <TextBox Text="{Binding Model.Cnpj, ValidatesOnNotifyDataErrors=True, Converter={StaticResource StringToCpfCnpjConverter}}" 
+                         materialDesign:HintAssist.Hint="CNPJ"
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                         Margin="0,10" Width="110" HorizontalAlignment="Left"
+                         Margin="0,10" Width="140" HorizontalAlignment="Left"
                          IsReadOnly="{Binding IsViewSomenteLeitura}">
             </TextBox>
 
-            <DatePicker SelectedDate="{Binding Model.DataNascimento, ValidatesOnNotifyDataErrors=True, TargetNullValue=''}" 
-                         materialDesign:HintAssist.Hint="Data Nascimento" 
-                         Style="{StaticResource MaterialDesignFloatingHintDatePicker}" 
-                         Width="140" Margin="0,10" HorizontalAlignment="Left"
-                         IsEnabled="{Binding IsViewSomenteLeitura, Converter={StaticResource InverseBooleanConverter}}"/>
+            <TextBox Text="{Binding Model.InscricaoEstadual, ValidatesOnNotifyDataErrors=True, Converter={StaticResource StringToInscrEstadualConverter}}" 
+                     materialDesign:HintAssist.Hint="Inscrição Estadual"
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                     Margin="0,10" Width="140" HorizontalAlignment="Left"
+                     IsReadOnly="{Binding IsViewSomenteLeitura}">
+            </TextBox>
 
             <TextBox Text="{Binding Model.Endereco, ValidatesOnNotifyDataErrors=True}"
                          materialDesign:HintAssist.Hint="Endereço" 

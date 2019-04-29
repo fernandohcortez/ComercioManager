@@ -118,6 +118,7 @@
     <Compile Include="Components\Mensagem.cs" />
     <Compile Include="Behaviors\TextBoxInputDecimalBehavior.cs" />
     <Compile Include="Enum.cs" />
+    <Compile Include="Helpers\StringToInscrEstadualConverter.cs" />
     <Compile Include="Helpers\StringToCpfCnpjConverter.cs" />
     <Compile Include="Helpers\StringToPhoneConverter.cs" />
     <Compile Include="Helpers\InverseBooleanConverter.cs" />
@@ -141,6 +142,15 @@
     <Compile Include="ViewModels\ClienteViewModel.cs" />
     <Compile Include="ViewModels\ProdutoViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
+    <Compile Include="Views\FornecedorEdicaoView.xaml.cs">
+      <DependentUpon>FornecedorEdicaoView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FornecedorListaView.xaml.cs">
+      <DependentUpon>FornecedorListaView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FornecedorView.xaml.cs">
+      <DependentUpon>FornecedorView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
@@ -169,6 +179,18 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\FornecedorEdicaoView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\FornecedorListaView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\FornecedorView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\LoginView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

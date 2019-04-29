@@ -10,7 +10,7 @@ namespace CM.UI.Desktop.ViewModels
     {
         public string FiltroNome
         {
-            set { ListaRegistros.Filter = m => ((ClienteModel)m).Nome.Contains(value); }
+            set { ListaRegistros.Filter = m => ((ClienteModel)m).Nome.ToUpper().Contains(value.ToUpper()); }
         }
 
         public string FiltroCpf

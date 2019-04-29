@@ -18,6 +18,7 @@
             <helpers:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
             <helpers:StringToPhoneConverter x:Key="StringToPhoneConverter"/>
             <helpers:StringToCpfCnpjConverter x:Key="StringToCpfCnpjConverter"/>
+            <helpers:StringToInscrEstadualConverter x:Key="StringToInscrEstadualConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
