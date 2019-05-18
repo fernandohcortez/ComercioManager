@@ -47,7 +47,7 @@ namespace CM.UI.Desktop.ViewModels.Base
             set => ListaViewModel.ListaRegistros = value;
         }
 
-        private TModel RegistroCorrente
+        public TModel RegistroCorrente
         {
             set => ListaViewModel.RegistroCorrente = value;
             get => ListaViewModel?.RegistroCorrente;
@@ -100,6 +100,11 @@ namespace CM.UI.Desktop.ViewModels.Base
             CarregarViewEdicao(AcaoCrud.Visualizar);
         }
 
+        protected virtual async Task RemoverRegistro()
+        {
+            await ApiHelper.Remover<TModel>(RegistroCorrente.Id);
+        }
+
         public async void Remover()
         {
             if (RegistroCorrente == null)
@@ -111,7 +116,7 @@ namespace CM.UI.Desktop.ViewModels.Base
             {
                 IsWaiting = true;
 
-                await ApiHelper.Remover<TModel>(RegistroCorrente.Id);
+                await RemoverRegistro();
 
                 ListaRegistrosSource.Remove(RegistroCorrente);
             }
@@ -130,7 +135,31 @@ namespace CM.UI.Desktop.ViewModels.Base
             await AtualizarListaRegistros();
         }
 
-        public async void Salvar()
+        protected virtual void PreSalvar()
+        {
+
+        }
+
+        protected virtual async Task<TModel> SalvarInclusao()
+        {
+            var result = await ApiHelper.Incluir(RegistroCorrente);
+
+            return result;
+        }
+
+        protected virtual async Task<TModel> SalvarAlteracao()
+        {
+            var result = await ApiHelper.Alterar(RegistroCorrente, RegistroCorrente.Id);
+
+            return result;
+        }
+
+        protected virtual void PosSalvar(TModel model)
+        {
+
+        }
+
+        public virtual async void Salvar()
         {
             try
             {
@@ -140,15 +169,19 @@ namespace CM.UI.Desktop.ViewModels.Base
 
                 TModel registroInclusoAlterado = null;
 
+                PreSalvar();
+
                 switch (AcaoCrud)
                 {
                     case AcaoCrud.Incluir:
-                        registroInclusoAlterado = await ApiHelper.Incluir(RegistroCorrente);
+                        registroInclusoAlterado = await SalvarInclusao();
                         break;
                     case AcaoCrud.Alterar:
-                        registroInclusoAlterado = await ApiHelper.Alterar(RegistroCorrente, RegistroCorrente.Id);
+                        registroInclusoAlterado = await SalvarAlteracao();
                         break;
                 }
+                
+                PosSalvar(registroInclusoAlterado);
 
                 Mapping.Mapper.Map(registroInclusoAlterado, RegistroCorrente);
 

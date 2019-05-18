@@ -1,26 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Http;
-using System.Web.Http.ModelBinding;
+﻿using CM.Domain.BLLs;
+using CM.WebApi.Models;
+using CM.WebApi.Providers;
+using CM.WebApi.Results;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
-using CM.WebApi.Models;
-using CM.WebApi.Providers;
-using CM.WebApi.Results;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Http;
 
 namespace CM.WebApi.Controllers
 {
-    [Authorize]
-    [RoutePrefix("api/Account")]
+    [System.Web.Http.Authorize]
+    [System.Web.Http.RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
         private const string LocalLoginProvider = "Local";
@@ -53,7 +54,7 @@ namespace CM.WebApi.Controllers
 
         // GET api/Account/UserInfo
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
-        [Route("UserInfo")]
+        [System.Web.Http.Route("UserInfo")]
         public UserInfoViewModel GetUserInfo()
         {
             ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
@@ -67,7 +68,7 @@ namespace CM.WebApi.Controllers
         }
 
         // POST api/Account/Logout
-        [Route("Logout")]
+        [System.Web.Http.Route("Logout")]
         public IHttpActionResult Logout()
         {
             Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
@@ -75,7 +76,7 @@ namespace CM.WebApi.Controllers
         }
 
         // GET api/Account/ManageInfo?returnUrl=%2F&generateState=true
-        [Route("ManageInfo")]
+        [System.Web.Http.Route("ManageInfo")]
         public async Task<ManageInfoViewModel> GetManageInfo(string returnUrl, bool generateState = false)
         {
             IdentityUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
@@ -115,7 +116,7 @@ namespace CM.WebApi.Controllers
         }
 
         // POST api/Account/ChangePassword
-        [Route("ChangePassword")]
+        [System.Web.Http.Route("ChangePassword")]
         public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -125,7 +126,7 @@ namespace CM.WebApi.Controllers
 
             IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
                 model.NewPassword);
-            
+
             if (!result.Succeeded)
             {
                 return GetErrorResult(result);
@@ -135,7 +136,7 @@ namespace CM.WebApi.Controllers
         }
 
         // POST api/Account/SetPassword
-        [Route("SetPassword")]
+        [System.Web.Http.Route("SetPassword")]
         public async Task<IHttpActionResult> SetPassword(SetPasswordBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -154,7 +155,7 @@ namespace CM.WebApi.Controllers
         }
 
         // POST api/Account/AddExternalLogin
-        [Route("AddExternalLogin")]
+        [System.Web.Http.Route("AddExternalLogin")]
         public async Task<IHttpActionResult> AddExternalLogin(AddExternalLoginBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -191,8 +192,54 @@ namespace CM.WebApi.Controllers
             return Ok();
         }
 
+        [HttpDelete]
+        [Route("RemoveUser/{userName}")]
+        public async Task<IHttpActionResult> RemoveUser(string userName)
+        {
+            if (userName == null)
+            {
+                return BadRequest();
+            }
+
+            var user = await UserManager.FindByEmailAsync(userName);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            var logins = user.Logins;
+            var rolesForUser = await UserManager.GetRolesAsync(user.Id);
+
+            foreach (var login in logins.ToList())
+            {
+                await UserManager.RemoveLoginAsync(login.UserId, new UserLoginInfo(login.LoginProvider, login.ProviderKey));
+            }
+
+            if (rolesForUser.Any())
+            {
+                foreach (var item in rolesForUser.ToList())
+                {
+                    // item should be the name of the role
+                    _ = await UserManager.RemoveFromRoleAsync(user.Id, item);
+                }
+            }
+
+            var result = await UserManager.DeleteAsync(user);
+
+            if (!result.Succeeded)
+            {
+                return GetErrorResult(result);
+            }
+
+            var usuarioBLL = new UsuarioBLL();
+            await usuarioBLL.RemoveAsync(userName);
+
+            return Ok();
+        }
+
         // POST api/Account/RemoveLogin
-        [Route("RemoveLogin")]
+        [System.Web.Http.Route("RemoveLogin")]
         public async Task<IHttpActionResult> RemoveLogin(RemoveLoginBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -221,10 +268,10 @@ namespace CM.WebApi.Controllers
         }
 
         // GET api/Account/ExternalLogin
-        [OverrideAuthentication]
+        [System.Web.Http.OverrideAuthentication]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalCookie)]
-        [AllowAnonymous]
-        [Route("ExternalLogin", Name = "ExternalLogin")]
+        [System.Web.Http.AllowAnonymous]
+        [System.Web.Http.Route("ExternalLogin", Name = "ExternalLogin")]
         public async Task<IHttpActionResult> GetExternalLogin(string provider, string error = null)
         {
             if (error != null)
@@ -258,9 +305,9 @@ namespace CM.WebApi.Controllers
             if (hasRegistered)
             {
                 Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-                
-                 ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager,
-                    OAuthDefaults.AuthenticationType);
+
+                ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager,
+                   OAuthDefaults.AuthenticationType);
                 ClaimsIdentity cookieIdentity = await user.GenerateUserIdentityAsync(UserManager,
                     CookieAuthenticationDefaults.AuthenticationType);
 
@@ -278,8 +325,8 @@ namespace CM.WebApi.Controllers
         }
 
         // GET api/Account/ExternalLogins?returnUrl=%2F&generateState=true
-        [AllowAnonymous]
-        [Route("ExternalLogins")]
+        [System.Web.Http.AllowAnonymous]
+        [System.Web.Http.Route("ExternalLogins")]
         public IEnumerable<ExternalLoginViewModel> GetExternalLogins(string returnUrl, bool generateState = false)
         {
             IEnumerable<AuthenticationDescription> descriptions = Authentication.GetExternalAuthenticationTypes();
@@ -319,8 +366,8 @@ namespace CM.WebApi.Controllers
         }
 
         // POST api/Account/Register
-        [AllowAnonymous]
-        [Route("Register")]
+        [System.Web.Http.AllowAnonymous]
+        [System.Web.Http.Route("Register")]
         public async Task<IHttpActionResult> Register(RegisterBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -341,9 +388,9 @@ namespace CM.WebApi.Controllers
         }
 
         // POST api/Account/RegisterExternal
-        [OverrideAuthentication]
+        [System.Web.Http.OverrideAuthentication]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
-        [Route("RegisterExternal")]
+        [System.Web.Http.Route("RegisterExternal")]
         public async Task<IHttpActionResult> RegisterExternal(RegisterExternalBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -368,7 +415,7 @@ namespace CM.WebApi.Controllers
             result = await UserManager.AddLoginAsync(user.Id, info.Login);
             if (!result.Succeeded)
             {
-                return GetErrorResult(result); 
+                return GetErrorResult(result);
             }
             return Ok();
         }

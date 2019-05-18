@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using CM.Core;
 using CM.DataAccess;
 using CM.Domain.BLLs.Base;
@@ -9,43 +10,43 @@ namespace CM.Domain.BLLs
 {
     public class DocumentoEntradaBLL : BaseBLL<DocumentoEntradaDTO>
     {
-        public override DocumentoEntradaDTO Get(object id)
+        public override async Task<DocumentoEntradaDTO> GetAsync(object id)
         {
-            return Get<DocumentoEntrada>(id.IsNullOrEmptyThenZero());
+            return await GetAsync<DocumentoEntrada>(id.IsNullOrEmptyThenZero());
         }
 
-        public override IEnumerable<DocumentoEntradaDTO> GetAll()
+        public override async Task<IEnumerable<DocumentoEntradaDTO>> GetAllAsync()
         {
-            return GetAll<DocumentoEntrada>();
+            return await GetAllAsync<DocumentoEntrada>();
         }
 
-        public override DocumentoEntradaDTO Add(DocumentoEntradaDTO dto)
+        public override async Task<DocumentoEntradaDTO> AddAsync(DocumentoEntradaDTO dto)
         {
-            return Add<Cliente>(dto);
+            return await AddAsync<Cliente>(dto);
         }
 
-        public override void Update(DocumentoEntradaDTO dto)
+        public override async Task UpdateAsync(DocumentoEntradaDTO dto)
         {
-            Update<DocumentoEntrada>(dto, true);
+            await UpdateAsync<DocumentoEntrada>(dto, true);
         }
 
-        public override void Remove(object id)
+        public override async Task RemoveAsync(object id)
         {
-            Remove<DocumentoEntrada>(id.IsNullOrEmptyThenZero(), true);
+            await RemoveAsync<DocumentoEntrada>(id.IsNullOrEmptyThenZero(), true);
         }
 
-        public DocumentoEntradaDTO Incluir(DocumentoEntradaDTO documentoEntradaDTO)
+        public async Task<DocumentoEntradaDTO> IncluirAsync(DocumentoEntradaDTO documentoEntradaDTO)
         {
-            var documentoEntradaIncluso = Add(documentoEntradaDTO);
+            var documentoEntradaIncluso = await AddAsync(documentoEntradaDTO);
 
             var estoqueBll = new EstoqueBLL(ContextHelper);
 
             foreach (var item in documentoEntradaDTO.Itens)
             {
-                estoqueBll.MovimentarEstoque(TipoMovimentoEstoque.Entrada, item.ProdutoId, item.Quantidade, item.ValorUnitario);
+                await estoqueBll.MovimentarEstoqueAsync(TipoMovimentoEstoque.Entrada, item.ProdutoId, item.Quantidade, item.ValorUnitario);
             }
 
-            ContextHelper.Commit();
+            await ContextHelper.CommitAsync();
 
             return documentoEntradaIncluso;
         }

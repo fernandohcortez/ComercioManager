@@ -2,6 +2,7 @@
 using CM.DataAccess;
 using CM.Domain.BLLs.Base;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using CM.Domain.Helpers;
 using Helpers;
 
@@ -9,29 +10,29 @@ namespace CM.Domain.BLLs
 {
     public class ClienteBLL : BaseBLL<ClienteDTO>
     {
-        public override ClienteDTO Get(object id)
+        public override async Task<ClienteDTO> GetAsync(object id)
         {
-            return Get<Cliente>(id.IsNullOrEmptyThenZero());
+            return await GetAsync<Cliente>(id.IsNullOrEmptyThenZero());
         }
 
-        public override IEnumerable<ClienteDTO> GetAll()
+        public override async Task<IEnumerable<ClienteDTO>> GetAllAsync()
         {
-            return GetAll<Cliente>();
+            return await GetAllAsync<Cliente>();
         }
 
-        public override ClienteDTO Add(ClienteDTO dto)
+        public override async Task<ClienteDTO> AddAsync(ClienteDTO dto)
         {
-            return Add<Cliente>(dto, true);
+            return await AddAsync<Cliente>(dto, true);
         }
 
-        public override void Update(ClienteDTO dto)
+        public override async Task UpdateAsync(ClienteDTO dto)
         {
-            Update<Cliente>(dto, true);
+            await UpdateAsync<Cliente>(dto, true);
         }
 
-        public override void Remove(object id)
+        public override async Task RemoveAsync(object id)
         {
-            Remove<Cliente>(id.IsNullOrEmptyThenZero(), true);
+            await RemoveAsync<Cliente>(id.IsNullOrEmptyThenZero(), true);
         }
     }
 }

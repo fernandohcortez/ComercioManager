@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using CM.Core;
 using CM.DataAccess;
 using CM.Domain.BLLs.Base;
@@ -9,43 +10,43 @@ namespace CM.Domain.BLLs
 {
     public class PedidoVendaBLL : BaseBLL<PedidoVendaDTO>
     {
-        public override PedidoVendaDTO Get(object id)
+        public override async Task<PedidoVendaDTO> GetAsync(object id)
         {
-            return Get<PedidoVenda>(id.IsNullOrEmptyThenZero());
+            return await GetAsync<PedidoVenda>(id.IsNullOrEmptyThenZero());
         }
 
-        public override IEnumerable<PedidoVendaDTO> GetAll()
+        public override async Task<IEnumerable<PedidoVendaDTO>> GetAllAsync()
         {
-            return GetAll<PedidoVenda>();
+            return await GetAllAsync<PedidoVenda>();
         }
 
-        public override PedidoVendaDTO Add(PedidoVendaDTO dto)
+        public override async Task<PedidoVendaDTO> AddAsync(PedidoVendaDTO dto)
         {
-            return Add<PedidoVenda>(dto);
+            return await AddAsync<PedidoVenda>(dto);
         }
 
-        public override void Update(PedidoVendaDTO dto)
+        public override async Task UpdateAsync(PedidoVendaDTO dto)
         {
-            Update<PedidoVenda>(dto, true);
+            await UpdateAsync<PedidoVenda>(dto, true);
         }
 
-        public override void Remove(object id)
+        public override async Task RemoveAsync(object id)
         {
-            Remove<PedidoVenda>(id.IsNullOrEmptyThenZero(), true);
+            await RemoveAsync<PedidoVenda>(id.IsNullOrEmptyThenZero(), true);
         }
 
-        public PedidoVendaDTO Incluir(PedidoVendaDTO pedidoVendaDTO)
+        public async Task<PedidoVendaDTO> IncluirAsync(PedidoVendaDTO pedidoVendaDTO)
         {
-            var pedidoVendaInclusoDTO = Add(pedidoVendaDTO);
+            var pedidoVendaInclusoDTO = await AddAsync(pedidoVendaDTO);
 
             var estoqueBll = new EstoqueBLL(ContextHelper);
 
             foreach (var item in pedidoVendaDTO.Itens)
             {
-                estoqueBll.MovimentarEstoque(TipoMovimentoEstoque.Saida, item.ProdutoId, item.Quantidade, item.ValorUnitario);
+                await estoqueBll.MovimentarEstoqueAsync(TipoMovimentoEstoque.Saida, item.ProdutoId, item.Quantidade, item.ValorUnitario);
             }
 
-            ContextHelper.Commit();
+            await ContextHelper.CommitAsync();
 
             return pedidoVendaInclusoDTO;
         }

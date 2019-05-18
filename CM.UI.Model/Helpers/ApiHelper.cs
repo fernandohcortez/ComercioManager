@@ -1,5 +1,6 @@
 ﻿using CM.UI.Model.Models;
 using CM.UI.Model.Models.Interface;
+using Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,14 +16,14 @@ namespace CM.UI.Model.Helpers
     {
         #region Campos e Propriedades
 
-        private readonly IUsuarioLogadoModel _usuarioLogadoModel;
+        private readonly IUsuarioModel _usuarioLogadoModel;
         private HttpClient _apiClient;
-        
+
         #endregion
 
         #region Contrutores
 
-        public ApiHelper(IUsuarioLogadoModel usuarioLogadoModel)
+        public ApiHelper(IUsuarioModel usuarioLogadoModel)
         {
             IniciarClient();
 
@@ -68,19 +69,50 @@ namespace CM.UI.Model.Helpers
             }
         }
 
-        public async Task ObterInfoUsuarioLogado(string token)
+        public async Task<UsuarioModel> CriarNovaContaUsuario(string password, string confirmPassword, UsuarioModel usuarioModel)
+        {
+            var data = new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("Email", usuarioModel.Id),
+                new KeyValuePair<string, string>("Password", password),
+                new KeyValuePair<string, string>("ConfirmPassword", confirmPassword)
+            });
+
+            using (var response = await _apiClient.PostAsync("/api/Account/Register", data))
+            {
+                if (!response.IsSuccessStatusCode)
+                    throw new Exception(response.ReasonPhrase);
+
+                _ = response.Content.ReadAsAsync<object>();
+            }
+
+            return await Incluir(usuarioModel);
+        }
+
+        public async Task RemoverContaUsuario(string usuario)
+        {
+            using (var response = await _apiClient.DeleteAsync($"/api/Account/RemoveUser/{usuario}"))
+            {
+                if (!response.IsSuccessStatusCode)
+                    throw new Exception(response.ReasonPhrase);
+
+                _ = response.Content.ReadAsAsync<object>();
+            }
+        }
+
+        public async Task ObterInfoUsuarioLogado(string token, string usuario)
         {
             _apiClient.DefaultRequestHeaders.Clear();
             _apiClient.DefaultRequestHeaders.Accept.Clear();
             _apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             _apiClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
-            using (var response = await _apiClient.GetAsync("api/Usuario/GetUsuarioCorrente/"))
+            using (var response = await _apiClient.GetAsync($"api/Usuario/{usuario}/"))
             {
                 if (!response.IsSuccessStatusCode)
                     throw new Exception(response.ReasonPhrase);
 
-                var result = await response.Content.ReadAsAsync<UsuarioLogadoModel>();
+                var result = await response.Content.ReadAsAsync<UsuarioModel>();
 
                 _usuarioLogadoModel.Id = result.Id;
                 _usuarioLogadoModel.PrimeiroNome = result.PrimeiroNome;
@@ -88,6 +120,7 @@ namespace CM.UI.Model.Helpers
                 _usuarioLogadoModel.Email = result.Email;
                 _usuarioLogadoModel.DataInclusao = result.DataInclusao;
                 _usuarioLogadoModel.Token = token;
+                _usuarioLogadoModel.Foto = result.Foto;
             }
         }
 
@@ -117,6 +150,8 @@ namespace CM.UI.Model.Helpers
         {
             nomeUri = nomeUri ?? ObterNomeUriPadraoModel<T>();
 
+            id = AdicionarBarraStringQuandoEmail(id);
+
             using (var response = await _apiClient.PutAsync($"api/{nomeUri}/{id}", model, new JsonMediaTypeFormatter()))
             {
                 if (!response.IsSuccessStatusCode)
@@ -130,6 +165,8 @@ namespace CM.UI.Model.Helpers
         {
             nomeUri = nomeUri ?? ObterNomeUriPadraoModel<T>();
 
+            id = AdicionarBarraStringQuandoEmail(id);
+
             using (var response = await _apiClient.DeleteAsync($"api/{nomeUri}/{id}"))
             {
                 if (!response.IsSuccessStatusCode)
@@ -142,6 +179,8 @@ namespace CM.UI.Model.Helpers
         public async Task<T> Obter<T>(object id, string nomeUri = null)
         {
             nomeUri = nomeUri ?? ObterNomeUriPadraoModel<T>();
+
+            id = AdicionarBarraStringQuandoEmail(id);
 
             using (var response = await _apiClient.GetAsync($"api/{nomeUri}/{id}"))
             {
@@ -163,6 +202,19 @@ namespace CM.UI.Model.Helpers
 
                 return await response.Content.ReadAsAsync<ObservableCollection<T>>();
             }
+        }
+
+        private object AdicionarBarraStringQuandoEmail(object id)
+        {
+            if (!(id is string idString))
+                return id;
+
+            if (idString.ValidateEmail() && !idString.EndsWith("/"))
+                idString = $"{idString}/";
+
+            id = idString;
+
+            return id;
         }
 
         #endregion

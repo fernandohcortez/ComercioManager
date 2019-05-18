@@ -9,9 +9,11 @@ namespace CM.UI.Model.Models
     {
         [DataMember]
         public string Nome { get; set; }
+
         [DataMember]
         [Browser(Title = "Descrição")]
         public string Descricao { get; set; }
+
         [DataMember]
         [Browser(Title = "Preço")]
         public decimal PrecoVenda { get; set; }

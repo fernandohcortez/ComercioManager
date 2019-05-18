@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
-using CM.Core.Base;
+﻿using CM.Core.Base;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CM.Domain.BLLs.Base
 {
     public interface IBaseBLL<TDTO> where TDTO : IBaseDTO
     {
-        TDTO Add(TDTO dto);
-        TDTO Get(object id);
-        IEnumerable<TDTO> GetAll();
-        void Remove(object id);
-        void Update(TDTO dto);
+        Task<TDTO> AddAsync(TDTO dto);
+        Task<TDTO> GetAsync(object id);
+        Task<IEnumerable<TDTO>> GetAllAsync();
+        Task RemoveAsync(object id);
+        Task UpdateAsync(TDTO dto);
     }
 }

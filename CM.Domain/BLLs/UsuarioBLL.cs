@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using CM.Core;
 using CM.DataAccess;
 using CM.Domain.BLLs.Base;
@@ -7,29 +8,29 @@ namespace CM.Domain.BLLs
 {
     public class UsuarioBLL : BaseBLL<UsuarioDTO>
     {
-        public override UsuarioDTO Get(object id)
+        public override async Task<UsuarioDTO> GetAsync(object id)
         {
-            return Get<Usuario>(id.ToString());
+            return await GetAsync<Usuario>(id.ToString());
         }
 
-        public override IEnumerable<UsuarioDTO> GetAll()
+        public override async Task<IEnumerable<UsuarioDTO>> GetAllAsync()
         {
-            return GetAll<Usuario>();
+            return await GetAllAsync<Usuario>();
         }
 
-        public override UsuarioDTO Add(UsuarioDTO usuarioDTO)
+        public override async Task<UsuarioDTO> AddAsync(UsuarioDTO usuarioDTO)
         {
-            return Add<Usuario>(usuarioDTO, true);
+            return await AddAsync<Usuario>(usuarioDTO, true);
         }
 
-        public override void Update(UsuarioDTO usuarioDTO)
+        public override async Task UpdateAsync(UsuarioDTO usuarioDTO)
         {
-            Update<Usuario>(usuarioDTO, true);
+            await UpdateAsync<Usuario>(usuarioDTO, true);
         }
 
-        public override void Remove(object id)
+        public override async Task RemoveAsync(object id)
         {
-            Remove<Usuario>(id.ToString(), true);
+            await RemoveAsync<Usuario>(id.ToString(), true);
         }
     }
 }

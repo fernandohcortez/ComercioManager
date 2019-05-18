@@ -2,8 +2,8 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 03/26/2019 14:52:54
--- Generated from EDMX file: C:\ProjetosVS\ComercioManager\CMDataModel\CMEntityDataModel.edmx
+-- Date Created: 05/17/2019 16:19:05
+-- Generated from EDMX file: C:\ProjetosVS\ComercioManager\CM.DataAccess\CMEntityDataModel.edmx
 -- --------------------------------------------------
 
 SET QUOTED_IDENTIFIER OFF;
@@ -17,9 +17,6 @@ GO
 -- Dropping existing FOREIGN KEY constraints
 -- --------------------------------------------------
 
-IF OBJECT_ID(N'[dbo].[FK_EstoqueProduto]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Estoque] DROP CONSTRAINT [FK_EstoqueProduto];
-GO
 IF OBJECT_ID(N'[dbo].[FK_PedidoVendaItemPedidoVenda]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[PedidoVendaItem] DROP CONSTRAINT [FK_PedidoVendaItemPedidoVenda];
 GO
@@ -28,6 +25,21 @@ IF OBJECT_ID(N'[dbo].[FK_PedidoVendaItemProduto]', 'F') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[FK_PedidoVendaUsuario]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[PedidoVenda] DROP CONSTRAINT [FK_PedidoVendaUsuario];
+GO
+IF OBJECT_ID(N'[dbo].[FK_EstoqueProduto]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Estoque] DROP CONSTRAINT [FK_EstoqueProduto];
+GO
+IF OBJECT_ID(N'[dbo].[FK_DocumentoEntradaFornecedor]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[DocumentoEntrada] DROP CONSTRAINT [FK_DocumentoEntradaFornecedor];
+GO
+IF OBJECT_ID(N'[dbo].[FK_DocumentoEntradaItemDocumentoEntrada]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[DocumentoEntradaItem] DROP CONSTRAINT [FK_DocumentoEntradaItemDocumentoEntrada];
+GO
+IF OBJECT_ID(N'[dbo].[FK_DocumentoEntradaItemProduto]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[DocumentoEntradaItem] DROP CONSTRAINT [FK_DocumentoEntradaItemProduto];
+GO
+IF OBJECT_ID(N'[dbo].[FK_PedidoVendaCliente]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[PedidoVenda] DROP CONSTRAINT [FK_PedidoVendaCliente];
 GO
 
 -- --------------------------------------------------
@@ -48,6 +60,18 @@ IF OBJECT_ID(N'[dbo].[Produto]', 'U') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[Usuario]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Usuario];
+GO
+IF OBJECT_ID(N'[dbo].[DocumentoEntrada]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[DocumentoEntrada];
+GO
+IF OBJECT_ID(N'[dbo].[Fornecedor]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Fornecedor];
+GO
+IF OBJECT_ID(N'[dbo].[Cliente]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Cliente];
+GO
+IF OBJECT_ID(N'[dbo].[DocumentoEntradaItem]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[DocumentoEntradaItem];
 GO
 
 -- --------------------------------------------------
@@ -74,7 +98,7 @@ CREATE TABLE [dbo].[PedidoVenda] (
     [ValorTotal] decimal(19,4)  NOT NULL,
     [DataInclusao] datetime  NOT NULL,
     [DataAlteracao] datetime  NOT NULL,
-    [UsuarioIdCaixa] nvarchar(128)  NOT NULL,
+    [UsuarioIdCaixa] nvarchar(256)  NOT NULL,
     [ClienteId] int  NOT NULL
 );
 GO
@@ -104,12 +128,13 @@ GO
 
 -- Creating table 'Usuario'
 CREATE TABLE [dbo].[Usuario] (
-    [Id] nvarchar(128)  NOT NULL,
+    [Id] nvarchar(256)  NOT NULL,
     [PrimeiroNome] nvarchar(50)  NOT NULL,
     [UltimoNome] nvarchar(50)  NOT NULL,
     [Email] nvarchar(256)  NOT NULL,
     [DataInclusao] datetime  NOT NULL,
-    [DataAlteracao] datetime  NOT NULL
+    [DataAlteracao] datetime  NOT NULL,
+    [Foto] varbinary(max)  NULL
 );
 GO
 

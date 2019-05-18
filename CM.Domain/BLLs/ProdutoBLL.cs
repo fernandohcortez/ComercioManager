@@ -5,6 +5,7 @@ using CM.Domain.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using Helpers;
 
 namespace CM.Domain.BLLs
@@ -13,17 +14,17 @@ namespace CM.Domain.BLLs
     {
         public EstoqueBLL EstoqueBLL => new EstoqueBLL(ContextHelper);
 
-        public override ProdutoDTO Get(object id)
+        public override async Task<ProdutoDTO> GetAsync(object id)
         {
-            return Get<Produto>(id.IsNullOrEmptyThenZero());
+            return await GetAsync<Produto>(id.IsNullOrEmptyThenZero());
         }
 
-        public override IEnumerable<ProdutoDTO> GetAll()
+        public override async Task<IEnumerable<ProdutoDTO>> GetAllAsync()
         {
-            return GetAll<Produto>();
+            return await GetAllAsync<Produto>();
         }
 
-        public override ProdutoDTO Add(ProdutoDTO dto)
+        public override async Task<ProdutoDTO> AddAsync(ProdutoDTO dto)
         {
             try
             {
@@ -31,9 +32,9 @@ namespace CM.Domain.BLLs
 
                 Add(entity);
 
-                EstoqueBLL.IncluirEstoqueInicial(entity.Id);
+                await EstoqueBLL.IncluirEstoqueInicialAsync(entity.Id);
 
-                ContextHelper.Commit();
+                await ContextHelper.CommitAsync();
 
                 dto = Mapping.Mapper.Map<ProdutoDTO>(entity);
 
@@ -47,25 +48,24 @@ namespace CM.Domain.BLLs
             }
         }
 
-        public override void Update(ProdutoDTO dto)
+        public override async Task UpdateAsync(ProdutoDTO dto)
         {
-            Update<Produto>(dto, true);
+            await UpdateAsync<Produto>(dto, true);
         }
 
-        public override void Remove(object id)
+        public override async Task RemoveAsync(object id)
         {
-
             var produtoId = id.IsNullOrEmptyThenZero();
 
             try
             {
-                var produto = ContextHelper.DbSet.Get<Produto>(produtoId);
+                var produto = await ContextHelper.DbSet.GetAsync<Produto>(produtoId);
 
-                EstoqueBLL.RemoverEstoqueProduto(produto);
+                await EstoqueBLL.RemoverEstoqueProdutoAsync(produto);
 
                 Remove<Produto>(produtoId);
 
-                ContextHelper.Commit();
+                await ContextHelper.CommitAsync();
             }
             catch (Exception)
             {

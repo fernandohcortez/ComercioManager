@@ -126,7 +126,8 @@
 
             <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Height="100" HorizontalAlignment="Center">
 
-                <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Background="{x:Null}" BorderBrush="{x:Null}" 
+                <Button x:Name="Configuracoes" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" 
+                        Background="{x:Null}" BorderBrush="{x:Null}" 
                         Padding="0" Width="50" Height="50" Margin="10">
                     <materialDesign:PackIcon Kind="Settings" Width="40" Height="40"/>
                 </Button>
@@ -143,7 +144,8 @@
                         </TransformGroup>
                     </Button.RenderTransform>
                     <Button.Background>
-                        <ImageBrush ImageSource="/Assets/FotoUsuario.jpg" Stretch="UniformToFill"/>
+                        <!--<ImageBrush ImageSource="{Binding FotoUsuario}" Stretch="UniformToFill"/>-->
+                        <ImageBrush ImageSource="{Binding FotoUsuario}" Stretch="UniformToFill"/>
                     </Button.Background>
                 </Button>
 

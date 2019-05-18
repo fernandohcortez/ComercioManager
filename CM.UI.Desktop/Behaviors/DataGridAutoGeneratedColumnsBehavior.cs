@@ -29,7 +29,7 @@ namespace CM.UI.Desktop.Behaviors
             var attributeBrowser = GetAttributeBrowser(e.PropertyDescriptor);
 
             if (attributeBrowser != null && !attributeBrowser.Visible)
-            {
+            {               
                 e.Cancel = true;
                 return;
             }

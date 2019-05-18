@@ -1,11 +1,9 @@
-﻿using System;
-using System.Runtime.Serialization;
-using System.Threading.Tasks;
-using System.Windows;
-using Caliburn.Micro;
-using CM.UI.Desktop.Helpers;
+﻿using Caliburn.Micro;
 using CM.UI.Model.Helpers;
 using PropertyChanged;
+using System;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace CM.UI.Desktop.ViewModels
 {
@@ -61,7 +59,7 @@ namespace CM.UI.Desktop.ViewModels
 
                 var result = await _apiHelper.Autenticar(Usuario, Senha);
 
-                await _apiHelper.ObterInfoUsuarioLogado(result.Access_Token);
+                await _apiHelper.ObterInfoUsuarioLogado(result.Access_Token, Usuario);
 
                 _eventAggregator.PublishOnUIThread("LoginOk");
 

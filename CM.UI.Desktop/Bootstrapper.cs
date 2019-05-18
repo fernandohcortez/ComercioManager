@@ -47,7 +47,7 @@ namespace CM.UI.Desktop
                     .Singleton<IWindowManager, CortezWindowManager>()
                     .Singleton<IEventAggregator, EventAggregator>()
                     .Singleton<IApiHelper, ApiHelper>()
-                    .Singleton<IUsuarioLogadoModel, UsuarioLogadoModel>();
+                    .Singleton<IUsuarioModel, UsuarioModel>();
             }
 
             _container.Instance(_container);

@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="CM.UI.Desktop.Views.UsuarioEdicaoView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:behaviors="clr-namespace:CM.UI.Desktop.Behaviors"
+             mc:Ignorable="d" FontSize="15"
+             d:DesignHeight="600" d:DesignWidth="800">
+
+    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="3 0 3 3">
+
+        <Rectangle VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
+                   Margin="3" RadiusY="15" RadiusX="15" Fill="White"/>
+
+        <StackPanel VerticalAlignment="Stretch" Margin="10" 
+                        behaviors:KeyboardFocusBehavior.On="{Binding ElementName=Usuario}">
+
+            <TextBox x:Name="Usuario" Text="{Binding Model.Id, ValidatesOnNotifyDataErrors=True}" 
+                     materialDesign:HintAssist.Hint="Usuário" 
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                     Margin="0,10" IsReadOnly="{Binding IsViewSomenteLeitura}">
+            </TextBox>
+
+            <TextBox Text="{Binding Model.PrimeiroNome, ValidatesOnNotifyDataErrors=True}" 
+                         materialDesign:HintAssist.Hint="Primeiro Nome" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         Margin="0,10" IsReadOnly="{Binding IsViewSomenteLeitura}">
+            </TextBox>
+
+            <TextBox Text="{Binding Model.UltimoNome, ValidatesOnNotifyDataErrors=True}" 
+                     materialDesign:HintAssist.Hint="Último Nome" 
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                     Margin="0,10" IsReadOnly="{Binding IsViewSomenteLeitura}">
+            </TextBox>
+
+            <TextBox Text="{Binding Model.Email, ValidatesOnNotifyDataErrors=True}" 
+                     materialDesign:HintAssist.Hint="Email" 
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                     Margin="0,10" IsReadOnly="{Binding IsViewSomenteLeitura}">
+            </TextBox>
+
+            <Image Source="{Binding Model.Foto, ValidatesOnNotifyDataErrors=True}" 
+                   HorizontalAlignment="Left" Width="100" Height="120" Margin="0,10"/>
+
+        </StackPanel>
+
+    </Grid>
+
+</UserControl>

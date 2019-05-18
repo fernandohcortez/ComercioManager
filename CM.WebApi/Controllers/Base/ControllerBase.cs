@@ -1,6 +1,7 @@
 ﻿using CM.Core.Base;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Http;
 using CM.Domain.BLLs.Base;
 
@@ -18,31 +19,31 @@ namespace CM.WebApi.Controllers.Base
             BLL = Activator.CreateInstance<TBLL>();
         }
 
-        public virtual IEnumerable<TDTO> Get()
+        public virtual async Task<IEnumerable<TDTO>> Get()
         {
-            return BLL.GetAll();
+            return await BLL.GetAllAsync();
         }
 
-        public virtual TDTO Get(TIdType id)
+        public virtual async Task<TDTO> Get(TIdType id)
         {
-            return BLL.Get(id);
+            return await BLL.GetAsync(id);
         }
 
-        public virtual TDTO Post(TDTO dto)
+        public virtual async Task<TDTO> Post(TDTO dto)
         {
-            return BLL.Add(dto);
+            return await BLL.AddAsync(dto);
         }
 
-        public virtual TDTO Put(int id, [FromBody]TDTO dto)
+        public virtual async Task<TDTO> Put(TIdType id, [FromBody]TDTO dto)
         {
-            BLL.Update(dto);
+            await BLL.UpdateAsync(dto);
 
             return dto;
         }
 
-        public virtual void Delete(TIdType id)
+        public virtual async Task Delete(TIdType id)
         {
-            BLL.Remove(id);
+            await BLL.RemoveAsync(id);
         }
     }
 }

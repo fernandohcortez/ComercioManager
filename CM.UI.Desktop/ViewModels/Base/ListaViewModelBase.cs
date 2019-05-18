@@ -26,6 +26,10 @@ namespace CM.UI.Desktop.ViewModels.Base
             ActionVisualizarRegistro.Invoke();
         }
 
+        //private void ListaRegistros_OnAutoGeneratingColumn(string columnName)
+        //{
+        //    if (columnName)        }
+
         #endregion
     }
 }

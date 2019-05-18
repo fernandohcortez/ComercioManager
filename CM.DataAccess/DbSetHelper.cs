@@ -21,9 +21,19 @@ namespace CM.DataAccess
             return _context.Set<T>().Find(id);
         }
 
+        public async Task<T> GetAsync<T>(int id) where T : class
+        {
+            return await _context.Set<T>().FindAsync(id);
+        }
+
         public T Get<T>(string id) where T : class
         {
             return _context.Set<T>().Find(id);
+        }
+
+        public async Task<T> GetAsync<T>(string id) where T : class
+        {
+            return await _context.Set<T>().FindAsync(id);
         }
 
         public IEnumerable<T> GetAll<T>() where T : class
@@ -54,12 +64,22 @@ namespace CM.DataAccess
                 _context.SaveChanges();
         }
 
+        public async Task AddAsync<T>(T entity, bool commit = false) where T : class
+        {
+            await Task.Run(() => { Add<T>(entity, commit); });
+        }
+
         public void AddRange<T>(IEnumerable<T> entities, bool commit = false) where T : class
         {
             _context.Set<T>().AddRange(entities);
 
             if (commit)
                 _context.SaveChanges();
+        }
+
+        public async Task AddRangeAsync<T>(IEnumerable<T> entities, bool commit = false) where T : class
+        {
+            await Task.Run(() => { AddRange<T>(entities, commit); });
         }
 
         public void Update<T>(T entity, bool commit = false) where T : class
@@ -70,6 +90,11 @@ namespace CM.DataAccess
 
             if (commit)
                 _context.SaveChanges();
+        }
+
+        public async Task UpdateAsync<T>(T entity, bool commit = false) where T : class
+        {
+            await Task.Run(() => { Update<T>(entity, commit); });
         }
 
         public void UpdateRange<T>(IEnumerable<T> entities, bool commit = false) where T : class
@@ -85,6 +110,11 @@ namespace CM.DataAccess
                 _context.SaveChanges();
         }
 
+        public async Task UpdateRangeAsync<T>(IEnumerable<T> entities, bool commit = false) where T : class
+        {
+            await Task.Run(() => { UpdateRange<T>(entities, commit); });
+        }
+
         public void Remove<T>(T entity, bool commit = false) where T : class
         {
             _context.Set<T>().Remove(entity);
@@ -93,14 +123,29 @@ namespace CM.DataAccess
                 _context.SaveChanges();
         }
 
+        public async Task RemoveAsync<T>(T entity, bool commit = false) where T : class
+        {
+            await Task.Run(() => { Remove<T>(entity, commit); });
+        }
+
         public void Remove<T>(int id, bool commit = false) where T : class
         {
             Remove(Get<T>(id), commit);
         }
 
+        public async Task RemoveAsync<T>(int id, bool commit = false) where T : class
+        {
+            await Task.Run(() => { Remove<T>(id, commit); });
+        }
+
         public void Remove<T>(string id, bool commit = false) where T : class
         {
             Remove(Get<T>(id), commit);
+        }
+
+        public async Task RemoveAsync<T>(string id, bool commit = false) where T : class
+        {
+            await Task.Run(() => { Remove<T>(id, commit); });
         }
 
         public void RemoveRange<T>(IEnumerable<T> entities, bool commit = false) where T : class
@@ -111,11 +156,21 @@ namespace CM.DataAccess
                 _context.SaveChanges();
         }
 
+        public async Task RemoveRangeAsync<T>(IEnumerable<T> entities, bool commit = false) where T : class
+        {
+            await Task.Run(() => { RemoveRange<T>(entities, commit); });
+        }
+
         public void RemoveAll<T>(Expression<Func<T, bool>> predicate, bool commit = false) where T : class
         {
             var recordsToRemove = _context.Set<T>().Where(predicate);
 
             RemoveRange(recordsToRemove, commit);
+        }
+
+        public async Task RemoveAllAsync<T>(Expression<Func<T, bool>> predicate, bool commit = false) where T : class
+        {
+            await Task.Run(() => { RemoveAll<T>(predicate, commit); });
         }
     }
 }

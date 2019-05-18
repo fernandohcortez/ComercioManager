@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using CM.Core;
 using CM.DataAccess;
 using CM.Domain.BLLs.Base;
@@ -9,29 +10,29 @@ namespace CM.Domain.BLLs
 {
     public class FornecedorBLL : BaseBLL<FornecedorDTO>
     {
-        public override FornecedorDTO Get(object id)
+        public override async Task<FornecedorDTO> GetAsync(object id)
         {
-            return Get<Fornecedor>(id.IsNullOrEmptyThenZero());
+            return await GetAsync<Fornecedor>(id.IsNullOrEmptyThenZero());
         }
 
-        public override IEnumerable<FornecedorDTO> GetAll()
+        public override async Task<IEnumerable<FornecedorDTO>> GetAllAsync()
         {
-            return GetAll<Fornecedor>();
+            return await GetAllAsync<Fornecedor>();
         }
 
-        public override FornecedorDTO Add(FornecedorDTO dto)
+        public override async Task<FornecedorDTO> AddAsync(FornecedorDTO dto)
         {
-            return Add<Fornecedor>(dto, true);
+            return await AddAsync<Fornecedor>(dto, true);
         }
 
-        public override void Update(FornecedorDTO dto)
+        public override async Task UpdateAsync(FornecedorDTO dto)
         {
-            Update<Fornecedor>(dto, true);
+            await UpdateAsync<Fornecedor>(dto, true);
         }
 
-        public override void Remove(object id)
+        public override async Task RemoveAsync(object id)
         {
-            Remove<Fornecedor>(id.IsNullOrEmptyThenZero(), true);
+            await RemoveAsync<Fornecedor>(id.IsNullOrEmptyThenZero(), true);
         }
     }
 }
