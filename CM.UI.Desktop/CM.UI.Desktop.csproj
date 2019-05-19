@@ -125,6 +125,7 @@
     <Compile Include="Components\Mensagem.cs" />
     <Compile Include="Behaviors\TextBoxInputDecimalBehavior.cs" />
     <Compile Include="Enum.cs" />
+    <Compile Include="Helpers\FileDialogBoxHelper.cs" />
     <Compile Include="Helpers\StringToInscrEstadualConverter.cs" />
     <Compile Include="Helpers\StringToCpfCnpjConverter.cs" />
     <Compile Include="Helpers\StringToPhoneConverter.cs" />

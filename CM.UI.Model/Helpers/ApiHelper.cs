@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using UsuarioModel = CM.UI.Model.Models.UsuarioModel;
 
 namespace CM.UI.Model.Helpers
 {
@@ -69,24 +70,15 @@ namespace CM.UI.Model.Helpers
             }
         }
 
-        public async Task<UsuarioModel> CriarNovaContaUsuario(string password, string confirmPassword, UsuarioModel usuarioModel)
+        public async Task CriarNovaContaUsuario(UsuarioModel usuarioModel)
         {
-            var data = new FormUrlEncodedContent(new[]
-            {
-                new KeyValuePair<string, string>("Email", usuarioModel.Id),
-                new KeyValuePair<string, string>("Password", password),
-                new KeyValuePair<string, string>("ConfirmPassword", confirmPassword)
-            });
-
-            using (var response = await _apiClient.PostAsync("/api/Account/Register", data))
+            using (var response = await _apiClient.PostAsync("/api/Account/Register", usuarioModel, new JsonMediaTypeFormatter()))
             {
                 if (!response.IsSuccessStatusCode)
                     throw new Exception(response.ReasonPhrase);
 
                 _ = response.Content.ReadAsAsync<object>();
             }
-
-            return await Incluir(usuarioModel);
         }
 
         public async Task RemoverContaUsuario(string usuario)
@@ -121,6 +113,7 @@ namespace CM.UI.Model.Helpers
                 _usuarioLogadoModel.DataInclusao = result.DataInclusao;
                 _usuarioLogadoModel.Token = token;
                 _usuarioLogadoModel.Foto = result.Foto;
+                _usuarioLogadoModel.Administrador = result.Administrador;
             }
         }
 

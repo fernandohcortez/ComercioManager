@@ -30,5 +30,17 @@ namespace CM.UI.Model.Models
         [DataMember]
         [Browser(Visible = false)]
         public byte[] Foto { get; set; }
+
+        [DataMember]
+        [Browser(Visible = false)]
+        public bool Administrador { get; set; }
+
+        [DataMember]
+        [Browser(Visible = false)]
+        public string Password { get; set; }
+
+        [DataMember]
+        [Browser(Visible = false)]
+        public string ConfirmPassword { get; set; }
     }
 }

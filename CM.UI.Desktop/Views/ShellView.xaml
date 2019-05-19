@@ -126,10 +126,11 @@
 
             <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Height="100" HorizontalAlignment="Center">
 
-                <Button x:Name="Configuracoes" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" 
+                <Button x:Name="AbrirContasUsuarios" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" 
                         Background="{x:Null}" BorderBrush="{x:Null}" 
-                        Padding="0" Width="50" Height="50" Margin="10">
-                    <materialDesign:PackIcon Kind="Settings" Width="40" Height="40"/>
+                        Padding="0" Width="50" Height="50" Margin="10" 
+                        IsEnabled="{Binding UsuarioAdministrador}" materialDesign:HintAssist.Hint="Conta">
+                    <materialDesign:PackIcon Kind="SecurityAccount" Width="40" Height="40" materialDesign:HintAssist.Hint="Contas Usuários"/>
                 </Button>
 
                 <Button x:Name="TrocarUsuario" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" 

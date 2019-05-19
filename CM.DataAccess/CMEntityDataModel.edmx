@@ -107,6 +107,7 @@
     <Property Name="DataInclusao" Type="datetime" Nullable="false" />
     <Property Name="DataAlteracao" Type="datetime" Nullable="false" />
     <Property Name="Foto" Type="varbinary(max)" Nullable="true" />
+    <Property Name="Administrador" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="DocumentoEntrada">
     <Key>
@@ -344,6 +345,7 @@
           <Property Name="DataAlteracao" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="PedidosVendas" Relationship="CMDataModel.PedidoVendaUsuario" FromRole="Usuario" ToRole="PedidoVenda" />
           <Property Name="Foto" Type="Binary" />
+          <Property Name="Administrador" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityContainer Name="CMDataEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Estoque" EntityType="Self.Estoque" />
@@ -625,6 +627,7 @@
           <ScalarProperty Name="DataInclusao" ColumnName="DataInclusao" />
           <ScalarProperty Name="DataAlteracao" ColumnName="DataAlteracao" />
           <ScalarProperty Name="Foto" ColumnName="Foto" />
+          <ScalarProperty Name="Administrador" ColumnName="Administrador" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

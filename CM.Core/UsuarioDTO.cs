@@ -12,5 +12,8 @@ namespace CM.Core
         public DateTime DataInclusao { get; set; }
         public DateTime DataAlteracao { get; set; }
         public byte[] Foto { get; set; }
+        public bool Administrador { get; set; }
+        public string Password { get; set; }
+        public string ConfirmPassword { get; set; }
     }
 }

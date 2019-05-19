@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Markup;
 
 namespace CM.UI.Desktop.ViewModels.Base
 {
@@ -100,6 +101,16 @@ namespace CM.UI.Desktop.ViewModels.Base
             CarregarViewEdicao(AcaoCrud.Visualizar);
         }
 
+        protected virtual bool PreRemover()
+        {
+            return true;
+        }
+
+        protected virtual void PosRemover()
+        {
+            
+        }
+
         protected virtual async Task RemoverRegistro()
         {
             await ApiHelper.Remover<TModel>(RegistroCorrente.Id);
@@ -116,7 +127,12 @@ namespace CM.UI.Desktop.ViewModels.Base
             {
                 IsWaiting = true;
 
+                if (!PreRemover())
+                    return;
+
                 await RemoverRegistro();
+
+                PosRemover();
 
                 ListaRegistrosSource.Remove(RegistroCorrente);
             }

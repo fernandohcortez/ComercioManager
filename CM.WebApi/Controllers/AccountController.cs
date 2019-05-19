@@ -17,6 +17,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using CM.Core;
 
 namespace CM.WebApi.Controllers
 {
@@ -201,7 +202,7 @@ namespace CM.WebApi.Controllers
                 return BadRequest();
             }
 
-            var user = await UserManager.FindByEmailAsync(userName);
+            var user = await UserManager.FindByNameAsync(userName);
 
             if (user == null)
             {
@@ -368,24 +369,56 @@ namespace CM.WebApi.Controllers
         // POST api/Account/Register
         [System.Web.Http.AllowAnonymous]
         [System.Web.Http.Route("Register")]
-        public async Task<IHttpActionResult> Register(RegisterBindingModel model)
+        public async Task<IHttpActionResult> Register(UsuarioDTO usuarioDTO)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
+            var user = new ApplicationUser() { UserName = usuarioDTO.Id, Email = usuarioDTO.Email };
 
-            IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+            var result = await UserManager.CreateAsync(user, usuarioDTO.Password);
 
             if (!result.Succeeded)
             {
                 return GetErrorResult(result);
             }
 
+            usuarioDTO.DataInclusao = DateTime.Now;
+            usuarioDTO.DataAlteracao = DateTime.Now;
+            
+            try
+            {
+                var usuarioBLL = new UsuarioBLL();
+                await usuarioBLL.AddAsync(usuarioDTO);
+            }
+            catch (Exception e)
+            {
+                await RemoveUser(usuarioDTO.Id);
+
+                return InternalServerError(e);
+            }
+
             return Ok();
         }
+
+        //private async Task<UsuarioDTO> AddUsuario(RegisterBindingModel model)
+        //{
+        //    var usuarioDTO = new UsuarioDTO
+        //    {
+        //        Id = model.UserName,
+        //        PrimeiroNome = model.PrimeiroNome,
+        //        UltimoNome = model.UltimoNome,
+        //        Email = model.Email,
+        //        Foto = model.Foto,
+        //        DataInclusao = DateTime.Today,
+        //        DataAlteracao = DateTime.Today
+        //    };
+
+        //    var usuarioBLL = new UsuarioBLL();
+        //    return await usuarioBLL.AddAsync(usuarioDTO);
+        //}
 
         // POST api/Account/RegisterExternal
         [System.Web.Http.OverrideAuthentication]

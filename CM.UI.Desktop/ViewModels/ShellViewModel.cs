@@ -26,6 +26,7 @@ namespace CM.UI.Desktop.ViewModels
         public bool IsBotaoFecharMenuVisible { get; set; }
         public string NomeUsuario { get; set; }
         public byte[] FotoUsuario { get; set; }
+        public bool UsuarioAdministrador { get; set; }
 
         #endregion
 
@@ -115,7 +116,7 @@ namespace CM.UI.Desktop.ViewModels
             ActivateItem(_loginVm);
         }
 
-        public void Configuracoes()
+        public void AbrirContasUsuarios()
         {
             ActivateItem(UsuarioViewModel.Create());
         }
@@ -130,6 +131,8 @@ namespace CM.UI.Desktop.ViewModels
             {
                 if (IniciarAnimacaoAbrirMenu)
                     InciarAnimacaoFecharMenu();
+
+                UsuarioAdministrador = _usuarioModel.Administrador;
 
                 NomeUsuario = _usuarioModel.PrimeiroNome;
 

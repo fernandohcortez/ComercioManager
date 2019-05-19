@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using CM.Core;
 using Newtonsoft.Json;
 
 namespace CM.WebApi.Models
@@ -48,6 +49,21 @@ namespace CM.WebApi.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        //[Required]
+        //[Display(Name = "Primeiro Nome")]
+        //public string PrimeiroNome { get; set; }
+
+        //[Required]
+        //[Display(Name = "Último Nome")]
+        //public string UltimoNome { get; set; }
+
+        //[Required]
+        //[Display(Name = "Usuário")]
+        //public string UserName { get; set; }
+
+        //[Display(Name = "Foto")]
+        //public byte[] Foto { get; set; }
     }
 
     public class RegisterExternalBindingModel

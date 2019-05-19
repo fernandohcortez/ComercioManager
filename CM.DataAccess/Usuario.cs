@@ -27,6 +27,7 @@ namespace CM.DataAccess
         public System.DateTime DataInclusao { get; set; }
         public System.DateTime DataAlteracao { get; set; }
         public byte[] Foto { get; set; }
+        public bool Administrador { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PedidoVenda> PedidosVendas { get; set; }

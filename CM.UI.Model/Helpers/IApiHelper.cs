@@ -15,7 +15,7 @@ namespace CM.UI.Model.Helpers
         Task Remover<T>(object id, string nomeUri = null);
         Task<ObservableCollection<T>> Listar<T>(string nomeUri = null);
         Task<T> Obter<T>(object id, string nomeUri = null);
-        Task<UsuarioModel> CriarNovaContaUsuario(string password, string confirmPassword, UsuarioModel usuarioModel);
+        Task CriarNovaContaUsuario(UsuarioModel usuarioModel);
         Task RemoverContaUsuario(string usuario);
     }
 }

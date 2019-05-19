@@ -11,5 +11,6 @@ namespace CM.UI.Model.Models.Interface
         string Email { get; set; }
         DateTime DataInclusao { get; set; }
         byte[] Foto { get; set; }
+        bool Administrador { get; set; }
     }
 }
