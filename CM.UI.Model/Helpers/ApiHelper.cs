@@ -1,5 +1,6 @@
 ﻿using CM.UI.Model.Models;
 using CM.UI.Model.Models.Interface;
+using CM.WebApi.Exceptions;
 using Helpers;
 using System;
 using System.Collections.Generic;
@@ -64,20 +65,85 @@ namespace CM.UI.Model.Helpers
             using (var response = await _apiClient.PostAsync("/Token", data))
             {
                 if (!response.IsSuccessStatusCode)
-                    throw new Exception(response.ReasonPhrase);
+                    throw ApiException.CreateException(response);
 
                 return await response.Content.ReadAsAsync<AutenticarUsuario>();
             }
         }
 
-        public async Task CriarNovaContaUsuario(UsuarioModel usuarioModel)
+        public async Task ChangePassword(string oldPassword, string newPassword, string confirmPassword)
+        {
+            var data = new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("OldPassword", oldPassword),
+                new KeyValuePair<string, string>("NewPassword", newPassword),
+                new KeyValuePair<string, string>("ConfirmPassword", confirmPassword)
+            });
+
+            using (var response = await _apiClient.PostAsync("/api/Account/ChangePassword", data))
+            {
+                if (!response.IsSuccessStatusCode)
+                    throw ApiException.CreateException(response);
+
+                await response.Content.ReadAsAsync<object>();
+            }
+        }
+
+        public async Task SendEmailForgottenPassword(string username)
+        {
+            using (var response = await _apiClient.PostAsync($"/api/Account/SendEmailForgottenPassword/{username}", null))
+            {
+                if (!response.IsSuccessStatusCode)
+                    throw ApiException.CreateException(response);
+
+                await response.Content.ReadAsAsync<object>();
+            }
+        }
+
+        public async Task ResetPassword(string username, string token, string newPassword)
+        {
+            var data = new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("Username", username),
+                new KeyValuePair<string, string>("Token", token),
+                new KeyValuePair<string, string>("NewPassword", newPassword)
+            });
+
+            using (var response = await _apiClient.PostAsync("/api/Account/ResetPassword", data))
+            {
+                if (!response.IsSuccessStatusCode)
+                    throw ApiException.CreateException(response);
+
+                await response.Content.ReadAsAsync<object>();
+            }
+        }
+
+        public async Task CriarContaUsuario(UsuarioModel usuarioModel)
         {
             using (var response = await _apiClient.PostAsync("/api/Account/Register", usuarioModel, new JsonMediaTypeFormatter()))
             {
                 if (!response.IsSuccessStatusCode)
-                    throw new Exception(response.ReasonPhrase);
+                    throw ApiException.CreateException(response);
 
                 _ = response.Content.ReadAsAsync<object>();
+            }
+        }
+
+        public async Task AlterarContaUsuario(UsuarioModel usuarioModel)
+        {
+            using (var response = await _apiClient.PostAsync("/api/Account/ChangeUser", usuarioModel, new JsonMediaTypeFormatter()))
+            {
+                try
+                {
+                    if (!response.IsSuccessStatusCode)
+                        throw ApiException.CreateException(response);
+
+                    _ = response.Content.ReadAsAsync<object>();
+                }
+                catch (HttpRequestException e)
+                {
+                    throw new Exception(e.ToString());
+                }
             }
         }
 
@@ -86,7 +152,7 @@ namespace CM.UI.Model.Helpers
             using (var response = await _apiClient.DeleteAsync($"/api/Account/RemoveUser/{usuario}"))
             {
                 if (!response.IsSuccessStatusCode)
-                    throw new Exception(response.ReasonPhrase);
+                    throw ApiException.CreateException(response);
 
                 _ = response.Content.ReadAsAsync<object>();
             }
@@ -102,7 +168,7 @@ namespace CM.UI.Model.Helpers
             using (var response = await _apiClient.GetAsync($"api/Usuario/{usuario}/"))
             {
                 if (!response.IsSuccessStatusCode)
-                    throw new Exception(response.ReasonPhrase);
+                    throw ApiException.CreateException(response);
 
                 var result = await response.Content.ReadAsAsync<UsuarioModel>();
 
@@ -133,7 +199,18 @@ namespace CM.UI.Model.Helpers
             using (var response = await _apiClient.PostAsync($"api/{nomeUri}", model, new JsonMediaTypeFormatter()))
             {
                 if (!response.IsSuccessStatusCode)
-                    throw new Exception(response.ReasonPhrase);
+                    throw ApiException.CreateException(response);
+
+                return await response.Content.ReadAsAsync<T>();
+            }
+        }
+
+        public async Task<T> PostFromUri<T>(T value, string nomeUri = null)
+        {
+            using (var response = await _apiClient.PostAsync($"/api/{nomeUri}/{value}/", null))
+            {
+                if (!response.IsSuccessStatusCode)
+                    throw ApiException.CreateException(response);
 
                 return await response.Content.ReadAsAsync<T>();
             }
@@ -148,7 +225,7 @@ namespace CM.UI.Model.Helpers
             using (var response = await _apiClient.PutAsync($"api/{nomeUri}/{id}", model, new JsonMediaTypeFormatter()))
             {
                 if (!response.IsSuccessStatusCode)
-                    throw new Exception(response.ReasonPhrase);
+                    throw ApiException.CreateException(response);
 
                 return await response.Content.ReadAsAsync<T>();
             }
@@ -163,7 +240,7 @@ namespace CM.UI.Model.Helpers
             using (var response = await _apiClient.DeleteAsync($"api/{nomeUri}/{id}"))
             {
                 if (!response.IsSuccessStatusCode)
-                    throw new Exception(response.ReasonPhrase);
+                    throw ApiException.CreateException(response);
 
                 await response.Content.ReadAsAsync<object>();
             }
@@ -178,7 +255,7 @@ namespace CM.UI.Model.Helpers
             using (var response = await _apiClient.GetAsync($"api/{nomeUri}/{id}"))
             {
                 if (!response.IsSuccessStatusCode)
-                    throw new Exception(response.ReasonPhrase);
+                    throw ApiException.CreateException(response);
 
                 return await response.Content.ReadAsAsync<T>();
             }
@@ -191,9 +268,9 @@ namespace CM.UI.Model.Helpers
             using (var response = await _apiClient.GetAsync($"api/{nomeUri}/"))
             {
                 if (!response.IsSuccessStatusCode)
-                    throw new Exception(response.ReasonPhrase);
+                    throw ApiException.CreateException(response);
 
-                return await response.Content.ReadAsAsync<ObservableCollection<T>>();
+                return await response.Content.ReadAsAsync<ObservableCollection<T>>(); ;
             }
         }
 

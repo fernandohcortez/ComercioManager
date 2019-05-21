@@ -14,7 +14,7 @@
                    Margin="3" RadiusY="15" RadiusX="15" Fill="White"/>
 
         <StackPanel VerticalAlignment="Stretch" Margin="10" 
-                        behaviors:KeyboardFocusBehavior.On="{Binding ElementName=Nome}">
+                    behaviors:KeyboardFocusBehavior.On="{Binding ElementName=Nome}">
 
             <TextBox x:Name="Nome" Text="{Binding Model.Nome, ValidatesOnNotifyDataErrors=True}" 
                          materialDesign:HintAssist.Hint="Nome" 

@@ -1,4 +1,5 @@
-﻿using CM.Domain.BLLs;
+﻿using CM.Core;
+using CM.Domain.BLLs;
 using CM.WebApi.Models;
 using CM.WebApi.Providers;
 using CM.WebApi.Results;
@@ -17,7 +18,6 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using CM.Core;
 
 namespace CM.WebApi.Controllers
 {
@@ -41,14 +41,8 @@ namespace CM.WebApi.Controllers
 
         public ApplicationUserManager UserManager
         {
-            get
-            {
-                return _userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-            private set
-            {
-                _userManager = value;
-            }
+            get => _userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            private set => _userManager = value;
         }
 
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
@@ -64,7 +58,7 @@ namespace CM.WebApi.Controllers
             {
                 Email = User.Identity.GetUserName(),
                 HasRegistered = externalLogin == null,
-                LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null
+                LoginProvider = externalLogin?.LoginProvider
             };
         }
 
@@ -127,6 +121,60 @@ namespace CM.WebApi.Controllers
 
             IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
                 model.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                return GetErrorResult(result);
+            }
+
+            return Ok();
+        }
+
+        [OverrideAuthorization]
+        [AllowAnonymous]
+        [Route("SendEmailForgottenPassword/{username}")]
+        public async Task<IHttpActionResult> SendEmailForgottenPassword([FromUri] string username)
+        {
+            async Task SendEmail(string idUserDestination, string verificationCode)
+            {
+                const string subject = "Comércio Manager - Recuperação de Senha";
+                var body = $"Segue abaixo seu código de recuperação de senha. Copie e cole no campo código de recuperação no sistema:<BR><BR>{verificationCode}";
+
+                await UserManager.SendEmailAsync(idUserDestination, subject, body);
+            }
+
+            try
+            {
+                var user = await UserManager.FindByNameAsync(username);
+
+                if (user == null)
+                    throw new Exception("Usuário não encontrado.\r\nCertifique-se que seu usuário foi informado corretamente.");
+
+                var token = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+
+                await SendEmail(user.Id, token);
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+        }
+
+        [OverrideAuthorization]
+        [AllowAnonymous]
+        [Route("ResetPassword")]
+        public async Task<IHttpActionResult> ResetPassword(ResetPasswordBindingModel resetPasswordBindingModel)
+        {
+            var user = await UserManager.FindByNameAsync(resetPasswordBindingModel.Username);
+
+            if (user == null)
+            {
+                return InternalServerError(new Exception($"Usuário [{resetPasswordBindingModel.Username}] não encontrado."));
+            }
+
+            var result = await UserManager.ResetPasswordAsync(user.Id, resetPasswordBindingModel.Token, resetPasswordBindingModel.NewPassword);
 
             if (!result.Succeeded)
             {
@@ -199,14 +247,14 @@ namespace CM.WebApi.Controllers
         {
             if (userName == null)
             {
-                return BadRequest();
+                return InternalServerError(new Exception("Usuário não informado."));
             }
 
             var user = await UserManager.FindByNameAsync(userName);
 
             if (user == null)
             {
-                return null;
+                return InternalServerError(new Exception($"Usuário [{userName}] não encontrado."));
             }
 
             var logins = user.Logins;
@@ -366,9 +414,14 @@ namespace CM.WebApi.Controllers
             return logins;
         }
 
+        private ApplicationDbContext GetContext()
+        {
+            return Request.GetOwinContext().Get<ApplicationDbContext>();
+        }
+
         // POST api/Account/Register
-        [System.Web.Http.AllowAnonymous]
-        [System.Web.Http.Route("Register")]
+        [AllowAnonymous]
+        [Route("Register")]
         public async Task<IHttpActionResult> Register(UsuarioDTO usuarioDTO)
         {
             if (!ModelState.IsValid)
@@ -376,28 +429,76 @@ namespace CM.WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { UserName = usuarioDTO.Id, Email = usuarioDTO.Email };
+            var user = new ApplicationUser { UserName = usuarioDTO.Id, Email = usuarioDTO.Email };
 
-            var result = await UserManager.CreateAsync(user, usuarioDTO.Password);
-
-            if (!result.Succeeded)
+            using (var transaction = GetContext().Database.BeginTransaction())
             {
-                return GetErrorResult(result);
+                var result = await UserManager.CreateAsync(user, usuarioDTO.Password);
+
+                if (!result.Succeeded)
+                {
+                    return GetErrorResult(result);
+                }
+
+                try
+                {
+                    var usuarioBLL = new UsuarioBLL();
+
+                    await usuarioBLL.AddAsync(usuarioDTO);
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+
+                    return InternalServerError(e);
+                }
+
+                transaction.Commit();
             }
 
-            usuarioDTO.DataInclusao = DateTime.Now;
-            usuarioDTO.DataAlteracao = DateTime.Now;
-            
-            try
-            {
-                var usuarioBLL = new UsuarioBLL();
-                await usuarioBLL.AddAsync(usuarioDTO);
-            }
-            catch (Exception e)
-            {
-                await RemoveUser(usuarioDTO.Id);
+            return Ok();
+        }
 
-                return InternalServerError(e);
+        [Route("ChangeUser")]
+        public async Task<IHttpActionResult> ChangeUser(UsuarioDTO usuarioDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await UserManager.FindByNameAsync(usuarioDTO.Id);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            using (var transaction = GetContext().Database.BeginTransaction())
+            {
+                var result = await UserManager.SetEmailAsync(user.Id, usuarioDTO.Email);
+
+                if (!result.Succeeded)
+                {
+                    transaction.Rollback();
+
+                    return GetErrorResult(result);
+                }
+
+                try
+                {
+                    var usuarioBLL = new UsuarioBLL();
+
+                    await usuarioBLL.UpdateAsync(usuarioDTO);
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+
+                    return InternalServerError(e);
+                }
+
+                transaction.Commit();
             }
 
             return Ok();
@@ -466,10 +567,7 @@ namespace CM.WebApi.Controllers
 
         #region Helpers
 
-        private IAuthenticationManager Authentication
-        {
-            get { return Request.GetOwinContext().Authentication; }
-        }
+        private IAuthenticationManager Authentication => Request.GetOwinContext().Authentication;
 
         private IHttpActionResult GetErrorResult(IdentityResult result)
         {

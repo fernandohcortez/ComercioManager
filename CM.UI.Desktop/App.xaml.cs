@@ -1,15 +1,9 @@
-﻿using System;
+﻿using CM.UI.Model.Validators.Language;
+using FluentValidation;
 using System.Globalization;
-using System.Runtime.InteropServices;
-using System.Security.Permissions;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
-using CM.UI.Desktop.Helpers;
-using CM.UI.Model.Validators;
-using CM.UI.Model.Validators.Language;
-using FluentValidation;
 
 
 namespace CM.UI.Desktop
@@ -30,8 +24,9 @@ namespace CM.UI.Desktop
                     XmlLanguage.GetLanguage(
                         CultureInfo.CurrentCulture.IetfLanguageTag)));
 
-            EventManager.RegisterClassHandler(typeof(TextBox),UIElement.GotFocusEvent,new RoutedEventHandler(TextBox_GotFocus));
-            EventManager.RegisterClassHandler(typeof(Window), UIElement.GotMouseCaptureEvent,new RoutedEventHandler(Window_MouseCapture));
+            EventManager.RegisterClassHandler(typeof(TextBox), UIElement.GotFocusEvent, new RoutedEventHandler(InputBox_GotFocus));
+            EventManager.RegisterClassHandler(typeof(PasswordBox), UIElement.GotFocusEvent, new RoutedEventHandler(InputBox_GotFocus));
+            EventManager.RegisterClassHandler(typeof(Window), UIElement.GotMouseCaptureEvent, new RoutedEventHandler(Window_MouseCapture));
 
             ValidatorOptions.LanguageManager = new CustomLanguageManager
             {
@@ -41,15 +36,30 @@ namespace CM.UI.Desktop
             base.OnStartup(e);
         }
 
-        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        private void InputBox_GotFocus(object sender, RoutedEventArgs e)
         {
-            (sender as TextBox)?.SelectAll();
+            switch (sender)
+            {
+                case TextBox textBox:
+                    textBox.SelectAll();
+                    break;
+                case PasswordBox passwordBox:
+                    passwordBox.SelectAll();
+                    break;
+            }
         }
 
         private void Window_MouseCapture(object sender, RoutedEventArgs e)
         {
-            if (e.OriginalSource is TextBox textBox)
-                textBox.SelectAll();
+            switch (e.OriginalSource)
+            {
+                case TextBox textBox:
+                    textBox.SelectAll();
+                    break;
+                case PasswordBox passwordBox:
+                    passwordBox.SelectAll();
+                    break;
+            }
         }
     }
 }

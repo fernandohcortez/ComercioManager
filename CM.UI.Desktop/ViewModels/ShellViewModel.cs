@@ -1,19 +1,15 @@
 ﻿using Caliburn.Micro;
 using CM.UI.Desktop.Components;
 using CM.UI.Model.Helpers;
-using CM.UI.Model.Models.Interface;
-using Helpers;
-using PropertyChanged;
-using System.Drawing;
-using System.IO;
-using System.Reflection;
-using System.Windows;
 using CM.UI.Model.Models;
+using CM.UI.Model.Models.Interface;
+using PropertyChanged;
+using System.Windows;
 
 namespace CM.UI.Desktop.ViewModels
 {
     [AddINotifyPropertyChangedInterface]
-    public class ShellViewModel : Conductor<object>, IHandle<string>
+    public class ShellViewModel : Conductor<object>, IHandle<object>
     {
         #region Campos e Propriedades
 
@@ -116,6 +112,11 @@ namespace CM.UI.Desktop.ViewModels
             ActivateItem(_loginVm);
         }
 
+        public void AlterarSenha()
+        {
+            OpenChangePasswordViewModel(ChangePasswordViewType.Manual);
+        }
+
         public void AbrirContasUsuarios()
         {
             ActivateItem(UsuarioViewModel.Create());
@@ -125,34 +126,76 @@ namespace CM.UI.Desktop.ViewModels
 
         #region Eventos
 
-        public void Handle(string message)
+        public void Handle(object message)
         {
-            if (message == "LoginOk")
+            switch (message)
             {
-                if (IniciarAnimacaoAbrirMenu)
-                    InciarAnimacaoFecharMenu();
+                case string messageString when messageString.StartsWith("LoginOk"):
+                    {
+                        if (IniciarAnimacaoAbrirMenu)
+                            InciarAnimacaoFecharMenu();
 
-                UsuarioAdministrador = _usuarioModel.Administrador;
+                        UsuarioAdministrador = _usuarioModel.Administrador;
 
-                NomeUsuario = _usuarioModel.PrimeiroNome;
+                        NomeUsuario = _usuarioModel.PrimeiroNome;
 
-                //var caminhoAssets = @"C:\ProjetosVS\ComercioManager\CM.UI.Desktop\Assets\";
+                        //var caminhoAssets = @"C:\ProjetosVS\ComercioManager\CM.UI.Desktop\Assets\";
 
-                //var caminhoFoto = Path.Combine(caminhoAssets, "FotoUsuario.jpg");
+                        //var caminhoFoto = Path.Combine(caminhoAssets, "FotoUsuario.jpg");
 
-                //var foto = Image.FromFile(caminhoFoto);
+                        //var foto = Image.FromFile(caminhoFoto);
 
-                //_usuarioModel.Foto = ImageHelper.ImageToByteArray(foto);
+                        //_usuarioModel.Foto = ImageHelper.ImageToByteArray(foto);
 
-                //_apiHelper.Alterar(_usuarioModel, $"{_usuarioModel.Id}/");
+                        //_apiHelper.Alterar(_usuarioModel, $"{_usuarioModel.Id}/");
 
-                FotoUsuario = _usuarioModel.Foto;
+                        FotoUsuario = _usuarioModel.Foto;
 
-                InciarAnimacaoAbrirMenu();
+                        if (messageString == "LoginOkWithChangePassword")
+                            OpenChangePasswordViewModel(ChangePasswordViewType.NewUserForceNewPassword);
+                        else
+                            InciarAnimacaoAbrirMenu();
+
+                        break;
+                    }
+                case ResetPasswordModel resetPasswordModel:
+                    {
+                        if (string.IsNullOrEmpty(resetPasswordModel.VerificationCode))
+                            OpenResetPasswordViewModel(resetPasswordModel.Username);
+                        else
+                            OpenChangePasswordViewModel(ChangePasswordViewType.ForgottenPassword, resetPasswordModel.Username, resetPasswordModel.VerificationCode);
+
+                        break;
+                    }
+                case ChangePasswordViewType changePasswordViewType:
+                    {
+                        switch (changePasswordViewType)
+                        {
+                            case ChangePasswordViewType.NewUserForceNewPassword:
+                                InciarAnimacaoAbrirMenu();
+
+                                break;
+
+                            case ChangePasswordViewType.ForgottenPassword:
+                                ActivateItem(_loginVm);
+
+                                break;
+                        }
+
+                        break;
+                    }
             }
         }
 
+        private void OpenChangePasswordViewModel(ChangePasswordViewType changePasswordViewType, string usernameResetPassword = null, string verificationCodeResetPassword = null)
+        {
+            ActivateItem(ChangePasswordViewModel.Create(changePasswordViewType, usernameResetPassword, verificationCodeResetPassword));
+        }
 
+        private void OpenResetPasswordViewModel(string username)
+        {
+            ActivateItem(ResetPasswordVerificationCodeViewModel.Create(username));
+        }
 
         public void InciarAnimacaoAbrirMenu()
         {

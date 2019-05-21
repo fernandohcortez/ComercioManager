@@ -12,5 +12,6 @@ namespace CM.UI.Model.Models.Interface
         DateTime DataInclusao { get; set; }
         byte[] Foto { get; set; }
         bool Administrador { get; set; }
+        bool UsuarioLogado { get;}
     }
 }

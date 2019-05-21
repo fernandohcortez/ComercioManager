@@ -7,6 +7,7 @@ using CM.UI.Model.Models.Interface;
 using CM.UI.Model.Validators;
 using PropertyChanged;
 using System.Threading.Tasks;
+using CM.UI.Desktop.Properties;
 
 namespace CM.UI.Desktop.ViewModels
 {
@@ -14,7 +15,7 @@ namespace CM.UI.Desktop.ViewModels
     public class UsuarioViewModel : ViewModelBase<UsuarioListaViewModel, UsuarioEdicaoViewModel, UsuarioModel, UsuarioValidator>
     {
         private readonly UsuarioModel _usuarioModel;
-
+        
         #region Construtores
 
         public static UsuarioViewModel Create()
@@ -31,12 +32,25 @@ namespace CM.UI.Desktop.ViewModels
 
         protected override async Task<UsuarioModel> SalvarInclusao()
         {
-            RegistroCorrente.Password = "123mudar";
+            RegistroCorrente.Password = Settings.Default.DefaultPassword;
             RegistroCorrente.ConfirmPassword = RegistroCorrente.Password;
 
-            await ApiHelper.CriarNovaContaUsuario(RegistroCorrente);
+            await ApiHelper.CriarContaUsuario(RegistroCorrente);
 
             return await ApiHelper.Obter<UsuarioModel>(RegistroCorrente.Id);
+        }
+
+        protected override async Task<UsuarioModel> SalvarAlteracao()
+        {
+            await ApiHelper.AlterarContaUsuario(RegistroCorrente);
+
+            return await ApiHelper.Obter<UsuarioModel>(RegistroCorrente.Id);
+        }
+
+        protected override void PosSalvar(UsuarioModel model)
+        {
+            if (AcaoCrud == AcaoCrud.Incluir)
+                Mensagem.Create().MostrarInformacao($"Usuário cadastrado com sucesso.\r\nA senha padrão é [{Settings.Default.DefaultPassword}] e deverá ser alterada no próximo login.");
         }
 
         protected override bool PreRemover()

@@ -1,9 +1,8 @@
 ﻿using CM.Core.Base;
+using CM.Domain.BLLs.Base;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
-using CM.Domain.BLLs.Base;
 
 namespace CM.WebApi.Controllers.Base
 {
@@ -19,31 +18,68 @@ namespace CM.WebApi.Controllers.Base
             BLL = Activator.CreateInstance<TBLL>();
         }
 
-        public virtual async Task<IEnumerable<TDTO>> Get()
+        public virtual async Task<IHttpActionResult> Get()
         {
-            return await BLL.GetAllAsync();
+            try
+            {
+                return Ok(await BLL.GetAllAsync());
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
         }
 
-        public virtual async Task<TDTO> Get(TIdType id)
+        public virtual async Task<IHttpActionResult> Get(TIdType id)
         {
-            return await BLL.GetAsync(id);
+            try
+            {
+                return Ok(await BLL.GetAsync(id));
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
         }
 
-        public virtual async Task<TDTO> Post(TDTO dto)
+        public virtual async Task<IHttpActionResult> Post(TDTO dto)
         {
-            return await BLL.AddAsync(dto);
+            try
+            {
+                return Ok(await BLL.AddAsync(dto));
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
         }
 
-        public virtual async Task<TDTO> Put(TIdType id, [FromBody]TDTO dto)
+        public virtual async Task<IHttpActionResult> Put(TIdType id, [FromBody]TDTO dto)
         {
-            await BLL.UpdateAsync(dto);
+            try
+            {
+                await BLL.UpdateAsync(dto);
 
-            return dto;
+                return Ok(dto);
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
         }
 
-        public virtual async Task Delete(TIdType id)
+        public virtual async Task<IHttpActionResult> Delete(TIdType id)
         {
-            await BLL.RemoveAsync(id);
+            try
+            {
+                await BLL.RemoveAsync(id);
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
         }
     }
 }

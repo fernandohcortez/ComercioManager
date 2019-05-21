@@ -14,4 +14,11 @@ namespace CM.UI.Desktop
         Visualizar,
         Remover
     }
+
+    public enum ChangePasswordViewType
+    {
+        Manual,
+        NewUserForceNewPassword,
+        ForgottenPassword
+    }
 }

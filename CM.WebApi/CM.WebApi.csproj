@@ -194,6 +194,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\SmtpEmailService.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -236,6 +237,8 @@
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Controllers\ProdutoController.cs" />
     <Compile Include="Enum.cs" />
+    <Compile Include="Exceptions\ApiException.cs" />
+    <Compile Include="Exceptions\CreateApiException.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -344,6 +347,10 @@
     <ProjectReference Include="..\CM.Domain\CM.Domain.csproj">
       <Project>{4b8c3221-89b3-4c6a-a9da-ec174f0afd35}</Project>
       <Name>CM.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Helpers\Helpers.csproj">
+      <Project>{369C5B03-F10D-42D1-AF2A-EE47496A83EC}</Project>
+      <Name>Helpers</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

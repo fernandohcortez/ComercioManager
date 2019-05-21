@@ -1,10 +1,39 @@
 ﻿using System;
+using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Helpers
 {
     public static class StringExtensions
     {
+        public static string Encode(this string value)
+        {
+            var bytes = Encoding.Unicode.GetBytes(value);
+            var inArray = HashAlgorithm.Create("SHA1")?.ComputeHash(bytes);
+
+            return inArray != null ? Convert.ToBase64String(inArray) : string.Empty;
+        }
+
+        public static string Protect(this string value)
+        {
+            var entropy = Encoding.ASCII.GetBytes(Assembly.GetExecutingAssembly().FullName);
+            var data = Encoding.ASCII.GetBytes(value);
+            var protectedData = Convert.ToBase64String(ProtectedData.Protect(data, entropy, DataProtectionScope.CurrentUser));
+
+            return protectedData;
+        }
+
+        public static string Unprotect(this string value)
+        {
+            var protectedData = Convert.FromBase64String(value);
+            var entropy = Encoding.ASCII.GetBytes(Assembly.GetExecutingAssembly().FullName);
+            var data = Encoding.ASCII.GetString(ProtectedData.Unprotect(protectedData, entropy, DataProtectionScope.CurrentUser));
+
+            return data;
+        }
+
         public static int IsNullThenZero(this string valor)
         {
             return string.IsNullOrEmpty(valor) ? 0 : int.Parse(valor);

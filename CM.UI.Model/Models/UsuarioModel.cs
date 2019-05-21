@@ -42,5 +42,8 @@ namespace CM.UI.Model.Models
         [DataMember]
         [Browser(Visible = false)]
         public string ConfirmPassword { get; set; }
+
+        [Browser(Visible = false)]
+        public bool UsuarioLogado => !string.IsNullOrEmpty(Token);
     }
 }

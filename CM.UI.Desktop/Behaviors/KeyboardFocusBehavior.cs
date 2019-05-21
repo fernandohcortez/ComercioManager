@@ -33,13 +33,15 @@ namespace CM.UI.Desktop.Behaviors
             if (target == null)
                 return;
 
-            //if (target is TextBox textBox)
-            //{
-            //    if (textBox.IsReadOnly)
-            //        return;
-            //}
+            frameworkElement.Loaded += (s, e) =>
+            {
+                Keyboard.Focus(target);
 
-            frameworkElement.Loaded += (s, e) => Keyboard.Focus(target);
+                if (!target.IsEnabled)
+                {
+                    target.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                }
+            };
         }
     }
 }

@@ -1,5 +1,10 @@
 ﻿using Caliburn.Micro;
+using CM.UI.Desktop.Components;
+using CM.UI.Desktop.Properties;
 using CM.UI.Model.Helpers;
+using CM.UI.Model.Models;
+using CM.UI.Model.Models.Interface;
+using Helpers;
 using PropertyChanged;
 using System;
 using System.Threading.Tasks;
@@ -8,21 +13,30 @@ using System.Windows;
 namespace CM.UI.Desktop.ViewModels
 {
     [AddINotifyPropertyChangedInterface]
-    public class LoginViewModel : Conductor<object>
+    public class LoginViewModel : Screen
     {
+        #region Fields and Properties
+
+        private readonly IUsuarioModel _usuarioLogadoModel;
         private readonly IEventAggregator _eventAggregator;
         private readonly IApiHelper _apiHelper;
-        public bool IsWaiting { get; set; }
 
-        public LoginViewModel(IEventAggregator eventAggregator, IApiHelper apiHelper)
+        public bool IsWaiting { get; set; }
+        public bool LembrarSenha { get; set; }
+        public bool IsErrorVisible => MensagemErro?.Length > 0;
+
+        private string _usuario;
+        public string Usuario
         {
-            _eventAggregator = eventAggregator;
-            _apiHelper = apiHelper;
+            get => _usuario;
+            set
+            {
+                _usuario = value;
+                NotifyOfPropertyChange(() => CanLogIn);
+            }
         }
 
-        public string Usuario { get; set; } = "fernandohcortez@gmail.com";
-
-        private string _senha = "Growth@2018";
+        private string _senha;
         public string Senha
         {
             get => _senha;
@@ -32,8 +46,6 @@ namespace CM.UI.Desktop.ViewModels
                 NotifyOfPropertyChange(() => CanLogIn);
             }
         }
-
-        public bool IsErrorVisible => MensagemErro?.Length > 0;
 
         private string _mensagemErro;
         public string MensagemErro
@@ -49,6 +61,58 @@ namespace CM.UI.Desktop.ViewModels
 
         public bool CanLogIn => Usuario?.Length > 0 && Senha?.Length > 0;
 
+        #endregion
+
+        #region Constructors and Activators
+
+        public LoginViewModel(IEventAggregator eventAggregator, IApiHelper apiHelper, IUsuarioModel usuarioLogadoModel)
+        {
+            _usuarioLogadoModel = usuarioLogadoModel;
+            _eventAggregator = eventAggregator;
+            _apiHelper = apiHelper;
+
+            SetEvents();
+
+            SetDefaultPassword();
+        }
+
+        private void SetEvents()
+        {
+            Activated += LoginViewModel_Activated;
+        }
+
+        private void SetDefaultPassword()
+        {
+            var defaultPassaword = "123mudar";
+
+            if (!string.IsNullOrEmpty(Settings.Default.DefaultPassword) && Settings.Default.DefaultPassword.Unprotect().Equals(defaultPassaword))
+                return;
+
+            Settings.Default.DefaultPassword = defaultPassaword.Protect();
+            Settings.Default.Save();
+        }
+
+        private void LoginViewModel_Activated(object sender, ActivationEventArgs e)
+        {
+            LoadLastUserLoggedIn();
+        }
+
+        private void LoadLastUserLoggedIn()
+        {
+            if (string.IsNullOrEmpty(Settings.Default.LastUserLoggedIn))
+                return;
+
+            Usuario = Settings.Default.LastUserLoggedIn;
+            LembrarSenha = Settings.Default.RememberPassword;
+
+            if (LembrarSenha)
+                Senha = Settings.Default.LastPasswordLoggedIn.Unprotect();
+        }
+
+        #endregion
+
+        #region Buttons
+
         public async Task LogIn()
         {
             try
@@ -57,13 +121,14 @@ namespace CM.UI.Desktop.ViewModels
 
                 MensagemErro = string.Empty;
 
-                var result = await _apiHelper.Autenticar(Usuario, Senha);
+                await AutenticateUser();
 
-                await _apiHelper.ObterInfoUsuarioLogado(result.Access_Token, Usuario);
+                SaveLastLoginInfo();
 
-                _eventAggregator.PublishOnUIThread("LoginOk");
+                PublishEventLoginOk();
 
                 TryClose();
+
             }
             catch (Exception e)
             {
@@ -75,14 +140,85 @@ namespace CM.UI.Desktop.ViewModels
             }
         }
 
-        public void Sair()
+        private async Task AutenticateUser()
         {
-            Application.Current.Shutdown();
+            var result = await _apiHelper.Autenticar(Usuario, Senha);
+
+            await _apiHelper.ObterInfoUsuarioLogado(result.Access_Token, Usuario);
         }
 
-        public void EsqueceuSenha()
+        private void SaveLastLoginInfo()
         {
-            MensagemErro = "Função ainda não disponível.";
+            Settings.Default.LastUserLoggedIn = Usuario;
+            Settings.Default.LastPasswordLoggedIn = LembrarSenha ? Senha.Protect() : string.Empty;
+            Settings.Default.RememberPassword = LembrarSenha;
+            Settings.Default.Save();
         }
+
+        private void PublishEventLoginOk()
+        {
+            var forceChangePassword = Senha.Equals(Settings.Default.DefaultPassword.Unprotect());
+
+            _eventAggregator.PublishOnUIThread(forceChangePassword ? "LoginOkWithChangePassword" : "LoginOk");
+        }
+
+        public async Task EsqueceuSenha()
+        {
+            if (string.IsNullOrEmpty(Usuario))
+            {
+                MensagemErro = "Informe o seu usuário.";
+                return;
+            }
+
+            if (Mensagem.Create().MostrarPergunta($"Será encaminhado no email do usuário [{Usuario}] um código de recuperação para cadastro de uma nova senha.\r\n\r\nDeseja continuar?") == MessageBoxResult.No)
+                return;
+
+            try
+            {
+                IsWaiting = true;
+
+                MensagemErro = string.Empty;
+
+                await _apiHelper.PostFromUri(Usuario, "Account/SendEmailForgottenPassword");
+            }
+            catch (Exception e)
+            {
+                MensagemErro = e.Message;
+
+                return;
+            }
+            finally
+            {
+                IsWaiting = false;
+            }
+
+            Mensagem.Create().MostrarInformacao("Verifique seu email e obtenha o código de recuperação de senha e informe na tela a seguir.");
+
+            PublishEventResetPassword();
+
+            TryClose();
+        }
+
+        private void PublishEventResetPassword()
+        {
+            var resetPasswordModel = new ResetPasswordModel
+            {
+                Username = Usuario
+            };
+
+            _eventAggregator.PublishOnUIThread(resetPasswordModel);
+        }
+
+        public void Sair()
+        {
+            var anyUserLoggedin = !string.IsNullOrEmpty(_usuarioLogadoModel.Token);
+
+            if (anyUserLoggedin)
+                TryClose();
+            else
+                Application.Current.Shutdown();
+        }
+
+        #endregion
     }
 }

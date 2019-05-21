@@ -69,7 +69,19 @@ namespace CM.UI.Desktop.ViewModels.Base
             ModelValidator = Activator.CreateInstance<TModelValidator>();
 
             CarregarViewLista();
+
+            //SetEventos();
         }
+
+        //private void SetEventos()
+        //{
+        //    Activated += ViewModelBase_Activated;
+        //}
+
+        //private void ViewModelBase_Activated(object sender, ActivationEventArgs e)
+        //{
+        //    CarregarViewLista();
+        //}
 
         public static T Create<T>() where T : ViewModelBase<TListaViewModel, TEdicaoViewModel, TModel, TModelValidator>
         {
@@ -250,6 +262,8 @@ namespace CM.UI.Desktop.ViewModels.Base
                 ControlarVisibilidadeBotoes();
 
                 edicaoViewModel.TryClose();
+
+                ActivateItem(ListaViewModel);
             }
 
             if (AcaoCrud == AcaoCrud.Incluir || AcaoCrud == AcaoCrud.Alterar)

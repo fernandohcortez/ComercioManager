@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
+        xmlns:behaviors="clr-namespace:CM.UI.Desktop.Behaviors"
         mc:Ignorable="d"  Height="500" Width="350">
     <Grid IsEnabled="{Binding IsWaiting, Converter={StaticResource InverseBooleanConverter}}">
 
@@ -48,15 +49,18 @@
 
             <TextBlock Text="Login" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="5" Foreground="Gray" FontSize="25" FontWeight="Medium"/>
 
-            <StackPanel VerticalAlignment="Center" Margin="10" FocusManager.FocusedElement="{Binding ElementName=Usuario}">
+            <StackPanel VerticalAlignment="Center" Margin="10" behaviors:KeyboardFocusBehavior.On="{Binding ElementName=Usuario}">
 
                 <TextBox x:Name="Usuario" materialDesign:HintAssist.Hint="Usuário" 
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                         Margin="0,10" FontFamily="Champagne &amp; Limousines" FontSize="18"/>
+                         Margin="0,10" FontSize="18"/>
 
                 <PasswordBox x:Name="Senha" materialDesign:HintAssist.Hint="Senha" 
                              Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" 
-                             Margin="0,10" FontFamily="Champagne &amp; Limousines" FontSize="18"/>
+                             Margin="0,10" FontSize="18"/>
+
+                <CheckBox x:Name="LembrarSenha" Style="{StaticResource MaterialDesignCheckBox}"
+                          Margin="0,15" HorizontalAlignment="Center" Content="Lembrar Senha?" Foreground="Gray"/>
 
             </StackPanel>
 
@@ -64,7 +68,9 @@
 
         <Button x:Name="Login" VerticalAlignment="Bottom" Margin="0,85"  Width="150" Content="Entrar"/>
 
-        <Button x:Name="EsqueceuSenha" Content="Esqueceu sua senha?" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="60" Foreground="Gray" Cursor="Hand" Background="Transparent" FontSize="12" BorderBrush="Gray" BorderThickness="0 0 0 0.5" Height="15" Padding="0" IsTabStop="False"/>
+        <Button x:Name="EsqueceuSenha" Content="Esqueceu sua senha?" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="60" 
+                Foreground="White" Cursor="Hand" Background="Transparent" FontSize="12" BorderBrush="White" BorderThickness="0 0 0 0.5" 
+                Height="15" Padding="0" IsTabStop="False"/>
 
         <TextBlock x:Name="MensagemErro" Foreground="Red" Text="MensagemErro" 
                    MaxWidth="300" TextWrapping="Wrap" Margin="10"

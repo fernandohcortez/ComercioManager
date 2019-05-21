@@ -129,12 +129,12 @@
                 <Button x:Name="AbrirContasUsuarios" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" 
                         Background="{x:Null}" BorderBrush="{x:Null}" 
                         Padding="0" Width="50" Height="50" Margin="10" 
-                        IsEnabled="{Binding UsuarioAdministrador}" materialDesign:HintAssist.Hint="Conta">
+                        IsEnabled="{Binding UsuarioAdministrador}" ToolTip="Contas Usuários">
                     <materialDesign:PackIcon Kind="SecurityAccount" Width="40" Height="40" materialDesign:HintAssist.Hint="Contas Usuários"/>
                 </Button>
 
                 <Button x:Name="TrocarUsuario" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" 
-                        BorderBrush="{x:Null}" Padding="0" Width="80" Height="80" Margin="10" 
+                        BorderBrush="{x:Null}" Padding="0" Width="80" Height="80" Margin="10" ToolTip="Trocar Usuário"
                         RenderTransformOrigin="0.5,0.5">
                     <Button.RenderTransform>
                         <TransformGroup>
@@ -145,14 +145,13 @@
                         </TransformGroup>
                     </Button.RenderTransform>
                     <Button.Background>
-                        <!--<ImageBrush ImageSource="{Binding FotoUsuario}" Stretch="UniformToFill"/>-->
                         <ImageBrush ImageSource="{Binding FotoUsuario}" Stretch="UniformToFill"/>
                     </Button.Background>
                 </Button>
 
-                <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" 
-                        Background="{x:Null}" BorderBrush="{x:Null}" Padding="0" Width="50" Height="50" Margin="10">
-                    <materialDesign:PackIcon Kind="InformationOutline" Width="40" Height="40"/>
+                <Button x:Name="AlterarSenha" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" 
+                        Background="{x:Null}" BorderBrush="{x:Null}" Padding="0" Width="50" Height="50" Margin="10" ToolTip="Alterar Senha">
+                    <materialDesign:PackIcon Kind="PasswordReset" Width="40" Height="40"/>
                 </Button>
 
             </StackPanel>
